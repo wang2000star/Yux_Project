@@ -1,0 +1,1 @@
+/usr/local/bin/c++ -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp CMakeFiles/externalproductntt.dir/externalproductntt.cpp.o -o externalproductntt  ../src/libtfhe++.a ../thirdparties/randen/libranden.a ../thirdparties/spqlios/libspqlios.a
