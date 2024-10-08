@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Fregata/CBSmode/test/polymul.cpp" "test/CMakeFiles/polymul.dir/polymul.cpp.o" "gcc" "test/CMakeFiles/polymul.dir/polymul.cpp.o.d"
+  "/home/wangfangzhen/Yux/CBSmode/test/polymul.cpp" "test/CMakeFiles/polymul.dir/polymul.cpp.o" "gcc" "test/CMakeFiles/polymul.dir/polymul.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

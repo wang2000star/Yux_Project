@@ -57,10 +57,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wangfangzhen/Fregata/CBSmode
+CMAKE_SOURCE_DIR = /home/wangfangzhen/Yux/CBSmode
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wangfangzhen/Fregata/CBSmode/build
+CMAKE_BINARY_DIR = /home/wangfangzhen/Yux/CBSmode/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,9 +132,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Fregata/CBSmode/build/CMakeFiles /home/wangfangzhen/Fregata/CBSmode/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles /home/wangfangzhen/Yux/CBSmode/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Fregata/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -578,19 +578,6 @@ trlwemult/fast:
 .PHONY : trlwemult/fast
 
 #=============================================================================
-# Target rules for targets named homosm4
-
-# Build rule for target.
-homosm4: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 homosm4
-.PHONY : homosm4
-
-# fast build rule for target.
-homosm4/fast:
-	$(MAKE) $(MAKESILENT) -f homoSM4_CB/CMakeFiles/homosm4.dir/build.make homoSM4_CB/CMakeFiles/homosm4.dir/build
-.PHONY : homosm4/fast
-
-#=============================================================================
 # Target rules for targets named homoAES
 
 # Build rule for target.
@@ -600,7 +587,7 @@ homoAES: cmake_check_build_system
 
 # fast build rule for target.
 homoAES/fast:
-	$(MAKE) $(MAKESILENT) -f homoSM4_CB/CMakeFiles/homoAES.dir/build.make homoSM4_CB/CMakeFiles/homoAES.dir/build
+	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/build
 .PHONY : homoAES/fast
 
 # Help Target
@@ -630,7 +617,6 @@ help:
 	@echo "... gatebootstrapping"
 	@echo "... gatebootstrappingntt"
 	@echo "... homoAES"
-	@echo "... homosm4"
 	@echo "... identitybootstrapping"
 	@echo "... iks"
 	@echo "... invcircuitbootstrapping"

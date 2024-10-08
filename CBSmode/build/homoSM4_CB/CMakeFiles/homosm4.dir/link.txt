@@ -1,1 +1,0 @@
-/usr/local/bin/c++ -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp -w CMakeFiles/homosm4.dir/SM4.cpp.o CMakeFiles/homosm4.dir/SM4_homo.cpp.o -o homosm4  ../src/libtfhe++.a ../thirdparties/randen/libranden.a ../thirdparties/spqlios/libspqlios.a

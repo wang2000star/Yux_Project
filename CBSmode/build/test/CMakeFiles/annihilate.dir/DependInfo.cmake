@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Fregata/CBSmode/test/annihilate.cpp" "test/CMakeFiles/annihilate.dir/annihilate.cpp.o" "gcc" "test/CMakeFiles/annihilate.dir/annihilate.cpp.o.d"
+  "/home/wangfangzhen/Yux/CBSmode/test/annihilate.cpp" "test/CMakeFiles/annihilate.dir/annihilate.cpp.o" "gcc" "test/CMakeFiles/annihilate.dir/annihilate.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

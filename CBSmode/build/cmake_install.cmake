@@ -1,4 +1,4 @@
-# Install script for directory: /home/wangfangzhen/Fregata/CBSmode
+# Install script for directory: /home/wangfangzhen/Yux/CBSmode
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,31 +44,31 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/wangfangzhen/Fregata/CBSmode/build/thirdparties/spqlios/cmake_install.cmake")
+  include("/home/wangfangzhen/Yux/CBSmode/build/thirdparties/spqlios/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/wangfangzhen/Fregata/CBSmode/build/thirdparties/randen/cmake_install.cmake")
+  include("/home/wangfangzhen/Yux/CBSmode/build/thirdparties/randen/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/wangfangzhen/Fregata/CBSmode/build/src/cmake_install.cmake")
+  include("/home/wangfangzhen/Yux/CBSmode/build/src/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/wangfangzhen/Fregata/CBSmode/build/test/cmake_install.cmake")
+  include("/home/wangfangzhen/Yux/CBSmode/build/test/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/wangfangzhen/Fregata/CBSmode/build/homoSM4_CB/cmake_install.cmake")
+  include("/home/wangfangzhen/Yux/CBSmode/build/Yux/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/wangfangzhen/Fregata/CBSmode/build/src/libtfhe++.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/wangfangzhen/Yux/CBSmode/build/src/libtfhe++.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -86,6 +86,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-  file(WRITE "/home/wangfangzhen/Fregata/CBSmode/build/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/home/wangfangzhen/Yux/CBSmode/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

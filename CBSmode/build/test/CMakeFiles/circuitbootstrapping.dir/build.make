@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wangfangzhen/Fregata/CBSmode
+CMAKE_SOURCE_DIR = /home/wangfangzhen/Yux/CBSmode
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wangfangzhen/Fregata/CBSmode/build
+CMAKE_BINARY_DIR = /home/wangfangzhen/Yux/CBSmode/build
 
 # Include any dependencies generated for this target.
 include test/CMakeFiles/circuitbootstrapping.dir/depend.make
@@ -70,18 +70,18 @@ include test/CMakeFiles/circuitbootstrapping.dir/progress.make
 include test/CMakeFiles/circuitbootstrapping.dir/flags.make
 
 test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o: test/CMakeFiles/circuitbootstrapping.dir/flags.make
-test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o: /home/wangfangzhen/Fregata/CBSmode/test/circuitbootstrapping.cpp
+test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o: /home/wangfangzhen/Yux/CBSmode/test/circuitbootstrapping.cpp
 test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o: test/CMakeFiles/circuitbootstrapping.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Fregata/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o"
-	cd /home/wangfangzhen/Fregata/CBSmode/build/test && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o -MF CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o.d -o CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o -c /home/wangfangzhen/Fregata/CBSmode/test/circuitbootstrapping.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o"
+	cd /home/wangfangzhen/Yux/CBSmode/build/test && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o -MF CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o.d -o CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.o -c /home/wangfangzhen/Yux/CBSmode/test/circuitbootstrapping.cpp
 
 test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.i"
-	cd /home/wangfangzhen/Fregata/CBSmode/build/test && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Fregata/CBSmode/test/circuitbootstrapping.cpp > CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.i
+	cd /home/wangfangzhen/Yux/CBSmode/build/test && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/test/circuitbootstrapping.cpp > CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.i
 
 test/CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.s"
-	cd /home/wangfangzhen/Fregata/CBSmode/build/test && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Fregata/CBSmode/test/circuitbootstrapping.cpp -o CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.s
+	cd /home/wangfangzhen/Yux/CBSmode/build/test && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/test/circuitbootstrapping.cpp -o CMakeFiles/circuitbootstrapping.dir/circuitbootstrapping.cpp.s
 
 # Object files for target circuitbootstrapping
 circuitbootstrapping_OBJECTS = \
@@ -96,18 +96,18 @@ test/circuitbootstrapping: src/libtfhe++.a
 test/circuitbootstrapping: thirdparties/randen/libranden.a
 test/circuitbootstrapping: thirdparties/spqlios/libspqlios.a
 test/circuitbootstrapping: test/CMakeFiles/circuitbootstrapping.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/wangfangzhen/Fregata/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable circuitbootstrapping"
-	cd /home/wangfangzhen/Fregata/CBSmode/build/test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/circuitbootstrapping.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable circuitbootstrapping"
+	cd /home/wangfangzhen/Yux/CBSmode/build/test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/circuitbootstrapping.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 test/CMakeFiles/circuitbootstrapping.dir/build: test/circuitbootstrapping
 .PHONY : test/CMakeFiles/circuitbootstrapping.dir/build
 
 test/CMakeFiles/circuitbootstrapping.dir/clean:
-	cd /home/wangfangzhen/Fregata/CBSmode/build/test && $(CMAKE_COMMAND) -P CMakeFiles/circuitbootstrapping.dir/cmake_clean.cmake
+	cd /home/wangfangzhen/Yux/CBSmode/build/test && $(CMAKE_COMMAND) -P CMakeFiles/circuitbootstrapping.dir/cmake_clean.cmake
 .PHONY : test/CMakeFiles/circuitbootstrapping.dir/clean
 
 test/CMakeFiles/circuitbootstrapping.dir/depend:
-	cd /home/wangfangzhen/Fregata/CBSmode/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wangfangzhen/Fregata/CBSmode /home/wangfangzhen/Fregata/CBSmode/test /home/wangfangzhen/Fregata/CBSmode/build /home/wangfangzhen/Fregata/CBSmode/build/test /home/wangfangzhen/Fregata/CBSmode/build/test/CMakeFiles/circuitbootstrapping.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wangfangzhen/Yux/CBSmode /home/wangfangzhen/Yux/CBSmode/test /home/wangfangzhen/Yux/CBSmode/build /home/wangfangzhen/Yux/CBSmode/build/test /home/wangfangzhen/Yux/CBSmode/build/test/CMakeFiles/circuitbootstrapping.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : test/CMakeFiles/circuitbootstrapping.dir/depend
 

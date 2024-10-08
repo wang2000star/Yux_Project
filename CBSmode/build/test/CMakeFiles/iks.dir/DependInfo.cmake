@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Fregata/CBSmode/test/iks.cpp" "test/CMakeFiles/iks.dir/iks.cpp.o" "gcc" "test/CMakeFiles/iks.dir/iks.cpp.o.d"
+  "/home/wangfangzhen/Yux/CBSmode/test/iks.cpp" "test/CMakeFiles/iks.dir/iks.cpp.o" "gcc" "test/CMakeFiles/iks.dir/iks.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Fregata/CBSmode/test/my_circuitbootstrapping.cpp" "test/CMakeFiles/my_circuitbootstrapping.dir/my_circuitbootstrapping.cpp.o" "gcc" "test/CMakeFiles/my_circuitbootstrapping.dir/my_circuitbootstrapping.cpp.o.d"
+  "/home/wangfangzhen/Yux/CBSmode/test/my_circuitbootstrapping.cpp" "test/CMakeFiles/my_circuitbootstrapping.dir/my_circuitbootstrapping.cpp.o" "gcc" "test/CMakeFiles/my_circuitbootstrapping.dir/my_circuitbootstrapping.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

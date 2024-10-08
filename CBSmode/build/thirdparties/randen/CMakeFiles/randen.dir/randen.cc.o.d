@@ -1,7 +1,7 @@
 thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o: \
- /home/wangfangzhen/Fregata/CBSmode/thirdparties/randen/randen.cc \
+ /home/wangfangzhen/Yux/CBSmode/thirdparties/randen/randen.cc \
  /usr/include/stdc-predef.h \
- /home/wangfangzhen/Fregata/CBSmode/thirdparties/randen/randen.h \
+ /home/wangfangzhen/Yux/CBSmode/thirdparties/randen/randen.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/14.2.0/include/stdint.h \
  /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -188,7 +188,7 @@ thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o: \
  /usr/local/include/c++/14.2.0/iterator \
  /usr/local/include/c++/14.2.0/bits/stream_iterator.h \
  /usr/local/include/c++/14.2.0/limits \
- /home/wangfangzhen/Fregata/CBSmode/thirdparties/randen/vector128.h \
+ /home/wangfangzhen/Yux/CBSmode/thirdparties/randen/vector128.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/14.2.0/include/wmmintrin.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/14.2.0/include/emmintrin.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/14.2.0/include/xmmintrin.h \

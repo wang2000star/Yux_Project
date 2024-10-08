@@ -72,7 +72,7 @@ if(ENABLE_TEST)
 endif()
 
 # my add
-add_subdirectory(homoSM4_CB)
+add_subdirectory(Yux)
 
 
 if(ENABLE_BENCHMARK)

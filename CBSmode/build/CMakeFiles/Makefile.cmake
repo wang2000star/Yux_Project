@@ -7,15 +7,15 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/home/wangfangzhen/Fregata/CBSmode/CMakeLists.txt"
+  "/home/wangfangzhen/Yux/CBSmode/CMakeLists.txt"
+  "/home/wangfangzhen/Yux/CBSmode/Yux/CMakeLists.txt"
   "CMakeFiles/3.30.3/CMakeASMCompiler.cmake"
   "CMakeFiles/3.30.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.30.3/CMakeSystem.cmake"
-  "/home/wangfangzhen/Fregata/CBSmode/homoSM4_CB/CMakeLists.txt"
-  "/home/wangfangzhen/Fregata/CBSmode/src/CMakeLists.txt"
-  "/home/wangfangzhen/Fregata/CBSmode/test/CMakeLists.txt"
-  "/home/wangfangzhen/Fregata/CBSmode/thirdparties/randen/CMakeLists.txt"
-  "/home/wangfangzhen/Fregata/CBSmode/thirdparties/spqlios/CMakeLists.txt"
+  "/home/wangfangzhen/Yux/CBSmode/src/CMakeLists.txt"
+  "/home/wangfangzhen/Yux/CBSmode/test/CMakeLists.txt"
+  "/home/wangfangzhen/Yux/CBSmode/thirdparties/randen/CMakeLists.txt"
+  "/home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/CMakeLists.txt"
   "/usr/local/share/cmake-3.30/Modules/CMakeASMCompiler.cmake.in"
   "/usr/local/share/cmake-3.30/Modules/CMakeASMInformation.cmake"
   "/usr/local/share/cmake-3.30/Modules/CMakeCXXCompiler.cmake.in"
@@ -118,7 +118,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "thirdparties/randen/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/CMakeFiles/CMakeDirectoryInformation.cmake"
   "test/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "homoSM4_CB/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "Yux/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -155,6 +155,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "test/CMakeFiles/tlwemult.dir/DependInfo.cmake"
   "test/CMakeFiles/trlweenc.dir/DependInfo.cmake"
   "test/CMakeFiles/trlwemult.dir/DependInfo.cmake"
-  "homoSM4_CB/CMakeFiles/homosm4.dir/DependInfo.cmake"
-  "homoSM4_CB/CMakeFiles/homoAES.dir/DependInfo.cmake"
+  "Yux/CMakeFiles/homoAES.dir/DependInfo.cmake"
   )

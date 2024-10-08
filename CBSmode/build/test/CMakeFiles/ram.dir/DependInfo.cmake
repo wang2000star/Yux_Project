@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Fregata/CBSmode/test/ram.cpp" "test/CMakeFiles/ram.dir/ram.cpp.o" "gcc" "test/CMakeFiles/ram.dir/ram.cpp.o.d"
+  "/home/wangfangzhen/Yux/CBSmode/test/ram.cpp" "test/CMakeFiles/ram.dir/ram.cpp.o" "gcc" "test/CMakeFiles/ram.dir/ram.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

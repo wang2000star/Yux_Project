@@ -1,4 +1,4 @@
-# Install script for directory: /home/wangfangzhen/Fregata/CBSmode/thirdparties/randen
+# Install script for directory: /home/wangfangzhen/Yux/CBSmode/thirdparties/randen
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

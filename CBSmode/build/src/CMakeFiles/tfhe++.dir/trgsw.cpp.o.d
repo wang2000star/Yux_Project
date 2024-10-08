@@ -1,7 +1,6 @@
 src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: \
- /home/wangfangzhen/Fregata/CBSmode/src/trgsw.cpp \
- /usr/include/stdc-predef.h \
- /home/wangfangzhen/Fregata/CBSmode/include/trgsw.hpp \
+ /home/wangfangzhen/Yux/CBSmode/src/trgsw.cpp /usr/include/stdc-predef.h \
+ /home/wangfangzhen/Yux/CBSmode/include/trgsw.hpp \
  /usr/local/include/c++/14.2.0/array \
  /usr/local/include/c++/14.2.0/compare \
  /usr/local/include/c++/14.2.0/bits/version.h \
@@ -47,8 +46,8 @@ src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /home/wangfangzhen/Fregata/CBSmode/include/mulfft.hpp \
- /home/wangfangzhen/Fregata/CBSmode/thirdparties/spqlios/fft_processor_spqlios.h \
+ /home/wangfangzhen/Yux/CBSmode/include/mulfft.hpp \
+ /home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.h \
  /usr/local/include/c++/14.2.0/cassert /usr/include/assert.h \
  /usr/local/include/c++/14.2.0/cmath \
  /usr/local/include/c++/14.2.0/bits/requires_hosted.h /usr/include/math.h \
@@ -106,13 +105,13 @@ src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: \
  /usr/local/include/c++/14.2.0/tr1/poly_hermite.tcc \
  /usr/local/include/c++/14.2.0/tr1/poly_laguerre.tcc \
  /usr/local/include/c++/14.2.0/tr1/riemann_zeta.tcc \
- /home/wangfangzhen/Fregata/CBSmode/include/cuhe++.hpp \
- /home/wangfangzhen/Fregata/CBSmode/include/INTorus.hpp \
- /home/wangfangzhen/Fregata/CBSmode/include/params.hpp \
- /home/wangfangzhen/Fregata/CBSmode/include/params/128bit.hpp \
- /home/wangfangzhen/Fregata/CBSmode/include/./axell/mpparam.hpp \
- /home/wangfangzhen/Fregata/CBSmode/include/utils.hpp \
- /home/wangfangzhen/Fregata/CBSmode/thirdparties/randen/randen.h \
+ /home/wangfangzhen/Yux/CBSmode/include/cuhe++.hpp \
+ /home/wangfangzhen/Yux/CBSmode/include/INTorus.hpp \
+ /home/wangfangzhen/Yux/CBSmode/include/params.hpp \
+ /home/wangfangzhen/Yux/CBSmode/include/params/128bit.hpp \
+ /home/wangfangzhen/Yux/CBSmode/include/./axell/mpparam.hpp \
+ /home/wangfangzhen/Yux/CBSmode/include/utils.hpp \
+ /home/wangfangzhen/Yux/CBSmode/thirdparties/randen/randen.h \
  /usr/include/string.h /usr/include/strings.h \
  /usr/local/include/c++/14.2.0/algorithm \
  /usr/local/include/c++/14.2.0/bits/stl_algo.h \
@@ -253,4 +252,4 @@ src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: \
  /usr/local/include/c++/14.2.0/numeric \
  /usr/local/include/c++/14.2.0/bits/stl_numeric.h \
  /usr/local/include/c++/14.2.0/pstl/glue_numeric_defs.h \
- /home/wangfangzhen/Fregata/CBSmode/include/trlwe.hpp
+ /home/wangfangzhen/Yux/CBSmode/include/trlwe.hpp
