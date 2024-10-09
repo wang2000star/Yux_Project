@@ -6,5 +6,5 @@ CXX_DEFINES = -DENABLE_AXELL -DUSE_RANDEN
 
 CXX_INCLUDES = -I/home/wangfangzhen/Yux/CBSmode/include -I/home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios -I/home/wangfangzhen/Yux/CBSmode/thirdparties/fftw -I/home/wangfangzhen/Yux/CBSmode/thirdparties/spqliox_aarch64 -I/home/wangfangzhen/Yux/CBSmode/thirdparties/spqliox_aarch64/xbyak_aarch64/xbyak_aarch64 -I/home/wangfangzhen/Yux/CBSmode/thirdparties/hexl/hexl/hexl/include -I/home/wangfangzhen/Yux/CBSmode/thirdparties/randen -I/home/wangfangzhen/Yux/CBSmode/thirdparties/cereal/include
 
-CXX_FLAGS = -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp -std=gnu++17 -fopenmp
+CXX_FLAGS = -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp -pg -std=gnu++17 -fopenmp
 

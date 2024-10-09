@@ -234,7 +234,7 @@ void rotation(unsigned char *a, int l,int r){
 
 // This function produces Nb(Nr+1) round keys.
 // The round keys are used in each round to encrypt the states.
-long KeyExpansion(unsigned char RoundKey[], long round, long blockByte,  unsigned char Key[])
+int KeyExpansion(unsigned char RoundKey[], int round, int blockByte,  unsigned char Key[])
 {
     // Nr is the round number
     // Nk is the number of 64-bit Feistel works in the key 4bytes each round.

@@ -5,6 +5,10 @@ find_package(OpenMP REQUIRED)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
+# For gprof
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+
 # 添加可执行文件 homoAES，并链接 OpenMP 库
 add_executable(homoYux2 Yux2.cpp Yux2_homo.cpp)
 target_link_libraries(homoYux2 tfhe++ OpenMP::OpenMP_CXX)

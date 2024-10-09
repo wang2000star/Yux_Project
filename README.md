@@ -9,5 +9,5 @@ cd build
 cmake -DENABLE_TEST=ON ..
 make -j$(nproc)
 cd Yux
-./Yux
+./homoYux2
 ```
