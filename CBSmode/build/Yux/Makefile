@@ -162,66 +162,66 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-Yux/CMakeFiles/homoAES.dir/rule:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/CMakeFiles/homoAES.dir/rule
-.PHONY : Yux/CMakeFiles/homoAES.dir/rule
+Yux/CMakeFiles/homoYux2.dir/rule:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/CMakeFiles/homoYux2.dir/rule
+.PHONY : Yux/CMakeFiles/homoYux2.dir/rule
 
 # Convenience name for target.
-homoAES: Yux/CMakeFiles/homoAES.dir/rule
-.PHONY : homoAES
+homoYux2: Yux/CMakeFiles/homoYux2.dir/rule
+.PHONY : homoYux2
 
 # fast build rule for target.
-homoAES/fast:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/build
-.PHONY : homoAES/fast
+homoYux2/fast:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/build
+.PHONY : homoYux2/fast
 
-AES.o: AES.cpp.o
-.PHONY : AES.o
-
-# target to build an object file
-AES.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/AES.cpp.o
-.PHONY : AES.cpp.o
-
-AES.i: AES.cpp.i
-.PHONY : AES.i
-
-# target to preprocess a source file
-AES.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/AES.cpp.i
-.PHONY : AES.cpp.i
-
-AES.s: AES.cpp.s
-.PHONY : AES.s
-
-# target to generate assembly for a file
-AES.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/AES.cpp.s
-.PHONY : AES.cpp.s
-
-AES_homo.o: AES_homo.cpp.o
-.PHONY : AES_homo.o
+Yux2.o: Yux2.cpp.o
+.PHONY : Yux2.o
 
 # target to build an object file
-AES_homo.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/AES_homo.cpp.o
-.PHONY : AES_homo.cpp.o
+Yux2.cpp.o:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o
+.PHONY : Yux2.cpp.o
 
-AES_homo.i: AES_homo.cpp.i
-.PHONY : AES_homo.i
+Yux2.i: Yux2.cpp.i
+.PHONY : Yux2.i
 
 # target to preprocess a source file
-AES_homo.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/AES_homo.cpp.i
-.PHONY : AES_homo.cpp.i
+Yux2.cpp.i:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.i
+.PHONY : Yux2.cpp.i
 
-AES_homo.s: AES_homo.cpp.s
-.PHONY : AES_homo.s
+Yux2.s: Yux2.cpp.s
+.PHONY : Yux2.s
 
 # target to generate assembly for a file
-AES_homo.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/AES_homo.cpp.s
-.PHONY : AES_homo.cpp.s
+Yux2.cpp.s:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.s
+.PHONY : Yux2.cpp.s
+
+Yux2_homo.o: Yux2_homo.cpp.o
+.PHONY : Yux2_homo.o
+
+# target to build an object file
+Yux2_homo.cpp.o:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o
+.PHONY : Yux2_homo.cpp.o
+
+Yux2_homo.i: Yux2_homo.cpp.i
+.PHONY : Yux2_homo.i
+
+# target to preprocess a source file
+Yux2_homo.cpp.i:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.i
+.PHONY : Yux2_homo.cpp.i
+
+Yux2_homo.s: Yux2_homo.cpp.s
+.PHONY : Yux2_homo.s
+
+# target to generate assembly for a file
+Yux2_homo.cpp.s:
+	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.s
+.PHONY : Yux2_homo.cpp.s
 
 # Help Target
 help:
@@ -235,13 +235,13 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... homoAES"
-	@echo "... AES.o"
-	@echo "... AES.i"
-	@echo "... AES.s"
-	@echo "... AES_homo.o"
-	@echo "... AES_homo.i"
-	@echo "... AES_homo.s"
+	@echo "... homoYux2"
+	@echo "... Yux2.o"
+	@echo "... Yux2.i"
+	@echo "... Yux2.s"
+	@echo "... Yux2_homo.o"
+	@echo "... Yux2_homo.i"
+	@echo "... Yux2_homo.s"
 .PHONY : help
 
 

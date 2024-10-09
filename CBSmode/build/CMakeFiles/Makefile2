@@ -90,7 +90,7 @@ clean: Yux/clean
 # Directory level rules for directory Yux
 
 # Recursive "all" directory target.
-Yux/all: Yux/CMakeFiles/homoAES.dir/all
+Yux/all: Yux/CMakeFiles/homoYux2.dir/all
 .PHONY : Yux/all
 
 # Recursive "preinstall" directory target.
@@ -98,7 +98,7 @@ Yux/preinstall:
 .PHONY : Yux/preinstall
 
 # Recursive "clean" directory target.
-Yux/clean: Yux/CMakeFiles/homoAES.dir/clean
+Yux/clean: Yux/CMakeFiles/homoYux2.dir/clean
 .PHONY : Yux/clean
 
 #=============================================================================
@@ -1108,32 +1108,32 @@ test/CMakeFiles/trlwemult.dir/clean:
 .PHONY : test/CMakeFiles/trlwemult.dir/clean
 
 #=============================================================================
-# Target rules for target Yux/CMakeFiles/homoAES.dir
+# Target rules for target Yux/CMakeFiles/homoYux2.dir
 
 # All Build rule for target.
-Yux/CMakeFiles/homoAES.dir/all: thirdparties/spqlios/CMakeFiles/spqlios.dir/all
-Yux/CMakeFiles/homoAES.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
-Yux/CMakeFiles/homoAES.dir/all: src/CMakeFiles/tfhe++.dir/all
-	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/depend
-	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=29,30,31 "Built target homoAES"
-.PHONY : Yux/CMakeFiles/homoAES.dir/all
+Yux/CMakeFiles/homoYux2.dir/all: thirdparties/spqlios/CMakeFiles/spqlios.dir/all
+Yux/CMakeFiles/homoYux2.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
+Yux/CMakeFiles/homoYux2.dir/all: src/CMakeFiles/tfhe++.dir/all
+	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/depend
+	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=29,30,31 "Built target homoYux2"
+.PHONY : Yux/CMakeFiles/homoYux2.dir/all
 
 # Build rule for subdir invocation for target.
-Yux/CMakeFiles/homoAES.dir/rule: cmake_check_build_system
+Yux/CMakeFiles/homoYux2.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 23
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/CMakeFiles/homoAES.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/CMakeFiles/homoYux2.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
-.PHONY : Yux/CMakeFiles/homoAES.dir/rule
+.PHONY : Yux/CMakeFiles/homoYux2.dir/rule
 
 # Convenience name for target.
-homoAES: Yux/CMakeFiles/homoAES.dir/rule
-.PHONY : homoAES
+homoYux2: Yux/CMakeFiles/homoYux2.dir/rule
+.PHONY : homoYux2
 
 # clean rule for target.
-Yux/CMakeFiles/homoAES.dir/clean:
-	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/clean
-.PHONY : Yux/CMakeFiles/homoAES.dir/clean
+Yux/CMakeFiles/homoYux2.dir/clean:
+	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/clean
+.PHONY : Yux/CMakeFiles/homoYux2.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

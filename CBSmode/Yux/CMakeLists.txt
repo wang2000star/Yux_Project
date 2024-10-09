@@ -5,8 +5,8 @@ find_package(OpenMP REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 
 # 添加可执行文件 homoAES，并链接 OpenMP 库
-add_executable(homoAES AES.cpp AES_homo.cpp)
-target_link_libraries(homoAES tfhe++ OpenMP::OpenMP_CXX)
+add_executable(homoYux2 Yux2.cpp Yux2_homo.cpp)
+target_link_libraries(homoYux2 tfhe++ OpenMP::OpenMP_CXX)
 
 # 其他注释掉的代码
 # file(GLOB test_sources RELATIVE "${CMAKE_CURRENT_LIST_DIR}" "*.cpp")

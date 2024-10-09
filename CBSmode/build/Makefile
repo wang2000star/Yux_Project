@@ -578,17 +578,17 @@ trlwemult/fast:
 .PHONY : trlwemult/fast
 
 #=============================================================================
-# Target rules for targets named homoAES
+# Target rules for targets named homoYux2
 
 # Build rule for target.
-homoAES: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 homoAES
-.PHONY : homoAES
+homoYux2: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 homoYux2
+.PHONY : homoYux2
 
 # fast build rule for target.
-homoAES/fast:
-	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoAES.dir/build.make Yux/CMakeFiles/homoAES.dir/build
-.PHONY : homoAES/fast
+homoYux2/fast:
+	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/build
+.PHONY : homoYux2/fast
 
 # Help Target
 help:
@@ -616,7 +616,7 @@ help:
 	@echo "... gate"
 	@echo "... gatebootstrapping"
 	@echo "... gatebootstrappingntt"
-	@echo "... homoAES"
+	@echo "... homoYux2"
 	@echo "... identitybootstrapping"
 	@echo "... iks"
 	@echo "... invcircuitbootstrapping"
