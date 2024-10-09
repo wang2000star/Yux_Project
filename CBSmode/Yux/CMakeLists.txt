@@ -2,7 +2,8 @@
 find_package(OpenMP REQUIRED)
 
 # 设置编译器选项以禁止所有警告
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 # 添加可执行文件 homoAES，并链接 OpenMP 库
 add_executable(homoYux2 Yux2.cpp Yux2_homo.cpp)
