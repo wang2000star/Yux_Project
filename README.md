@@ -10,4 +10,5 @@ cmake -DENABLE_TEST=ON ..
 make -j$(nproc)
 cd Yux
 ./homoYux2
+gprof homoYux2 gmon.out//生成性能报告
 ```
