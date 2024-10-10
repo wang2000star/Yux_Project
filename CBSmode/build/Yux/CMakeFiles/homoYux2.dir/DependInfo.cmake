@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Yux/CBSmode/Yux/Yux2.cpp" "Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o" "gcc" "Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o.d"
-  "/home/wangfangzhen/Yux/CBSmode/Yux/Yux2_homo.cpp" "Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o" "gcc" "Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o.d"
+  "/home/wfz/Yux/CBSmode/Yux/Yux2.cpp" "Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o" "gcc" "Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o.d"
+  "/home/wfz/Yux/CBSmode/Yux/Yux2_homo.cpp" "Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o" "gcc" "Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

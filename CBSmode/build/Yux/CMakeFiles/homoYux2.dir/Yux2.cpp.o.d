@@ -1,5 +1,5 @@
 Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o: \
- /home/wangfangzhen/Yux/CBSmode/Yux/Yux2.cpp /usr/include/stdc-predef.h \
+ /home/wfz/Yux/CBSmode/Yux/Yux2.cpp /usr/include/stdc-predef.h \
  /usr/local/include/c++/14.2.0/cstring \
  /usr/local/include/c++/14.2.0/bits/version.h \
  /usr/local/include/c++/14.2.0/x86_64-pc-linux-gnu/bits/c++config.h \

@@ -57,18 +57,18 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wangfangzhen/Yux/CBSmode
+CMAKE_SOURCE_DIR = /home/wfz/Yux/CBSmode
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wangfangzhen/Yux/CBSmode/build
+CMAKE_BINARY_DIR = /home/wfz/Yux/CBSmode/build
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/usr/local/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
+	/usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles /home/wangfangzhen/Yux/CBSmode/build/Yux//CMakeFiles/progress.marks
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	cd /home/wfz/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles /home/wfz/Yux/CBSmode/build/Yux//CMakeFiles/progress.marks
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/clean
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/preinstall
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/preinstall
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/wfz/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 Yux/CMakeFiles/homoYux2.dir/rule:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/CMakeFiles/homoYux2.dir/rule
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/CMakeFiles/homoYux2.dir/rule
 .PHONY : Yux/CMakeFiles/homoYux2.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ homoYux2: Yux/CMakeFiles/homoYux2.dir/rule
 
 # fast build rule for target.
 homoYux2/fast:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/build
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/build
 .PHONY : homoYux2/fast
 
 Yux2.o: Yux2.cpp.o
@@ -180,7 +180,7 @@ Yux2.o: Yux2.cpp.o
 
 # target to build an object file
 Yux2.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o
 .PHONY : Yux2.cpp.o
 
 Yux2.i: Yux2.cpp.i
@@ -188,7 +188,7 @@ Yux2.i: Yux2.cpp.i
 
 # target to preprocess a source file
 Yux2.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.i
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.i
 .PHONY : Yux2.cpp.i
 
 Yux2.s: Yux2.cpp.s
@@ -196,7 +196,7 @@ Yux2.s: Yux2.cpp.s
 
 # target to generate assembly for a file
 Yux2.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.s
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.s
 .PHONY : Yux2.cpp.s
 
 Yux2_homo.o: Yux2_homo.cpp.o
@@ -204,7 +204,7 @@ Yux2_homo.o: Yux2_homo.cpp.o
 
 # target to build an object file
 Yux2_homo.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o
 .PHONY : Yux2_homo.cpp.o
 
 Yux2_homo.i: Yux2_homo.cpp.i
@@ -212,7 +212,7 @@ Yux2_homo.i: Yux2_homo.cpp.i
 
 # target to preprocess a source file
 Yux2_homo.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.i
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.i
 .PHONY : Yux2_homo.cpp.i
 
 Yux2_homo.s: Yux2_homo.cpp.s
@@ -220,7 +220,7 @@ Yux2_homo.s: Yux2_homo.cpp.s
 
 # target to generate assembly for a file
 Yux2_homo.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.s
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.s
 .PHONY : Yux2_homo.cpp.s
 
 # Help Target
@@ -253,6 +253,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/wfz/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

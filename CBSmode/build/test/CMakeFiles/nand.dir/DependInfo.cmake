@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Yux/CBSmode/test/nand.cpp" "test/CMakeFiles/nand.dir/nand.cpp.o" "gcc" "test/CMakeFiles/nand.dir/nand.cpp.o.d"
+  "/home/wfz/Yux/CBSmode/test/nand.cpp" "test/CMakeFiles/nand.dir/nand.cpp.o" "gcc" "test/CMakeFiles/nand.dir/nand.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

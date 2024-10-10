@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wangfangzhen/Yux/CBSmode
+CMAKE_SOURCE_DIR = /home/wfz/Yux/CBSmode
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wangfangzhen/Yux/CBSmode/build
+CMAKE_BINARY_DIR = /home/wfz/Yux/CBSmode/build
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/tfhe++.dir/depend.make
@@ -70,172 +70,172 @@ include src/CMakeFiles/tfhe++.dir/progress.make
 include src/CMakeFiles/tfhe++.dir/flags.make
 
 src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/axell/gate.cpp
+src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o: /home/wfz/Yux/CBSmode/src/axell/gate.cpp
 src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o -MF CMakeFiles/tfhe++.dir/axell/gate.cpp.o.d -o CMakeFiles/tfhe++.dir/axell/gate.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/axell/gate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o -MF CMakeFiles/tfhe++.dir/axell/gate.cpp.o.d -o CMakeFiles/tfhe++.dir/axell/gate.cpp.o -c /home/wfz/Yux/CBSmode/src/axell/gate.cpp
 
 src/CMakeFiles/tfhe++.dir/axell/gate.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/axell/gate.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/axell/gate.cpp > CMakeFiles/tfhe++.dir/axell/gate.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/axell/gate.cpp > CMakeFiles/tfhe++.dir/axell/gate.cpp.i
 
 src/CMakeFiles/tfhe++.dir/axell/gate.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/axell/gate.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/axell/gate.cpp -o CMakeFiles/tfhe++.dir/axell/gate.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/axell/gate.cpp -o CMakeFiles/tfhe++.dir/axell/gate.cpp.s
 
 src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/axell/integer.cpp
+src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o: /home/wfz/Yux/CBSmode/src/axell/integer.cpp
 src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o -MF CMakeFiles/tfhe++.dir/axell/integer.cpp.o.d -o CMakeFiles/tfhe++.dir/axell/integer.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/axell/integer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o -MF CMakeFiles/tfhe++.dir/axell/integer.cpp.o.d -o CMakeFiles/tfhe++.dir/axell/integer.cpp.o -c /home/wfz/Yux/CBSmode/src/axell/integer.cpp
 
 src/CMakeFiles/tfhe++.dir/axell/integer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/axell/integer.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/axell/integer.cpp > CMakeFiles/tfhe++.dir/axell/integer.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/axell/integer.cpp > CMakeFiles/tfhe++.dir/axell/integer.cpp.i
 
 src/CMakeFiles/tfhe++.dir/axell/integer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/axell/integer.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/axell/integer.cpp -o CMakeFiles/tfhe++.dir/axell/integer.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/axell/integer.cpp -o CMakeFiles/tfhe++.dir/axell/integer.cpp.s
 
 src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/circuitbootstrapping.cpp
+src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o: /home/wfz/Yux/CBSmode/src/circuitbootstrapping.cpp
 src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o -MF CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o.d -o CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/circuitbootstrapping.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o -MF CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o.d -o CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o -c /home/wfz/Yux/CBSmode/src/circuitbootstrapping.cpp
 
 src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/circuitbootstrapping.cpp > CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/circuitbootstrapping.cpp > CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.i
 
 src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/circuitbootstrapping.cpp -o CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/circuitbootstrapping.cpp -o CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.s
 
 src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/cloudkey.cpp
+src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o: /home/wfz/Yux/CBSmode/src/cloudkey.cpp
 src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o -MF CMakeFiles/tfhe++.dir/cloudkey.cpp.o.d -o CMakeFiles/tfhe++.dir/cloudkey.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/cloudkey.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o -MF CMakeFiles/tfhe++.dir/cloudkey.cpp.o.d -o CMakeFiles/tfhe++.dir/cloudkey.cpp.o -c /home/wfz/Yux/CBSmode/src/cloudkey.cpp
 
 src/CMakeFiles/tfhe++.dir/cloudkey.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/cloudkey.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/cloudkey.cpp > CMakeFiles/tfhe++.dir/cloudkey.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/cloudkey.cpp > CMakeFiles/tfhe++.dir/cloudkey.cpp.i
 
 src/CMakeFiles/tfhe++.dir/cloudkey.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/cloudkey.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/cloudkey.cpp -o CMakeFiles/tfhe++.dir/cloudkey.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/cloudkey.cpp -o CMakeFiles/tfhe++.dir/cloudkey.cpp.s
 
 src/CMakeFiles/tfhe++.dir/detwfa.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/detwfa.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/detwfa.cpp
+src/CMakeFiles/tfhe++.dir/detwfa.cpp.o: /home/wfz/Yux/CBSmode/src/detwfa.cpp
 src/CMakeFiles/tfhe++.dir/detwfa.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/tfhe++.dir/detwfa.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/detwfa.cpp.o -MF CMakeFiles/tfhe++.dir/detwfa.cpp.o.d -o CMakeFiles/tfhe++.dir/detwfa.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/detwfa.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/tfhe++.dir/detwfa.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/detwfa.cpp.o -MF CMakeFiles/tfhe++.dir/detwfa.cpp.o.d -o CMakeFiles/tfhe++.dir/detwfa.cpp.o -c /home/wfz/Yux/CBSmode/src/detwfa.cpp
 
 src/CMakeFiles/tfhe++.dir/detwfa.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/detwfa.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/detwfa.cpp > CMakeFiles/tfhe++.dir/detwfa.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/detwfa.cpp > CMakeFiles/tfhe++.dir/detwfa.cpp.i
 
 src/CMakeFiles/tfhe++.dir/detwfa.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/detwfa.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/detwfa.cpp -o CMakeFiles/tfhe++.dir/detwfa.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/detwfa.cpp -o CMakeFiles/tfhe++.dir/detwfa.cpp.s
 
 src/CMakeFiles/tfhe++.dir/gate.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/gate.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/gate.cpp
+src/CMakeFiles/tfhe++.dir/gate.cpp.o: /home/wfz/Yux/CBSmode/src/gate.cpp
 src/CMakeFiles/tfhe++.dir/gate.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/tfhe++.dir/gate.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/gate.cpp.o -MF CMakeFiles/tfhe++.dir/gate.cpp.o.d -o CMakeFiles/tfhe++.dir/gate.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/gate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/tfhe++.dir/gate.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/gate.cpp.o -MF CMakeFiles/tfhe++.dir/gate.cpp.o.d -o CMakeFiles/tfhe++.dir/gate.cpp.o -c /home/wfz/Yux/CBSmode/src/gate.cpp
 
 src/CMakeFiles/tfhe++.dir/gate.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/gate.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/gate.cpp > CMakeFiles/tfhe++.dir/gate.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/gate.cpp > CMakeFiles/tfhe++.dir/gate.cpp.i
 
 src/CMakeFiles/tfhe++.dir/gate.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/gate.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/gate.cpp -o CMakeFiles/tfhe++.dir/gate.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/gate.cpp -o CMakeFiles/tfhe++.dir/gate.cpp.s
 
 src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/gatebootstrapping.cpp
+src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o: /home/wfz/Yux/CBSmode/src/gatebootstrapping.cpp
 src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o -MF CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o.d -o CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/gatebootstrapping.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o -MF CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o.d -o CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o -c /home/wfz/Yux/CBSmode/src/gatebootstrapping.cpp
 
 src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/gatebootstrapping.cpp > CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/gatebootstrapping.cpp > CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.i
 
 src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/gatebootstrapping.cpp -o CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/gatebootstrapping.cpp -o CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.s
 
 src/CMakeFiles/tfhe++.dir/key.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/key.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/key.cpp
+src/CMakeFiles/tfhe++.dir/key.cpp.o: /home/wfz/Yux/CBSmode/src/key.cpp
 src/CMakeFiles/tfhe++.dir/key.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/tfhe++.dir/key.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/key.cpp.o -MF CMakeFiles/tfhe++.dir/key.cpp.o.d -o CMakeFiles/tfhe++.dir/key.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/key.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/tfhe++.dir/key.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/key.cpp.o -MF CMakeFiles/tfhe++.dir/key.cpp.o.d -o CMakeFiles/tfhe++.dir/key.cpp.o -c /home/wfz/Yux/CBSmode/src/key.cpp
 
 src/CMakeFiles/tfhe++.dir/key.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/key.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/key.cpp > CMakeFiles/tfhe++.dir/key.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/key.cpp > CMakeFiles/tfhe++.dir/key.cpp.i
 
 src/CMakeFiles/tfhe++.dir/key.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/key.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/key.cpp -o CMakeFiles/tfhe++.dir/key.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/key.cpp -o CMakeFiles/tfhe++.dir/key.cpp.s
 
 src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/keyswitch.cpp
+src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o: /home/wfz/Yux/CBSmode/src/keyswitch.cpp
 src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o -MF CMakeFiles/tfhe++.dir/keyswitch.cpp.o.d -o CMakeFiles/tfhe++.dir/keyswitch.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/keyswitch.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o -MF CMakeFiles/tfhe++.dir/keyswitch.cpp.o.d -o CMakeFiles/tfhe++.dir/keyswitch.cpp.o -c /home/wfz/Yux/CBSmode/src/keyswitch.cpp
 
 src/CMakeFiles/tfhe++.dir/keyswitch.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/keyswitch.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/keyswitch.cpp > CMakeFiles/tfhe++.dir/keyswitch.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/keyswitch.cpp > CMakeFiles/tfhe++.dir/keyswitch.cpp.i
 
 src/CMakeFiles/tfhe++.dir/keyswitch.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/keyswitch.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/keyswitch.cpp -o CMakeFiles/tfhe++.dir/keyswitch.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/keyswitch.cpp -o CMakeFiles/tfhe++.dir/keyswitch.cpp.s
 
 src/CMakeFiles/tfhe++.dir/tlwe.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/tlwe.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/tlwe.cpp
+src/CMakeFiles/tfhe++.dir/tlwe.cpp.o: /home/wfz/Yux/CBSmode/src/tlwe.cpp
 src/CMakeFiles/tfhe++.dir/tlwe.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/tfhe++.dir/tlwe.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/tlwe.cpp.o -MF CMakeFiles/tfhe++.dir/tlwe.cpp.o.d -o CMakeFiles/tfhe++.dir/tlwe.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/tlwe.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/tfhe++.dir/tlwe.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/tlwe.cpp.o -MF CMakeFiles/tfhe++.dir/tlwe.cpp.o.d -o CMakeFiles/tfhe++.dir/tlwe.cpp.o -c /home/wfz/Yux/CBSmode/src/tlwe.cpp
 
 src/CMakeFiles/tfhe++.dir/tlwe.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/tlwe.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/tlwe.cpp > CMakeFiles/tfhe++.dir/tlwe.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/tlwe.cpp > CMakeFiles/tfhe++.dir/tlwe.cpp.i
 
 src/CMakeFiles/tfhe++.dir/tlwe.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/tlwe.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/tlwe.cpp -o CMakeFiles/tfhe++.dir/tlwe.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/tlwe.cpp -o CMakeFiles/tfhe++.dir/tlwe.cpp.s
 
 src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/trgsw.cpp
+src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: /home/wfz/Yux/CBSmode/src/trgsw.cpp
 src/CMakeFiles/tfhe++.dir/trgsw.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/tfhe++.dir/trgsw.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/trgsw.cpp.o -MF CMakeFiles/tfhe++.dir/trgsw.cpp.o.d -o CMakeFiles/tfhe++.dir/trgsw.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/trgsw.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/tfhe++.dir/trgsw.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/trgsw.cpp.o -MF CMakeFiles/tfhe++.dir/trgsw.cpp.o.d -o CMakeFiles/tfhe++.dir/trgsw.cpp.o -c /home/wfz/Yux/CBSmode/src/trgsw.cpp
 
 src/CMakeFiles/tfhe++.dir/trgsw.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/trgsw.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/trgsw.cpp > CMakeFiles/tfhe++.dir/trgsw.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/trgsw.cpp > CMakeFiles/tfhe++.dir/trgsw.cpp.i
 
 src/CMakeFiles/tfhe++.dir/trgsw.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/trgsw.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/trgsw.cpp -o CMakeFiles/tfhe++.dir/trgsw.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/trgsw.cpp -o CMakeFiles/tfhe++.dir/trgsw.cpp.s
 
 src/CMakeFiles/tfhe++.dir/trlwe.cpp.o: src/CMakeFiles/tfhe++.dir/flags.make
-src/CMakeFiles/tfhe++.dir/trlwe.cpp.o: /home/wangfangzhen/Yux/CBSmode/src/trlwe.cpp
+src/CMakeFiles/tfhe++.dir/trlwe.cpp.o: /home/wfz/Yux/CBSmode/src/trlwe.cpp
 src/CMakeFiles/tfhe++.dir/trlwe.cpp.o: src/CMakeFiles/tfhe++.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/tfhe++.dir/trlwe.cpp.o"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/trlwe.cpp.o -MF CMakeFiles/tfhe++.dir/trlwe.cpp.o.d -o CMakeFiles/tfhe++.dir/trlwe.cpp.o -c /home/wangfangzhen/Yux/CBSmode/src/trlwe.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/tfhe++.dir/trlwe.cpp.o"
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/tfhe++.dir/trlwe.cpp.o -MF CMakeFiles/tfhe++.dir/trlwe.cpp.o.d -o CMakeFiles/tfhe++.dir/trlwe.cpp.o -c /home/wfz/Yux/CBSmode/src/trlwe.cpp
 
 src/CMakeFiles/tfhe++.dir/trlwe.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tfhe++.dir/trlwe.cpp.i"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wangfangzhen/Yux/CBSmode/src/trlwe.cpp > CMakeFiles/tfhe++.dir/trlwe.cpp.i
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/CBSmode/src/trlwe.cpp > CMakeFiles/tfhe++.dir/trlwe.cpp.i
 
 src/CMakeFiles/tfhe++.dir/trlwe.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tfhe++.dir/trlwe.cpp.s"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wangfangzhen/Yux/CBSmode/src/trlwe.cpp -o CMakeFiles/tfhe++.dir/trlwe.cpp.s
+	cd /home/wfz/Yux/CBSmode/build/src && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/CBSmode/src/trlwe.cpp -o CMakeFiles/tfhe++.dir/trlwe.cpp.s
 
 # Object files for target tfhe++
 tfhe_______OBJECTS = \
@@ -269,19 +269,19 @@ src/libtfhe++.a: src/CMakeFiles/tfhe++.dir/trgsw.cpp.o
 src/libtfhe++.a: src/CMakeFiles/tfhe++.dir/trlwe.cpp.o
 src/libtfhe++.a: src/CMakeFiles/tfhe++.dir/build.make
 src/libtfhe++.a: src/CMakeFiles/tfhe++.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX static library libtfhe++.a"
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && $(CMAKE_COMMAND) -P CMakeFiles/tfhe++.dir/cmake_clean_target.cmake
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tfhe++.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX static library libtfhe++.a"
+	cd /home/wfz/Yux/CBSmode/build/src && $(CMAKE_COMMAND) -P CMakeFiles/tfhe++.dir/cmake_clean_target.cmake
+	cd /home/wfz/Yux/CBSmode/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tfhe++.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/tfhe++.dir/build: src/libtfhe++.a
 .PHONY : src/CMakeFiles/tfhe++.dir/build
 
 src/CMakeFiles/tfhe++.dir/clean:
-	cd /home/wangfangzhen/Yux/CBSmode/build/src && $(CMAKE_COMMAND) -P CMakeFiles/tfhe++.dir/cmake_clean.cmake
+	cd /home/wfz/Yux/CBSmode/build/src && $(CMAKE_COMMAND) -P CMakeFiles/tfhe++.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/tfhe++.dir/clean
 
 src/CMakeFiles/tfhe++.dir/depend:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wangfangzhen/Yux/CBSmode /home/wangfangzhen/Yux/CBSmode/src /home/wangfangzhen/Yux/CBSmode/build /home/wangfangzhen/Yux/CBSmode/build/src /home/wangfangzhen/Yux/CBSmode/build/src/CMakeFiles/tfhe++.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/wfz/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wfz/Yux/CBSmode /home/wfz/Yux/CBSmode/src /home/wfz/Yux/CBSmode/build /home/wfz/Yux/CBSmode/build/src /home/wfz/Yux/CBSmode/build/src/CMakeFiles/tfhe++.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : src/CMakeFiles/tfhe++.dir/depend
 

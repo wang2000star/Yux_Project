@@ -4,7 +4,7 @@
 # compile CXX with /usr/local/bin/c++
 CXX_DEFINES = -DENABLE_AXELL -DUSE_RANDEN
 
-CXX_INCLUDES = -I/home/wangfangzhen/Yux/CBSmode/include -I/home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios -I/home/wangfangzhen/Yux/CBSmode/thirdparties/fftw -I/home/wangfangzhen/Yux/CBSmode/thirdparties/spqliox_aarch64 -I/home/wangfangzhen/Yux/CBSmode/thirdparties/spqliox_aarch64/xbyak_aarch64/xbyak_aarch64 -I/home/wangfangzhen/Yux/CBSmode/thirdparties/hexl/hexl/hexl/include -I/home/wangfangzhen/Yux/CBSmode/thirdparties/randen -I/home/wangfangzhen/Yux/CBSmode/thirdparties/cereal/include
+CXX_INCLUDES = -I/home/wfz/Yux/CBSmode/include -I/home/wfz/Yux/CBSmode/thirdparties/spqlios -I/home/wfz/Yux/CBSmode/thirdparties/fftw -I/home/wfz/Yux/CBSmode/thirdparties/spqliox_aarch64 -I/home/wfz/Yux/CBSmode/thirdparties/spqliox_aarch64/xbyak_aarch64/xbyak_aarch64 -I/home/wfz/Yux/CBSmode/thirdparties/hexl/hexl/hexl/include -I/home/wfz/Yux/CBSmode/thirdparties/randen -I/home/wfz/Yux/CBSmode/thirdparties/cereal/include
 
 CXX_FLAGS = -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp -pg -std=gnu++17 -fopenmp
 

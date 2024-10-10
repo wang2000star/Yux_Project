@@ -54,10 +54,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wangfangzhen/Yux/CBSmode
+CMAKE_SOURCE_DIR = /home/wfz/Yux/CBSmode
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wangfangzhen/Yux/CBSmode/build
+CMAKE_BINARY_DIR = /home/wfz/Yux/CBSmode/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -224,14 +224,14 @@ thirdparties/spqlios/clean: thirdparties/spqlios/CMakeFiles/spqlios.dir/clean
 thirdparties/spqlios/CMakeFiles/spqlios.dir/all:
 	$(MAKE) $(MAKESILENT) -f thirdparties/spqlios/CMakeFiles/spqlios.dir/build.make thirdparties/spqlios/CMakeFiles/spqlios.dir/depend
 	$(MAKE) $(MAKESILENT) -f thirdparties/spqlios/CMakeFiles/spqlios.dir/build.make thirdparties/spqlios/CMakeFiles/spqlios.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=54,55,56,57,58 "Built target spqlios"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=54,55,56,57,58 "Built target spqlios"
 .PHONY : thirdparties/spqlios/CMakeFiles/spqlios.dir/all
 
 # Build rule for subdir invocation for target.
 thirdparties/spqlios/CMakeFiles/spqlios.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/spqlios/CMakeFiles/spqlios.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : thirdparties/spqlios/CMakeFiles/spqlios.dir/rule
 
 # Convenience name for target.
@@ -250,14 +250,14 @@ thirdparties/spqlios/CMakeFiles/spqlios.dir/clean:
 thirdparties/randen/CMakeFiles/randen.dir/all:
 	$(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/depend
 	$(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=50,51 "Built target randen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=50,51 "Built target randen"
 .PHONY : thirdparties/randen/CMakeFiles/randen.dir/all
 
 # Build rule for subdir invocation for target.
 thirdparties/randen/CMakeFiles/randen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/CMakeFiles/randen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : thirdparties/randen/CMakeFiles/randen.dir/rule
 
 # Convenience name for target.
@@ -276,14 +276,14 @@ thirdparties/randen/CMakeFiles/randen.dir/clean:
 src/CMakeFiles/tfhe++.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=59,60,61,62,63,64,65,66,67,68,69,70,71 "Built target tfhe++"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=59,60,61,62,63,64,65,66,67,68,69,70,71 "Built target tfhe++"
 .PHONY : src/CMakeFiles/tfhe++.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/tfhe++.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/tfhe++.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/tfhe++.dir/rule
 
 # Convenience name for target.
@@ -304,14 +304,14 @@ test/CMakeFiles/annihilate.dir/all: thirdparties/randen/CMakeFiles/randen.dir/al
 test/CMakeFiles/annihilate.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/annihilate.dir/build.make test/CMakeFiles/annihilate.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/annihilate.dir/build.make test/CMakeFiles/annihilate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=1,2 "Built target annihilate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=1,2 "Built target annihilate"
 .PHONY : test/CMakeFiles/annihilate.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/annihilate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/annihilate.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/annihilate.dir/rule
 
 # Convenience name for target.
@@ -332,14 +332,14 @@ test/CMakeFiles/automorphism.dir/all: thirdparties/randen/CMakeFiles/randen.dir/
 test/CMakeFiles/automorphism.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/automorphism.dir/build.make test/CMakeFiles/automorphism.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/automorphism.dir/build.make test/CMakeFiles/automorphism.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=3,4 "Built target automorphism"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=3,4 "Built target automorphism"
 .PHONY : test/CMakeFiles/automorphism.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/automorphism.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/automorphism.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/automorphism.dir/rule
 
 # Convenience name for target.
@@ -360,14 +360,14 @@ test/CMakeFiles/bitsequencerepresentation.dir/all: thirdparties/randen/CMakeFile
 test/CMakeFiles/bitsequencerepresentation.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/bitsequencerepresentation.dir/build.make test/CMakeFiles/bitsequencerepresentation.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/bitsequencerepresentation.dir/build.make test/CMakeFiles/bitsequencerepresentation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=5,6 "Built target bitsequencerepresentation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=5,6 "Built target bitsequencerepresentation"
 .PHONY : test/CMakeFiles/bitsequencerepresentation.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/bitsequencerepresentation.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/bitsequencerepresentation.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/bitsequencerepresentation.dir/rule
 
 # Convenience name for target.
@@ -388,14 +388,14 @@ test/CMakeFiles/cereal.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/cereal.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/cereal.dir/build.make test/CMakeFiles/cereal.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/cereal.dir/build.make test/CMakeFiles/cereal.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=7,8 "Built target cereal"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=7,8 "Built target cereal"
 .PHONY : test/CMakeFiles/cereal.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/cereal.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/cereal.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/cereal.dir/rule
 
 # Convenience name for target.
@@ -416,14 +416,14 @@ test/CMakeFiles/circuitbootstrapping.dir/all: thirdparties/randen/CMakeFiles/ran
 test/CMakeFiles/circuitbootstrapping.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/circuitbootstrapping.dir/build.make test/CMakeFiles/circuitbootstrapping.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/circuitbootstrapping.dir/build.make test/CMakeFiles/circuitbootstrapping.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=9,10 "Built target circuitbootstrapping"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=9,10 "Built target circuitbootstrapping"
 .PHONY : test/CMakeFiles/circuitbootstrapping.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/circuitbootstrapping.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/circuitbootstrapping.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/circuitbootstrapping.dir/rule
 
 # Convenience name for target.
@@ -444,14 +444,14 @@ test/CMakeFiles/cmux.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/cmux.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/cmux.dir/build.make test/CMakeFiles/cmux.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/cmux.dir/build.make test/CMakeFiles/cmux.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=11,12 "Built target cmux"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=11,12 "Built target cmux"
 .PHONY : test/CMakeFiles/cmux.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/cmux.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/cmux.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/cmux.dir/rule
 
 # Convenience name for target.
@@ -472,14 +472,14 @@ test/CMakeFiles/combinedmem.dir/all: thirdparties/randen/CMakeFiles/randen.dir/a
 test/CMakeFiles/combinedmem.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/combinedmem.dir/build.make test/CMakeFiles/combinedmem.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/combinedmem.dir/build.make test/CMakeFiles/combinedmem.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=13,14 "Built target combinedmem"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=13,14 "Built target combinedmem"
 .PHONY : test/CMakeFiles/combinedmem.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/combinedmem.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/combinedmem.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/combinedmem.dir/rule
 
 # Convenience name for target.
@@ -500,14 +500,14 @@ test/CMakeFiles/cuhe++.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/cuhe++.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/cuhe++.dir/build.make test/CMakeFiles/cuhe++.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/cuhe++.dir/build.make test/CMakeFiles/cuhe++.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=15,16 "Built target cuhe++"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=15,16 "Built target cuhe++"
 .PHONY : test/CMakeFiles/cuhe++.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/cuhe++.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/cuhe++.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/cuhe++.dir/rule
 
 # Convenience name for target.
@@ -528,14 +528,14 @@ test/CMakeFiles/evalauto.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/evalauto.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/evalauto.dir/build.make test/CMakeFiles/evalauto.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/evalauto.dir/build.make test/CMakeFiles/evalauto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=17,18 "Built target evalauto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=17,18 "Built target evalauto"
 .PHONY : test/CMakeFiles/evalauto.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/evalauto.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/evalauto.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/evalauto.dir/rule
 
 # Convenience name for target.
@@ -556,14 +556,14 @@ test/CMakeFiles/externalproduct.dir/all: thirdparties/randen/CMakeFiles/randen.d
 test/CMakeFiles/externalproduct.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/externalproduct.dir/build.make test/CMakeFiles/externalproduct.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/externalproduct.dir/build.make test/CMakeFiles/externalproduct.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=19,20 "Built target externalproduct"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=19,20 "Built target externalproduct"
 .PHONY : test/CMakeFiles/externalproduct.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/externalproduct.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/externalproduct.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/externalproduct.dir/rule
 
 # Convenience name for target.
@@ -584,14 +584,14 @@ test/CMakeFiles/externalproductntt.dir/all: thirdparties/randen/CMakeFiles/rande
 test/CMakeFiles/externalproductntt.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/externalproductntt.dir/build.make test/CMakeFiles/externalproductntt.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/externalproductntt.dir/build.make test/CMakeFiles/externalproductntt.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=21,22 "Built target externalproductntt"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=21,22 "Built target externalproductntt"
 .PHONY : test/CMakeFiles/externalproductntt.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/externalproductntt.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/externalproductntt.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/externalproductntt.dir/rule
 
 # Convenience name for target.
@@ -612,14 +612,14 @@ test/CMakeFiles/gate.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/gate.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gate.dir/build.make test/CMakeFiles/gate.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gate.dir/build.make test/CMakeFiles/gate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=23,24 "Built target gate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=23,24 "Built target gate"
 .PHONY : test/CMakeFiles/gate.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/gate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/gate.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/gate.dir/rule
 
 # Convenience name for target.
@@ -640,14 +640,14 @@ test/CMakeFiles/gatebootstrapping.dir/all: thirdparties/randen/CMakeFiles/randen
 test/CMakeFiles/gatebootstrapping.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gatebootstrapping.dir/build.make test/CMakeFiles/gatebootstrapping.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gatebootstrapping.dir/build.make test/CMakeFiles/gatebootstrapping.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=25,26 "Built target gatebootstrapping"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=25,26 "Built target gatebootstrapping"
 .PHONY : test/CMakeFiles/gatebootstrapping.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/gatebootstrapping.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/gatebootstrapping.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/gatebootstrapping.dir/rule
 
 # Convenience name for target.
@@ -668,14 +668,14 @@ test/CMakeFiles/gatebootstrappingntt.dir/all: thirdparties/randen/CMakeFiles/ran
 test/CMakeFiles/gatebootstrappingntt.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gatebootstrappingntt.dir/build.make test/CMakeFiles/gatebootstrappingntt.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gatebootstrappingntt.dir/build.make test/CMakeFiles/gatebootstrappingntt.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=27,28 "Built target gatebootstrappingntt"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=27,28 "Built target gatebootstrappingntt"
 .PHONY : test/CMakeFiles/gatebootstrappingntt.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/gatebootstrappingntt.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/gatebootstrappingntt.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/gatebootstrappingntt.dir/rule
 
 # Convenience name for target.
@@ -696,14 +696,14 @@ test/CMakeFiles/identitybootstrapping.dir/all: thirdparties/randen/CMakeFiles/ra
 test/CMakeFiles/identitybootstrapping.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/identitybootstrapping.dir/build.make test/CMakeFiles/identitybootstrapping.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/identitybootstrapping.dir/build.make test/CMakeFiles/identitybootstrapping.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=32,33 "Built target identitybootstrapping"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=32,33 "Built target identitybootstrapping"
 .PHONY : test/CMakeFiles/identitybootstrapping.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/identitybootstrapping.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/identitybootstrapping.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/identitybootstrapping.dir/rule
 
 # Convenience name for target.
@@ -724,14 +724,14 @@ test/CMakeFiles/iks.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/iks.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/iks.dir/build.make test/CMakeFiles/iks.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/iks.dir/build.make test/CMakeFiles/iks.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=34,35 "Built target iks"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=34,35 "Built target iks"
 .PHONY : test/CMakeFiles/iks.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/iks.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/iks.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/iks.dir/rule
 
 # Convenience name for target.
@@ -752,14 +752,14 @@ test/CMakeFiles/invcircuitbootstrapping.dir/all: thirdparties/randen/CMakeFiles/
 test/CMakeFiles/invcircuitbootstrapping.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/invcircuitbootstrapping.dir/build.make test/CMakeFiles/invcircuitbootstrapping.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/invcircuitbootstrapping.dir/build.make test/CMakeFiles/invcircuitbootstrapping.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=36,37 "Built target invcircuitbootstrapping"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=36,37 "Built target invcircuitbootstrapping"
 .PHONY : test/CMakeFiles/invcircuitbootstrapping.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/invcircuitbootstrapping.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/invcircuitbootstrapping.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/invcircuitbootstrapping.dir/rule
 
 # Convenience name for target.
@@ -780,14 +780,14 @@ test/CMakeFiles/my_circuitbootstrapping.dir/all: thirdparties/randen/CMakeFiles/
 test/CMakeFiles/my_circuitbootstrapping.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/my_circuitbootstrapping.dir/build.make test/CMakeFiles/my_circuitbootstrapping.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/my_circuitbootstrapping.dir/build.make test/CMakeFiles/my_circuitbootstrapping.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=38,39 "Built target my_circuitbootstrapping"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=38,39 "Built target my_circuitbootstrapping"
 .PHONY : test/CMakeFiles/my_circuitbootstrapping.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/my_circuitbootstrapping.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/my_circuitbootstrapping.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/my_circuitbootstrapping.dir/rule
 
 # Convenience name for target.
@@ -808,14 +808,14 @@ test/CMakeFiles/nand.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/nand.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/nand.dir/build.make test/CMakeFiles/nand.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/nand.dir/build.make test/CMakeFiles/nand.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=40,41 "Built target nand"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=40,41 "Built target nand"
 .PHONY : test/CMakeFiles/nand.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/nand.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/nand.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/nand.dir/rule
 
 # Convenience name for target.
@@ -836,14 +836,14 @@ test/CMakeFiles/nested_cmux.dir/all: thirdparties/randen/CMakeFiles/randen.dir/a
 test/CMakeFiles/nested_cmux.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/nested_cmux.dir/build.make test/CMakeFiles/nested_cmux.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/nested_cmux.dir/build.make test/CMakeFiles/nested_cmux.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=42,43 "Built target nested_cmux"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=42,43 "Built target nested_cmux"
 .PHONY : test/CMakeFiles/nested_cmux.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/nested_cmux.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/nested_cmux.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/nested_cmux.dir/rule
 
 # Convenience name for target.
@@ -864,14 +864,14 @@ test/CMakeFiles/out_tlwe2trlweski.dir/all: thirdparties/randen/CMakeFiles/randen
 test/CMakeFiles/out_tlwe2trlweski.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/out_tlwe2trlweski.dir/build.make test/CMakeFiles/out_tlwe2trlweski.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/out_tlwe2trlweski.dir/build.make test/CMakeFiles/out_tlwe2trlweski.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=44,45 "Built target out_tlwe2trlweski"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=44,45 "Built target out_tlwe2trlweski"
 .PHONY : test/CMakeFiles/out_tlwe2trlweski.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/out_tlwe2trlweski.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/out_tlwe2trlweski.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/out_tlwe2trlweski.dir/rule
 
 # Convenience name for target.
@@ -892,14 +892,14 @@ test/CMakeFiles/polymul.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/polymul.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/polymul.dir/build.make test/CMakeFiles/polymul.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/polymul.dir/build.make test/CMakeFiles/polymul.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=46,47 "Built target polymul"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=46,47 "Built target polymul"
 .PHONY : test/CMakeFiles/polymul.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/polymul.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/polymul.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/polymul.dir/rule
 
 # Convenience name for target.
@@ -920,14 +920,14 @@ test/CMakeFiles/ram.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/ram.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/ram.dir/build.make test/CMakeFiles/ram.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/ram.dir/build.make test/CMakeFiles/ram.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=48,49 "Built target ram"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=48,49 "Built target ram"
 .PHONY : test/CMakeFiles/ram.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/ram.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/ram.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/ram.dir/rule
 
 # Convenience name for target.
@@ -948,14 +948,14 @@ test/CMakeFiles/rom.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/rom.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/rom.dir/build.make test/CMakeFiles/rom.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/rom.dir/build.make test/CMakeFiles/rom.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=52,53 "Built target rom"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=52,53 "Built target rom"
 .PHONY : test/CMakeFiles/rom.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/rom.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/rom.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/rom.dir/rule
 
 # Convenience name for target.
@@ -976,14 +976,14 @@ test/CMakeFiles/tlwe2trlweski.dir/all: thirdparties/randen/CMakeFiles/randen.dir
 test/CMakeFiles/tlwe2trlweski.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/tlwe2trlweski.dir/build.make test/CMakeFiles/tlwe2trlweski.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/tlwe2trlweski.dir/build.make test/CMakeFiles/tlwe2trlweski.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=72,73 "Built target tlwe2trlweski"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=72,73 "Built target tlwe2trlweski"
 .PHONY : test/CMakeFiles/tlwe2trlweski.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/tlwe2trlweski.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/tlwe2trlweski.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/tlwe2trlweski.dir/rule
 
 # Convenience name for target.
@@ -1004,14 +1004,14 @@ test/CMakeFiles/tlweenc.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/tlweenc.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/tlweenc.dir/build.make test/CMakeFiles/tlweenc.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/tlweenc.dir/build.make test/CMakeFiles/tlweenc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=74,75 "Built target tlweenc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=74,75 "Built target tlweenc"
 .PHONY : test/CMakeFiles/tlweenc.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/tlweenc.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/tlweenc.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/tlweenc.dir/rule
 
 # Convenience name for target.
@@ -1032,14 +1032,14 @@ test/CMakeFiles/tlwemult.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/tlwemult.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/tlwemult.dir/build.make test/CMakeFiles/tlwemult.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/tlwemult.dir/build.make test/CMakeFiles/tlwemult.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=76,77 "Built target tlwemult"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=76,77 "Built target tlwemult"
 .PHONY : test/CMakeFiles/tlwemult.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/tlwemult.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/tlwemult.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/tlwemult.dir/rule
 
 # Convenience name for target.
@@ -1060,14 +1060,14 @@ test/CMakeFiles/trlweenc.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/trlweenc.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/trlweenc.dir/build.make test/CMakeFiles/trlweenc.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/trlweenc.dir/build.make test/CMakeFiles/trlweenc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=78,79 "Built target trlweenc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=78,79 "Built target trlweenc"
 .PHONY : test/CMakeFiles/trlweenc.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/trlweenc.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/trlweenc.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/trlweenc.dir/rule
 
 # Convenience name for target.
@@ -1088,14 +1088,14 @@ test/CMakeFiles/trlwemult.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 test/CMakeFiles/trlwemult.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/trlwemult.dir/build.make test/CMakeFiles/trlwemult.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/trlwemult.dir/build.make test/CMakeFiles/trlwemult.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=80,81 "Built target trlwemult"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=80,81 "Built target trlwemult"
 .PHONY : test/CMakeFiles/trlwemult.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/trlwemult.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/trlwemult.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/trlwemult.dir/rule
 
 # Convenience name for target.
@@ -1116,14 +1116,14 @@ Yux/CMakeFiles/homoYux2.dir/all: thirdparties/randen/CMakeFiles/randen.dir/all
 Yux/CMakeFiles/homoYux2.dir/all: src/CMakeFiles/tfhe++.dir/all
 	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/depend
 	$(MAKE) $(MAKESILENT) -f Yux/CMakeFiles/homoYux2.dir/build.make Yux/CMakeFiles/homoYux2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wangfangzhen/Yux/CBSmode/build/CMakeFiles --progress-num=29,30,31 "Built target homoYux2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/wfz/Yux/CBSmode/build/CMakeFiles --progress-num=29,30,31 "Built target homoYux2"
 .PHONY : Yux/CMakeFiles/homoYux2.dir/all
 
 # Build rule for subdir invocation for target.
 Yux/CMakeFiles/homoYux2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 23
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 23
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Yux/CMakeFiles/homoYux2.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : Yux/CMakeFiles/homoYux2.dir/rule
 
 # Convenience name for target.

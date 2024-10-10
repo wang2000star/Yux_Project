@@ -1,5 +1,5 @@
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o: \
- /home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp \
+ /home/wfz/Yux/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp \
  /usr/include/stdc-predef.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/14.2.0/include/stdint.h \
  /usr/include/stdint.h \
@@ -206,5 +206,5 @@ thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o: \
  /usr/local/include/c++/14.2.0/bits/ostream.tcc \
  /usr/local/include/c++/14.2.0/istream \
  /usr/local/include/c++/14.2.0/bits/istream.tcc \
- /home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.h \
+ /home/wfz/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.h \
  /usr/local/include/c++/14.2.0/cstdint

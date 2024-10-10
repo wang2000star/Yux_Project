@@ -57,18 +57,18 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wangfangzhen/Yux/CBSmode
+CMAKE_SOURCE_DIR = /home/wfz/Yux/CBSmode
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wangfangzhen/Yux/CBSmode/build
+CMAKE_BINARY_DIR = /home/wfz/Yux/CBSmode/build
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/usr/local/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
+	/usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles /home/wangfangzhen/Yux/CBSmode/build/thirdparties/randen//CMakeFiles/progress.marks
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	cd /home/wfz/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles /home/wfz/Yux/CBSmode/build/thirdparties/randen//CMakeFiles/progress.marks
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/CBSmode/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/clean
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/preinstall
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/preinstall
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/wfz/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 thirdparties/randen/CMakeFiles/randen.dir/rule:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/CMakeFiles/randen.dir/rule
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 thirdparties/randen/CMakeFiles/randen.dir/rule
 .PHONY : thirdparties/randen/CMakeFiles/randen.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ randen: thirdparties/randen/CMakeFiles/randen.dir/rule
 
 # fast build rule for target.
 randen/fast:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/build
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/build
 .PHONY : randen/fast
 
 randen.o: randen.cc.o
@@ -180,7 +180,7 @@ randen.o: randen.cc.o
 
 # target to build an object file
 randen.cc.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o
 .PHONY : randen.cc.o
 
 randen.i: randen.cc.i
@@ -188,7 +188,7 @@ randen.i: randen.cc.i
 
 # target to preprocess a source file
 randen.cc.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/randen.cc.i
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/randen.cc.i
 .PHONY : randen.cc.i
 
 randen.s: randen.cc.s
@@ -196,7 +196,7 @@ randen.s: randen.cc.s
 
 # target to generate assembly for a file
 randen.cc.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/randen.cc.s
+	cd /home/wfz/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f thirdparties/randen/CMakeFiles/randen.dir/build.make thirdparties/randen/CMakeFiles/randen.dir/randen.cc.s
 .PHONY : randen.cc.s
 
 # Help Target
@@ -226,6 +226,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/wfz/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

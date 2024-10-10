@@ -1,4 +1,4 @@
-# Install script for directory: /home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios
+# Install script for directory: /home/wfz/Yux/CBSmode/thirdparties/spqlios
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

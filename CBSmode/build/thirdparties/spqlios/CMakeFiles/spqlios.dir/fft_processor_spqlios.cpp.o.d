@@ -1,5 +1,5 @@
 thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o: \
- /home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp \
+ /home/wfz/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp \
  /usr/include/stdc-predef.h /usr/local/include/c++/14.2.0/cassert \
  /usr/local/include/c++/14.2.0/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/local/include/c++/14.2.0/x86_64-pc-linux-gnu/bits/os_defines.h \
@@ -97,13 +97,13 @@ thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o: \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/14.2.0/include/stdint.h \
  /usr/include/stdint.h /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /home/wangfangzhen/Yux/CBSmode/include/params.hpp \
+ /home/wfz/Yux/CBSmode/include/params.hpp \
  /usr/local/include/c++/14.2.0/array \
  /usr/local/include/c++/14.2.0/compare \
  /usr/local/include/c++/14.2.0/initializer_list \
  /usr/local/include/c++/14.2.0/bits/range_access.h \
- /home/wangfangzhen/Yux/CBSmode/include/cuhe++.hpp \
- /home/wangfangzhen/Yux/CBSmode/include/INTorus.hpp \
- /home/wangfangzhen/Yux/CBSmode/include/params/128bit.hpp \
- /home/wangfangzhen/Yux/CBSmode/include/./axell/mpparam.hpp \
- /home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.h
+ /home/wfz/Yux/CBSmode/include/cuhe++.hpp \
+ /home/wfz/Yux/CBSmode/include/INTorus.hpp \
+ /home/wfz/Yux/CBSmode/include/params/128bit.hpp \
+ /home/wfz/Yux/CBSmode/include/./axell/mpparam.hpp \
+ /home/wfz/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.h
