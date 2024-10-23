@@ -1,0 +1,1 @@
+/usr/local/bin/c++ -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp CMakeFiles/gatebootstrappingntt.dir/gatebootstrappingntt.cpp.o -o gatebootstrappingntt  ../src/libtfhe++.a ../thirdparties/randen/libranden.a ../thirdparties/spqlios/libspqlios.a

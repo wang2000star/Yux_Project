@@ -1,1 +1,0 @@
-/usr/local/bin/c++ -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp CMakeFiles/my_circuitbootstrapping.dir/my_circuitbootstrapping.cpp.o -o my_circuitbootstrapping  ../src/libtfhe++.a ../thirdparties/randen/libranden.a ../thirdparties/spqlios/libspqlios.a

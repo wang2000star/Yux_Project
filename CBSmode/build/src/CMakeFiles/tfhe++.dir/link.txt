@@ -1,2 +1,0 @@
-/usr/bin/ar qc libtfhe++.a CMakeFiles/tfhe++.dir/axell/gate.cpp.o CMakeFiles/tfhe++.dir/axell/integer.cpp.o CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o CMakeFiles/tfhe++.dir/cloudkey.cpp.o CMakeFiles/tfhe++.dir/detwfa.cpp.o CMakeFiles/tfhe++.dir/gate.cpp.o CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o CMakeFiles/tfhe++.dir/key.cpp.o CMakeFiles/tfhe++.dir/keyswitch.cpp.o CMakeFiles/tfhe++.dir/tlwe.cpp.o CMakeFiles/tfhe++.dir/trgsw.cpp.o CMakeFiles/tfhe++.dir/trlwe.cpp.o
-/usr/bin/ranlib libtfhe++.a

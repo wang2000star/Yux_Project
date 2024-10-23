@@ -27,6 +27,7 @@ int main()
     //  遍历a的高4位和b的高4位，计算乘积，结果保存在table中
     //  每隔16个输出一行
     unsigned char sbox[256];
+    #if 0
     for (int i = 0; i < 16; i++)
     {
         for (int j = 0; j < 16; j++)
@@ -35,6 +36,33 @@ int main()
             unsigned char b = j ;
             unsigned char c = mul(a, b);
             sbox[i * 16 + j] = c;
+        }
+    }
+    #endif
+    unsigned char a;
+    unsigned char b;
+    unsigned char c;
+    unsigned char d;
+    unsigned char t;
+    for (int i1 = 0; i1 < 4; i1++)
+    {
+        for (int i2 = 0; i2 < 4; i2++)
+        {
+            for (int i3 = 0; i3 < 4; i3++)
+            {
+                for (int i4 = 0; i4 < 4; i4++)
+                {
+            a = i1 << 6;
+            b = i2 << 4;
+            c = i3 << 2;
+            d = i4;
+            t = mul(a, b);
+            t = mul(t, c);
+            t = mul(t, d);
+            sbox[i1 * 64 + i2 * 16 + i3 * 4 + i4] = t;
+                }
+            }
+
         }
     }
     //将table保存到文件中，每个元素之间用逗号隔开，且是0x00格式，每行16个元素，每行末尾也有逗号，最后一个元素后面没有逗号
