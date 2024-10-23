@@ -4,8 +4,6 @@ using namespace std;
 using namespace helib;
 using namespace NTL;
 
-// 全局变量
-static unsigned char PlainStream[PlainByte];
 
 bool Client_offline()
 {
@@ -174,7 +172,7 @@ bool Client_offline()
     printf("KeyStream Generation Succeeded!\n");
 #endif
 // 同态加密初始对称密钥SymKey,得到encryptedSymKey
-    //设置
+// 设置
 long idx = 3; //0
 // amap.arg("sz", idx, "parameter-sets: toy=0 through huge=5");
 long c=9;
@@ -206,6 +204,7 @@ bool packed=true;
     secretKey.GenSecKey();
     addSome1DMatrices(secretKey);
 
+    // 将公私钥写入到文件Client_publickey
     std::ofstream out5("Client_publickey", std::ios::binary);
     if (!out5.is_open()) {
         std::cerr << "Failed to open " << "Client_publickey" << " for writing" << std::endl;
@@ -213,6 +212,14 @@ bool packed=true;
     }
     publicKey.writeTo(out5);
     out5.close();
+    // 将私钥写入到文件Client_secretkey
+    std::ofstream out6("Client_secretkey", std::ios::binary);
+    if (!out6.is_open()) {
+        std::cerr << "Failed to open " << "Client_secretkey" << " for writing" << std::endl;
+        return false;
+    }
+    secretKey.writeTo(out6);
+    out6.close();
 
     static const uint8_t YuxPolyBytes[] = { 0x1B, 0x1 }; // X^8+X^4+X^3+X+1
     const GF2X YuxPoly = GF2XFromBytes(YuxPolyBytes, 2);
@@ -262,17 +269,17 @@ bool packed=true;
     std::cout << "SymKey FHE succeeded!" << std::endl;
 
     // 将encryptedSymKey以字节形式写入到文件Client_encryptedSymKey.txt
-std::ofstream out6("Client_encryptedSymKey.txt");
-if (out6.is_open()) {
+std::ofstream out7("Client_encryptedSymKey.txt");
+if (out7.is_open()) {
     for (long i = 0; i < (long)encryptedSymKey.size(); i++) {
         std::ostringstream oss;
         encryptedSymKey[i].writeTo(oss);
         std::string str = oss.str();
         for (char c : str) {
-            out6 << std::hex << std::setw(2) << std::setfill('0') << (int)(unsigned char)c << " ";
+            out7 << std::hex << std::setw(2) << std::setfill('0') << (int)(unsigned char)c << " ";
         }
     }
-    out6.close();
+    out7.close();
 } else {
     std::cerr << "Failed to open Client_encryptedSymKey.txt for writing" << std::endl;
     return false;
@@ -282,10 +289,22 @@ if (out6.is_open()) {
 
 bool Client_online()
 {
+    unsigned char PlainStream[PlainByte];
     // 明文
     for (unsigned i = 0; i < PlainByte; i++)
     {
         PlainStream[i] = i + 1;
+    }
+    // 将PlainStream以字节形式写入到文件Client_PlainStream.txt
+    std::ofstream out1("Client_PlainStream.txt");
+    if (out1.is_open()) {
+        for (unsigned i = 0; i < PlainByte; i++) {
+            out1 << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(PlainStream[i]) << " ";
+        }
+        out1.close();
+    } else {
+        std::cerr << "Failed to open Client_PlainStream.txt for writing" << std::endl;
+        return false;
     }
     // 从文件KeyStream.txt读取KeyStream
      // 从文件Client_KeyStream.txt读取KeyStream
@@ -332,46 +351,4 @@ bool Client_online()
     }
     
     return true;
-}
-// 客户端检查
-bool Client_Check(){
-// 从Server_encryptedPlainStream.txt读取encryptedPlainStream
-#if 1
-    std::vector<Ctxt> encryptedPlainStream;
-    std::ifstream in("Server_encryptedPlainStream.txt", std::ios::binary);
-    if (in.is_open()) {
-        while (in.peek() != EOF) {
-            Ctxt ctxt(publicKey);
-            ctxt.read(in);
-            encryptedPlainStream.push_back(ctxt);
-        }
-        in.close();
-    } else {
-        std::cerr << "Failed to open Server_encryptedPlainStream.txt for reading" << std::endl;
-        return false;
-    }
-#endif
-// 解密encryptedPlainStream得到PlainStream2，然后与PlainStream比较
-#if 1
-    Vec<uint8_t> decryptedPlainStream(INIT_SIZE, PlainByte);
-    for (long i = 0; i < PlainByte; i++) {
-        decryptedPlainStream[i] = 0;
-    }
-
-    Vec<ZZX> poly(INIT_SIZE, encryptedPlainStream.size());
-    for (long i = 0; i < poly.length(); i++) {
-        secretKey.Decrypt(poly[i], encryptedPlainStream[i]);
-    }
-    decodeTo1Ctxt(decryptedPlainStream, poly, ea);
-
-    // 验证解密后的密文是否与原始密文相同
-    for (long i = 0; i < PlainByte; i++) {
-        if (decryptedPlainStream[i] != PlainStream[i]) {
-            std::cout << "PlainStream FHE failed!" << std::endl;
-            return false;
-        }
-    }
-#endif
-
-return true;
 }

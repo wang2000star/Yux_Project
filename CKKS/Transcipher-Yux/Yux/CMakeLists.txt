@@ -1,10 +1,12 @@
 # 包含路径
-include_directories(../thirdparty/HElib_v2.2.2/include)
-include_directories(../thirdparty/ntl-11.5.1/include)
+include_directories(${CMAKE_SOURCE_DIR}/thirdparty/HElib_v2.2.2/include)
+include_directories(${CMAKE_SOURCE_DIR}/thirdparty/ntl-11.5.1/include)
+include_directories(${CMAKE_SOURCE_DIR}/thirdparty/gmp/include)
 
 # 库路径
-link_directories(../thirdparty/HElib_v2.2.2)
-link_directories(../thirdparty/ntl-11.5.1)
+link_directories(${CMAKE_SOURCE_DIR}/thirdparty/HElib_v2.2.2/lib)
+link_directories(${CMAKE_SOURCE_DIR}/thirdparty/ntl-11.5.1/lib)
+link_directories(${CMAKE_SOURCE_DIR}/thirdparty/gmp/lib)
 
 # 源文件
 set(SOURCES
@@ -25,16 +27,10 @@ set(HEADERS
     FHEtool.hpp
     params.hpp
     random_bit.hpp
-    
 )
 
 # 生成可执行文件
 add_executable(Yux2_8 ${SOURCES} ${HEADERS})
 
 # 链接库
-target_link_libraries(Yux2_8 helib ntl)
-# 生成可执行文件
-#add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-
-# 链接库
-#target_link_libraries(${PROJECT_NAME} helib ntl)
+target_link_libraries(Yux2_8 helib ntl gmp)
