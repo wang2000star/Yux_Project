@@ -6,15 +6,20 @@ using namespace NTL;
 
 // 通用写入函数模板
 template <typename T>
-bool writeToFile(const Vec<T>& data, const string& filename, size_t length) {
+bool writeToFile(const Vec<T> &data, const string &filename, size_t length)
+{
     std::ofstream out(filename);
-    if (out.is_open()) {
-        for (size_t i = 0; i < length; ++i) {
+    if (out.is_open())
+    {
+        for (size_t i = 0; i < length; ++i)
+        {
             out << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(data[i]) << " ";
         }
         out.close();
         return true;
-    } else {
+    }
+    else
+    {
         std::cerr << "Failed to open " << filename << " for writing" << std::endl;
         return false;
     }
@@ -22,9 +27,11 @@ bool writeToFile(const Vec<T>& data, const string& filename, size_t length) {
 
 // 通用读取函数模板
 template <typename T>
-bool readFromFile(Vec<T>& data, const string& filename, size_t length) {
+bool readFromFile(Vec<T> &data, const string &filename, size_t length)
+{
     std::ifstream in(filename);
-    if (!in.is_open()) {
+    if (!in.is_open())
+    {
         std::cerr << "Failed to open " << filename << " for reading" << std::endl;
         return false;
     }
@@ -32,14 +39,19 @@ bool readFromFile(Vec<T>& data, const string& filename, size_t length) {
     // 获取文件大小
     in.seekg(0, std::ios::end);
     std::streamsize size = in.tellg();
-    if (size != static_cast<std::streamsize>(length * (sizeof(T) * 2 + 1) - 1)) { // 每个字节占用2个字符和1个空格，最后一个字节没有空格
-        std::cerr << "File size does not match expected length" << std::endl;
+    in.seekg(0, std::ios::beg);
+
+    // 计算预期的文件大小
+    std::streamsize expected_size = length * (sizeof(T) * 2 + 1) - 1; // 每个字节占用2个字符和1个空格，最后一个字节没有空格
+
+    if (size != expected_size)
+    {
+        std::cerr << "File size does not match expected length. Expected: " << expected_size << ", Got: " << size << std::endl;
         return false;
     }
 
-    in.seekg(0, std::ios::beg);
-
-    for (size_t i = 0; i < length; ++i) {
+    for (size_t i = 0; i < length; ++i)
+    {
         int temp;
         in >> std::hex >> temp;
         data[i] = static_cast<T>(temp);
@@ -99,7 +111,7 @@ bool Client_offline()
     BytesFromGF2X(SymKey.data(), rnd, SymKey.length());
     // 定义随机数集合nonce_set，随机向量Xset,轮密钥RoundKeySet和密钥流KeyStream
     Vec<uint64_t> NonceSet(INIT_SIZE, PlainBlock);
-    Vec<uint8_t> Xset(INIT_SIZE, PlainByte * (Nr + 1));  
+    Vec<uint8_t> Xset(INIT_SIZE, PlainByte * (Nr + 1));
     Vec<uint8_t> RoundKeySet(INIT_SIZE, PlainByte * (Nr + 1));
     Vec<uint8_t> KeyStream(INIT_SIZE, PlainByte);
 
@@ -108,8 +120,8 @@ bool Client_offline()
     // 为roundconstants创建别名
     auto &RanVecs = randomBit.roundconstants;
     // 定义counter_begin和counter_end
-    uint64_t counter_begin = 0;// 计数器起始值
-    uint64_t counter_end = PlainBlock + counter_begin - 1;// 计数器结束值
+    uint64_t counter_begin = 0;                            // 计数器起始值
+    uint64_t counter_end = PlainBlock + counter_begin - 1; // 计数器结束值
 
     for (uint64_t counter = counter_begin; counter <= counter_end; counter++)
     {
@@ -117,7 +129,7 @@ bool Client_offline()
         NonceSet[counter - counter_begin] = nonce;
         randomBit.generate_Instance_all_new(nonce, counter); // nonce, counter
         // 将RanVecs转换为X，比特转字节
-        Vec<uint8_t> state(INIT_SIZE, BlockByte);//单组密钥流状态
+        Vec<uint8_t> state(INIT_SIZE, BlockByte); // 单组密钥流状态
         for (unsigned r = 0; r <= Nr; r++)
         {
             Vec<uint8_t> X(INIT_SIZE, BlockByte);
@@ -180,19 +192,23 @@ bool Client_offline()
     }
 
     // 将Nonce以字节形式写入到文件Client_NonceSet.txt
-    if (!writeToFile(NonceSet, "Client_NonceSet.txt", PlainBlock)) {
+    if (!writeToFile(NonceSet, "Client_NonceSet.txt", PlainBlock))
+    {
         return false;
     }
     // 将X_set写入到文件Client_Xset.txt
-    if (!writeToFile(Xset, "Client_Xset.txt", PlainByte * (Nr + 1))) {
+    if (!writeToFile(Xset, "Client_Xset.txt", PlainByte * (Nr + 1)))
+    {
         return false;
     }
     // 将RoundKey_set写入到文件Client_RoundKeySet.txt
-    if (!writeToFile(RoundKeySet, "Client_RoundKeySet.txt", PlainByte * (Nr + 1))) {
+    if (!writeToFile(RoundKeySet, "Client_RoundKeySet.txt", PlainByte * (Nr + 1)))
+    {
         return false;
     }
     // 将KeyStream以字节形式写入到文件Client_KeyStream.txt
-    if (!writeToFile(KeyStream, "Client_KeyStream.txt", PlainByte)) {
+    if (!writeToFile(KeyStream, "Client_KeyStream.txt", PlainByte))
+    {
         return false;
     }
 
@@ -268,13 +284,11 @@ bool Client_offline()
     const GF2X YuxPoly = GF2XFromBytes(YuxPolyBytes, 2);
     EncryptedArrayDerived<PA_GF2> ea(context, YuxPoly, context.getAlMod());
 
-
     // 生成同态加密的初始对称密钥SymKey,打包状态
     std::cout << "SymKey encrypted start!" << std::endl;
     vector<Ctxt> encryptedSymKey;
     encryptSymKey(encryptedSymKey, SymKey, publicKey, ea);
     std::cout << "SymKey  encrypted cceeded!" << std::endl;
-
 
     // 将encryptedSymKey以字节形式写入到文件Client_encryptedSymKey.txt
     std::ofstream out3("Client_encryptedSymKey.txt");
@@ -307,15 +321,17 @@ bool Client_online()
     Vec<uint8_t> PlainStream(INIT_SIZE, PlainByte); // 8*10
     random(rnd, 8 * PlainStream.length());
     BytesFromGF2X(PlainStream.data(), rnd, PlainByte);
-    
+
     // 将PlainStream以字节形式写入到文件Client_PlainStream.txt
-    if (!writeToFile(PlainStream, "Client_PlainStream.txt", PlainByte)) {
+    if (!writeToFile(PlainStream, "Client_PlainStream.txt", PlainByte))
+    {
         return false;
     }
-    
+
     // 从文件Client_KeyStream.txt读取KeyStream,注意判断长度是否等于PlainByte
     Vec<uint8_t> KeyStream(INIT_SIZE, PlainByte);
-    if (!readFromFile(KeyStream, "Client_KeyStream.txt", PlainByte)) {
+    if (!readFromFile(KeyStream, "Client_KeyStream.txt", PlainByte))
+    {
         return false;
     }
 
@@ -337,7 +353,8 @@ bool Client_online()
     std::cout << "Plain encryption succeeded!" << std::endl;
 
     // 将CipherStream以字节形式写入到文件Client_CipherStream.txt
-    if (!writeToFile(CipherStream, "Client_CipherStream.txt", PlainByte)) {
+    if (!writeToFile(CipherStream, "Client_CipherStream.txt", PlainByte))
+    {
         return false;
     }
 
