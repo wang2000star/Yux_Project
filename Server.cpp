@@ -271,7 +271,6 @@ bool Server_offline()
 // 读取Nonce.txt，生成Xset
 #if 1
     Vec<uint8_t> Xset(INIT_SIZE, BlockByte * (Nr + 1) * PlainBlock);
-    long nslots = BlockByte * PlainBlock;
     // 创建RandomBit对象
     RandomBit<BlockSize> randomBit(Nr);
     // 为roundconstants创建别名
@@ -317,7 +316,7 @@ bool Server_offline()
                 X[i] = static_cast<unsigned char>(temp);
             }
             // 把X存入X_set
-            memcpy(&Xset[nslots * r + BlockByte * (counter - counter_begin)], X.data(), BlockByte);
+            memcpy(&Xset[PlainByte * r + BlockByte * (counter - counter_begin)], X.data(), BlockByte);
         }
     }
     printf("Xset generation succeeded!\n");

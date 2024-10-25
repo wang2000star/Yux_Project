@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Client.hpp"
-#include "Server.hpp"
+//#include "Server.hpp"
 
 using namespace std;
 using namespace helib;
@@ -10,28 +10,43 @@ int main()
 {
     // 调用 Client_offline 方法
 #if 1
-    std::cout << "-------------Client_offline start!--------------" << std::endl;
+    std::cout << "==========================================" << std::endl;
+    std::cout << "           Client Offline Start           " << std::endl;
+    std::cout << "==========================================" << std::endl;
+
     if (Client_offline())
     {
-        std::cout << "---------------Client_offline succeeded!-------------" << std::endl;
+        std::cout << "==========================================" << std::endl;
+        std::cout << "         Client Offline Succeeded         " << std::endl;
+        std::cout << "==========================================" << std::endl;
     }
     else
     {
-        std::cout << "-----------------Client_offline failed!--------------" << std::endl;
+        std::cout << "==========================================" << std::endl;
+        std::cout << "          Client Offline Failed           " << std::endl;
+        std::cout << "==========================================" << std::endl;
         return 0;
     }
 #endif
 
     // 调用 Client_online 方法
 #if 1
-    std::cout << "--------------------Client_online start!-----------------" << std::endl;
+
+    std::cout << "==========================================" << std::endl;
+    std::cout << "           Client Online Start            " << std::endl;
+    std::cout << "==========================================" << std::endl;
+
     if (Client_online())
     {
-        std::cout << "---------------------Client_online succeeded!---------------------" << std::endl;
+        std::cout << "==========================================" << std::endl;
+        std::cout << "         Client Online Succeeded          " << std::endl;
+        std::cout << "==========================================" << std::endl;
     }
     else
     {
-        std::cout << "---------------------Client_online failed!-------------------------" << std::endl;
+        std::cout << "==========================================" << std::endl;
+        std::cout << "          Client Online Failed            " << std::endl;
+        std::cout << "==========================================" << std::endl;
         return 0;
     }
 #endif
