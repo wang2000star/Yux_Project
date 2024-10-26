@@ -42,7 +42,7 @@ bool readFromFile(Vec<T> &data, const string &filename, size_t length)
     in.seekg(0, std::ios::beg);
 
     // 计算预期的文件大小
-    std::streamsize expected_size = length * (sizeof(T) * 2 + 1) - 1; // 每个字节占用2个字符和1个空格，最后一个字节没有空格
+    std::streamsize expected_size = length * (sizeof(T) * 2 + 1); // 每个字节占用2个字符和1个空格，最后一个字节没有空格
 
     if (size != expected_size)
     {
@@ -288,7 +288,7 @@ bool Client_offline()
     std::cout << "SymKey encrypted start!" << std::endl;
     vector<Ctxt> encryptedSymKey;
     encryptSymKey(encryptedSymKey, SymKey, publicKey, ea);
-    std::cout << "SymKey  encrypted cceeded!" << std::endl;
+    std::cout << "SymKey  encrypted Succeeded!" << std::endl;
 
     // 将encryptedSymKey以字节形式写入到文件Client_encryptedSymKey.txt
     std::ofstream out3("Client_encryptedSymKey.txt");
