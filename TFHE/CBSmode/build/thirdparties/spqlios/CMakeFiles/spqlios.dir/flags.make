@@ -5,13 +5,13 @@
 # compile CXX with /usr/local/bin/c++
 ASM_DEFINES = -DUSE_RANDEN
 
-ASM_INCLUDES = -I/home/wangfangzhen/Yux/CBSmode/include
+ASM_INCLUDES = -I/home/wfz/Yux/TFHE/CBSmode/include
 
 ASM_FLAGS = 
 
 CXX_DEFINES = -DUSE_RANDEN
 
-CXX_INCLUDES = -I/home/wangfangzhen/Yux/CBSmode/include
+CXX_INCLUDES = -I/home/wfz/Yux/TFHE/CBSmode/include
 
 CXX_FLAGS = -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -std=gnu++17
 

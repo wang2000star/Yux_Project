@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_ASM
-  "/home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s" "/home/wangfangzhen/Yux/CBSmode/build/thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-fma.s.o"
-  "/home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s" "/home/wangfangzhen/Yux/CBSmode/build/thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.o"
+  "/home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s" "/home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-fma.s.o"
+  "/home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s" "/home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.o"
   )
 set(CMAKE_ASM_COMPILER_ID "GNU")
 
@@ -20,13 +20,13 @@ set(CMAKE_TARGET_DEFINITIONS_ASM
 
 # The include file search paths:
 set(CMAKE_ASM_TARGET_INCLUDE_PATH
-  "/home/wangfangzhen/Yux/CBSmode/include"
+  "/home/wfz/Yux/TFHE/CBSmode/include"
   )
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp" "thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o" "gcc" "thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o.d"
-  "/home/wangfangzhen/Yux/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp" "thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o" "gcc" "thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o.d"
+  "/home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp" "thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o" "gcc" "thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o.d"
+  "/home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp" "thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o" "gcc" "thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

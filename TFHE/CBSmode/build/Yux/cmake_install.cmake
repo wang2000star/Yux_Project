@@ -1,4 +1,4 @@
-# Install script for directory: /home/wangfangzhen/Yux/CBSmode/Yux
+# Install script for directory: /home/wfz/Yux/TFHE/CBSmode/Yux
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

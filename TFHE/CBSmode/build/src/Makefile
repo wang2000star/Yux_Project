@@ -57,10 +57,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wangfangzhen/Yux/CBSmode
+CMAKE_SOURCE_DIR = /home/wfz/Yux/TFHE/CBSmode
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wangfangzhen/Yux/CBSmode/build
+CMAKE_BINARY_DIR = /home/wfz/Yux/TFHE/CBSmode/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles /home/wangfangzhen/Yux/CBSmode/build/src//CMakeFiles/progress.marks
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/wangfangzhen/Yux/CBSmode/build/CMakeFiles 0
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles /home/wfz/Yux/TFHE/CBSmode/build/src//CMakeFiles/progress.marks
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/tfhe++.dir/rule:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/tfhe++.dir/rule
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/tfhe++.dir/rule
 .PHONY : src/CMakeFiles/tfhe++.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ tfhe++: src/CMakeFiles/tfhe++.dir/rule
 
 # fast build rule for target.
 tfhe++/fast:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/build
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/build
 .PHONY : tfhe++/fast
 
 axell/gate.o: axell/gate.cpp.o
@@ -180,7 +180,7 @@ axell/gate.o: axell/gate.cpp.o
 
 # target to build an object file
 axell/gate.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/gate.cpp.o
 .PHONY : axell/gate.cpp.o
 
 axell/gate.i: axell/gate.cpp.i
@@ -188,7 +188,7 @@ axell/gate.i: axell/gate.cpp.i
 
 # target to preprocess a source file
 axell/gate.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/gate.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/gate.cpp.i
 .PHONY : axell/gate.cpp.i
 
 axell/gate.s: axell/gate.cpp.s
@@ -196,7 +196,7 @@ axell/gate.s: axell/gate.cpp.s
 
 # target to generate assembly for a file
 axell/gate.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/gate.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/gate.cpp.s
 .PHONY : axell/gate.cpp.s
 
 axell/integer.o: axell/integer.cpp.o
@@ -204,7 +204,7 @@ axell/integer.o: axell/integer.cpp.o
 
 # target to build an object file
 axell/integer.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/integer.cpp.o
 .PHONY : axell/integer.cpp.o
 
 axell/integer.i: axell/integer.cpp.i
@@ -212,7 +212,7 @@ axell/integer.i: axell/integer.cpp.i
 
 # target to preprocess a source file
 axell/integer.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/integer.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/integer.cpp.i
 .PHONY : axell/integer.cpp.i
 
 axell/integer.s: axell/integer.cpp.s
@@ -220,7 +220,7 @@ axell/integer.s: axell/integer.cpp.s
 
 # target to generate assembly for a file
 axell/integer.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/integer.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/axell/integer.cpp.s
 .PHONY : axell/integer.cpp.s
 
 circuitbootstrapping.o: circuitbootstrapping.cpp.o
@@ -228,7 +228,7 @@ circuitbootstrapping.o: circuitbootstrapping.cpp.o
 
 # target to build an object file
 circuitbootstrapping.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.o
 .PHONY : circuitbootstrapping.cpp.o
 
 circuitbootstrapping.i: circuitbootstrapping.cpp.i
@@ -236,7 +236,7 @@ circuitbootstrapping.i: circuitbootstrapping.cpp.i
 
 # target to preprocess a source file
 circuitbootstrapping.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.i
 .PHONY : circuitbootstrapping.cpp.i
 
 circuitbootstrapping.s: circuitbootstrapping.cpp.s
@@ -244,7 +244,7 @@ circuitbootstrapping.s: circuitbootstrapping.cpp.s
 
 # target to generate assembly for a file
 circuitbootstrapping.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/circuitbootstrapping.cpp.s
 .PHONY : circuitbootstrapping.cpp.s
 
 cloudkey.o: cloudkey.cpp.o
@@ -252,7 +252,7 @@ cloudkey.o: cloudkey.cpp.o
 
 # target to build an object file
 cloudkey.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/cloudkey.cpp.o
 .PHONY : cloudkey.cpp.o
 
 cloudkey.i: cloudkey.cpp.i
@@ -260,7 +260,7 @@ cloudkey.i: cloudkey.cpp.i
 
 # target to preprocess a source file
 cloudkey.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/cloudkey.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/cloudkey.cpp.i
 .PHONY : cloudkey.cpp.i
 
 cloudkey.s: cloudkey.cpp.s
@@ -268,7 +268,7 @@ cloudkey.s: cloudkey.cpp.s
 
 # target to generate assembly for a file
 cloudkey.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/cloudkey.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/cloudkey.cpp.s
 .PHONY : cloudkey.cpp.s
 
 detwfa.o: detwfa.cpp.o
@@ -276,7 +276,7 @@ detwfa.o: detwfa.cpp.o
 
 # target to build an object file
 detwfa.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/detwfa.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/detwfa.cpp.o
 .PHONY : detwfa.cpp.o
 
 detwfa.i: detwfa.cpp.i
@@ -284,7 +284,7 @@ detwfa.i: detwfa.cpp.i
 
 # target to preprocess a source file
 detwfa.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/detwfa.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/detwfa.cpp.i
 .PHONY : detwfa.cpp.i
 
 detwfa.s: detwfa.cpp.s
@@ -292,7 +292,7 @@ detwfa.s: detwfa.cpp.s
 
 # target to generate assembly for a file
 detwfa.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/detwfa.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/detwfa.cpp.s
 .PHONY : detwfa.cpp.s
 
 gate.o: gate.cpp.o
@@ -300,7 +300,7 @@ gate.o: gate.cpp.o
 
 # target to build an object file
 gate.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gate.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gate.cpp.o
 .PHONY : gate.cpp.o
 
 gate.i: gate.cpp.i
@@ -308,7 +308,7 @@ gate.i: gate.cpp.i
 
 # target to preprocess a source file
 gate.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gate.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gate.cpp.i
 .PHONY : gate.cpp.i
 
 gate.s: gate.cpp.s
@@ -316,7 +316,7 @@ gate.s: gate.cpp.s
 
 # target to generate assembly for a file
 gate.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gate.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gate.cpp.s
 .PHONY : gate.cpp.s
 
 gatebootstrapping.o: gatebootstrapping.cpp.o
@@ -324,7 +324,7 @@ gatebootstrapping.o: gatebootstrapping.cpp.o
 
 # target to build an object file
 gatebootstrapping.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.o
 .PHONY : gatebootstrapping.cpp.o
 
 gatebootstrapping.i: gatebootstrapping.cpp.i
@@ -332,7 +332,7 @@ gatebootstrapping.i: gatebootstrapping.cpp.i
 
 # target to preprocess a source file
 gatebootstrapping.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.i
 .PHONY : gatebootstrapping.cpp.i
 
 gatebootstrapping.s: gatebootstrapping.cpp.s
@@ -340,7 +340,7 @@ gatebootstrapping.s: gatebootstrapping.cpp.s
 
 # target to generate assembly for a file
 gatebootstrapping.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/gatebootstrapping.cpp.s
 .PHONY : gatebootstrapping.cpp.s
 
 key.o: key.cpp.o
@@ -348,7 +348,7 @@ key.o: key.cpp.o
 
 # target to build an object file
 key.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/key.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/key.cpp.o
 .PHONY : key.cpp.o
 
 key.i: key.cpp.i
@@ -356,7 +356,7 @@ key.i: key.cpp.i
 
 # target to preprocess a source file
 key.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/key.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/key.cpp.i
 .PHONY : key.cpp.i
 
 key.s: key.cpp.s
@@ -364,7 +364,7 @@ key.s: key.cpp.s
 
 # target to generate assembly for a file
 key.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/key.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/key.cpp.s
 .PHONY : key.cpp.s
 
 keyswitch.o: keyswitch.cpp.o
@@ -372,7 +372,7 @@ keyswitch.o: keyswitch.cpp.o
 
 # target to build an object file
 keyswitch.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/keyswitch.cpp.o
 .PHONY : keyswitch.cpp.o
 
 keyswitch.i: keyswitch.cpp.i
@@ -380,7 +380,7 @@ keyswitch.i: keyswitch.cpp.i
 
 # target to preprocess a source file
 keyswitch.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/keyswitch.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/keyswitch.cpp.i
 .PHONY : keyswitch.cpp.i
 
 keyswitch.s: keyswitch.cpp.s
@@ -388,7 +388,7 @@ keyswitch.s: keyswitch.cpp.s
 
 # target to generate assembly for a file
 keyswitch.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/keyswitch.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/keyswitch.cpp.s
 .PHONY : keyswitch.cpp.s
 
 tlwe.o: tlwe.cpp.o
@@ -396,7 +396,7 @@ tlwe.o: tlwe.cpp.o
 
 # target to build an object file
 tlwe.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/tlwe.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/tlwe.cpp.o
 .PHONY : tlwe.cpp.o
 
 tlwe.i: tlwe.cpp.i
@@ -404,7 +404,7 @@ tlwe.i: tlwe.cpp.i
 
 # target to preprocess a source file
 tlwe.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/tlwe.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/tlwe.cpp.i
 .PHONY : tlwe.cpp.i
 
 tlwe.s: tlwe.cpp.s
@@ -412,7 +412,7 @@ tlwe.s: tlwe.cpp.s
 
 # target to generate assembly for a file
 tlwe.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/tlwe.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/tlwe.cpp.s
 .PHONY : tlwe.cpp.s
 
 trgsw.o: trgsw.cpp.o
@@ -420,7 +420,7 @@ trgsw.o: trgsw.cpp.o
 
 # target to build an object file
 trgsw.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trgsw.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trgsw.cpp.o
 .PHONY : trgsw.cpp.o
 
 trgsw.i: trgsw.cpp.i
@@ -428,7 +428,7 @@ trgsw.i: trgsw.cpp.i
 
 # target to preprocess a source file
 trgsw.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trgsw.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trgsw.cpp.i
 .PHONY : trgsw.cpp.i
 
 trgsw.s: trgsw.cpp.s
@@ -436,7 +436,7 @@ trgsw.s: trgsw.cpp.s
 
 # target to generate assembly for a file
 trgsw.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trgsw.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trgsw.cpp.s
 .PHONY : trgsw.cpp.s
 
 trlwe.o: trlwe.cpp.o
@@ -444,7 +444,7 @@ trlwe.o: trlwe.cpp.o
 
 # target to build an object file
 trlwe.cpp.o:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trlwe.cpp.o
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trlwe.cpp.o
 .PHONY : trlwe.cpp.o
 
 trlwe.i: trlwe.cpp.i
@@ -452,7 +452,7 @@ trlwe.i: trlwe.cpp.i
 
 # target to preprocess a source file
 trlwe.cpp.i:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trlwe.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trlwe.cpp.i
 .PHONY : trlwe.cpp.i
 
 trlwe.s: trlwe.cpp.s
@@ -460,7 +460,7 @@ trlwe.s: trlwe.cpp.s
 
 # target to generate assembly for a file
 trlwe.cpp.s:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trlwe.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/tfhe++.dir/build.make src/CMakeFiles/tfhe++.dir/trlwe.cpp.s
 .PHONY : trlwe.cpp.s
 
 # Help Target
@@ -523,6 +523,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/wangfangzhen/Yux/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/wfz/Yux/TFHE/CBSmode/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
