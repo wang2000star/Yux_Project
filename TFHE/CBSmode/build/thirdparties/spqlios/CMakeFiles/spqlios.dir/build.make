@@ -72,56 +72,56 @@ include thirdparties/spqlios/CMakeFiles/spqlios.dir/flags.make
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-fma.s.o: thirdparties/spqlios/CMakeFiles/spqlios.dir/flags.make
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-fma.s.o: /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building ASM object thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-fma.s.o"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/spqlios.dir/spqlios-fft-fma.s.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/spqlios.dir/spqlios-fft-fma.s.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-fma.s.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing ASM source to CMakeFiles/spqlios.dir/spqlios-fft-fma.s.i"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s > CMakeFiles/spqlios.dir/spqlios-fft-fma.s.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s > CMakeFiles/spqlios.dir/spqlios-fft-fma.s.i
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-fma.s.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling ASM source to assembly CMakeFiles/spqlios.dir/spqlios-fft-fma.s.s"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s -o CMakeFiles/spqlios.dir/spqlios-fft-fma.s.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s -o CMakeFiles/spqlios.dir/spqlios-fft-fma.s.s
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.o: thirdparties/spqlios/CMakeFiles/spqlios.dir/flags.make
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.o: /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building ASM object thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.o"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing ASM source to CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.i"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s > CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s > CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.i
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling ASM source to assembly CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.s"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s -o CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s -o CMakeFiles/spqlios.dir/spqlios-ifft-fma.s.s
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o: thirdparties/spqlios/CMakeFiles/spqlios.dir/flags.make
 thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o: /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp
 thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o: thirdparties/spqlios/CMakeFiles/spqlios.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o -MF CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o.d -o CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o -MF CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o.d -o CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.i"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp > CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp > CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.i
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.s"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp -o CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/fft_processor_spqlios.cpp -o CMakeFiles/spqlios.dir/fft_processor_spqlios.cpp.s
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o: thirdparties/spqlios/CMakeFiles/spqlios.dir/flags.make
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o: /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o: thirdparties/spqlios/CMakeFiles/spqlios.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o -MF CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o.d -o CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o -MF CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o.d -o CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.i"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp > CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp > CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.i
 
 thirdparties/spqlios/CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.s"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp -o CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/spqlios && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-impl.cpp -o CMakeFiles/spqlios.dir/spqlios-fft-impl.cpp.s
 
 # Object files for target spqlios
 spqlios_OBJECTS = \

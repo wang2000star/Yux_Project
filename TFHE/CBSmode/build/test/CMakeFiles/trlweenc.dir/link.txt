@@ -1,1 +1,0 @@
-/usr/local/bin/c++ -march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w -fopenmp CMakeFiles/trlweenc.dir/trlweenc.cpp.o -o trlweenc  ../src/libtfhe++.a ../thirdparties/randen/libranden.a ../thirdparties/spqlios/libspqlios.a

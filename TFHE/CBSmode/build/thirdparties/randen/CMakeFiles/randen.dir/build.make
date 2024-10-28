@@ -73,15 +73,15 @@ thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o: thirdparties/randen/CMake
 thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o: /home/wfz/Yux/TFHE/CBSmode/thirdparties/randen/randen.cc
 thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o: thirdparties/randen/CMakeFiles/randen.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/randen && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o -MF CMakeFiles/randen.dir/randen.cc.o.d -o CMakeFiles/randen.dir/randen.cc.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/randen/randen.cc
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/randen && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT thirdparties/randen/CMakeFiles/randen.dir/randen.cc.o -MF CMakeFiles/randen.dir/randen.cc.o.d -o CMakeFiles/randen.dir/randen.cc.o -c /home/wfz/Yux/TFHE/CBSmode/thirdparties/randen/randen.cc
 
 thirdparties/randen/CMakeFiles/randen.dir/randen.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/randen.dir/randen.cc.i"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/randen && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/randen/randen.cc > CMakeFiles/randen.dir/randen.cc.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/randen && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/thirdparties/randen/randen.cc > CMakeFiles/randen.dir/randen.cc.i
 
 thirdparties/randen/CMakeFiles/randen.dir/randen.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/randen.dir/randen.cc.s"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/randen && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/randen/randen.cc -o CMakeFiles/randen.dir/randen.cc.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/thirdparties/randen && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/thirdparties/randen/randen.cc -o CMakeFiles/randen.dir/randen.cc.s
 
 # Object files for target randen
 randen_OBJECTS = \

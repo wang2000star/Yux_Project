@@ -73,29 +73,29 @@ Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o: Yux/CMakeFiles/homoYux2.dir/flags.make
 Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o: /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp
 Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o: Yux/CMakeFiles/homoYux2.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o -MF CMakeFiles/homoYux2.dir/Yux2.cpp.o.d -o CMakeFiles/homoYux2.dir/Yux2.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp
+	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o -MF CMakeFiles/homoYux2.dir/Yux2.cpp.o.d -o CMakeFiles/homoYux2.dir/Yux2.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp
 
 Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/homoYux2.dir/Yux2.cpp.i"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp > CMakeFiles/homoYux2.dir/Yux2.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp > CMakeFiles/homoYux2.dir/Yux2.cpp.i
 
 Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/homoYux2.dir/Yux2.cpp.s"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp -o CMakeFiles/homoYux2.dir/Yux2.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp -o CMakeFiles/homoYux2.dir/Yux2.cpp.s
 
 Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o: Yux/CMakeFiles/homoYux2.dir/flags.make
 Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o: /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp
 Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o: Yux/CMakeFiles/homoYux2.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o -MF CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o.d -o CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp
+	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o -MF CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o.d -o CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o -c /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp
 
 Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/homoYux2.dir/Yux2_homo.cpp.i"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp > CMakeFiles/homoYux2.dir/Yux2_homo.cpp.i
+	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp > CMakeFiles/homoYux2.dir/Yux2_homo.cpp.i
 
 Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/homoYux2.dir/Yux2_homo.cpp.s"
-	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp -o CMakeFiles/homoYux2.dir/Yux2_homo.cpp.s
+	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp -o CMakeFiles/homoYux2.dir/Yux2_homo.cpp.s
 
 # Object files for target homoYux2
 homoYux2_OBJECTS = \
@@ -111,8 +111,8 @@ Yux/homoYux2: Yux/CMakeFiles/homoYux2.dir/build.make
 Yux/homoYux2: src/libtfhe++.a
 Yux/homoYux2: thirdparties/randen/libranden.a
 Yux/homoYux2: thirdparties/spqlios/libspqlios.a
-Yux/homoYux2: /usr/local/lib64/libgomp.so
-Yux/homoYux2: /lib/x86_64-linux-gnu/libpthread.a
+Yux/homoYux2: /usr/lib/gcc/x86_64-linux-gnu/11/libgomp.so
+Yux/homoYux2: /usr/lib/x86_64-linux-gnu/libpthread.a
 Yux/homoYux2: Yux/CMakeFiles/homoYux2.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/wfz/Yux/TFHE/CBSmode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable homoYux2"
 	cd /home/wfz/Yux/TFHE/CBSmode/build/Yux && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/homoYux2.dir/link.txt --verbose=$(VERBOSE)

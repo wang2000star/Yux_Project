@@ -9,9 +9,6 @@
 #include <vector>
 #include <algorithm> // 用于 std::copy
 #include <iomanip>   // 包含此头文件以使用 std::setw 和 std::setfill#include <iomanip> // 包含此头文件以使用 std::setw 和 std::setfill
-
-
-#include "Yux2.cpp"
 using namespace std;
 
 const double clocks2seconds = 1. / CLOCKS_PER_SEC;
@@ -415,39 +412,48 @@ void Sbox(std::vector<std::vector<TLWE_0>> &cipher,
                 TFHEpp::SM4_CircuitBootstrappingFFT<iksP, bkP, privksP>(bootedTRGSW[i][j], cipher[i][j], ek);
             }
         }
-        std::vector<TRLWE_1> lut_result(4); //
+        std::vector<TRLWE_1> lut_result(8); //
         tfhe_mul(lut_result[0], Table1, Table2, Table3, Table4, bootedTRGSW[1], bootedTRGSW[2]);
         tfhe_mul(lut_result[1], Table1, Table2, Table3, Table4, bootedTRGSW[5], bootedTRGSW[6]);
         tfhe_mul(lut_result[2], Table1, Table2, Table3, Table4, bootedTRGSW[9], bootedTRGSW[10]);
         tfhe_mul(lut_result[3], Table1, Table2, Table3, Table4, bootedTRGSW[13], bootedTRGSW[14]);
+        tfhe_mul(lut_result[4], Table1, Table2, Table3, Table4, bootedTRGSW[2], bootedTRGSW[3]);
+        tfhe_mul(lut_result[5], Table1, Table2, Table3, Table4, bootedTRGSW[6], bootedTRGSW[7]);
+        tfhe_mul(lut_result[6], Table1, Table2, Table3, Table4, bootedTRGSW[10], bootedTRGSW[11]);
+        tfhe_mul(lut_result[7], Table1, Table2, Table3, Table4, bootedTRGSW[14], bootedTRGSW[15]);
 #if 1
-        std::vector<TRLWE_1> lut_result0(8); //
-        CipherSubBytesMixedPacking(lut_result0[0], Table5, bootedTRGSW[0]);
-        CipherSubBytesMixedPacking(lut_result0[1], Table5, bootedTRGSW[3]);
-        CipherSubBytesMixedPacking(lut_result0[2], Table5, bootedTRGSW[4]);
-        CipherSubBytesMixedPacking(lut_result0[3], Table5, bootedTRGSW[7]);
-        CipherSubBytesMixedPacking(lut_result0[4], Table5, bootedTRGSW[8]);
-        CipherSubBytesMixedPacking(lut_result0[5], Table5, bootedTRGSW[11]);
-        CipherSubBytesMixedPacking(lut_result0[6], Table5, bootedTRGSW[12]);
-        CipherSubBytesMixedPacking(lut_result0[7], Table5, bootedTRGSW[15]);
+        std::vector<TRLWE_1> lut_result0(16); //
+        for (int i = 0; i < 16; i++)
+        {
+            CipherSubBytesMixedPacking(lut_result0[i], Table5, bootedTRGSW[i]);
+        }
 
         TRlWE1_XOR_Two(lut_result[0], lut_result[0], lut_result0[0]);
-        TRlWE1_XOR_Two(lut_result[0], lut_result[0], lut_result0[1]);
-        TRlWE1_XOR_Two(lut_result[1], lut_result[1], lut_result0[2]);
-        TRlWE1_XOR_Two(lut_result[1], lut_result[1], lut_result0[3]);
-        TRlWE1_XOR_Two(lut_result[2], lut_result[2], lut_result0[4]);
-        TRlWE1_XOR_Two(lut_result[2], lut_result[2], lut_result0[5]);
-        TRlWE1_XOR_Two(lut_result[3], lut_result[3], lut_result0[6]);
-        TRlWE1_XOR_Two(lut_result[3], lut_result[3], lut_result0[7]);
+        TRlWE1_XOR_Two(lut_result[0], lut_result[0], lut_result0[3]);
+        TRlWE1_XOR_Two(lut_result[1], lut_result[1], lut_result0[4]);
+        TRlWE1_XOR_Two(lut_result[1], lut_result[1], lut_result0[7]);
+        TRlWE1_XOR_Two(lut_result[2], lut_result[2], lut_result0[8]);
+        TRlWE1_XOR_Two(lut_result[2], lut_result[2], lut_result0[11]);
+        TRlWE1_XOR_Two(lut_result[3], lut_result[3], lut_result0[12]);
+        TRlWE1_XOR_Two(lut_result[3], lut_result[3], lut_result0[15]);
+
+        TRlWE1_XOR_Two(lut_result[4], lut_result[4], lut_result[0]);
+        TRlWE1_XOR_Two(lut_result[4], lut_result[4], lut_result0[1]);
+        TRlWE1_XOR_Two(lut_result[5], lut_result[5], lut_result[1]);
+        TRlWE1_XOR_Two(lut_result[5], lut_result[5], lut_result0[5]);
+        TRlWE1_XOR_Two(lut_result[6], lut_result[6], lut_result[2]);
+        TRlWE1_XOR_Two(lut_result[6], lut_result[6], lut_result0[9]);
+        TRlWE1_XOR_Two(lut_result[7], lut_result[7], lut_result[3]);
+        TRlWE1_XOR_Two(lut_result[7], lut_result[7], lut_result0[13]);
 #endif
         // SampleExtract level 1
         std::vector<std::vector<TLWE_1>> Sbox_value;
-        Sbox_value.resize(4);
-        for (int i = 0; i < 4; i++)
+        Sbox_value.resize(8);
+        for (int i = 0; i < 8; i++)
         {
             Sbox_value[i].resize(8);
         }
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
@@ -458,16 +464,20 @@ void Sbox(std::vector<std::vector<TLWE_0>> &cipher,
         for (int j = 0; j < 8; j++)
         {
             // level 1 -> level 0
-            TFHEpp::IdentityKeySwitch<iksP>(y[3][j], Sbox_value[0][j], ek.getiksk<iksP>());
-            TFHEpp::IdentityKeySwitch<iksP>(y[7][j], Sbox_value[1][j], ek.getiksk<iksP>());
-            TFHEpp::IdentityKeySwitch<iksP>(y[11][j], Sbox_value[2][j], ek.getiksk<iksP>());
-            TFHEpp::IdentityKeySwitch<iksP>(y[15][j], Sbox_value[3][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[2][j], Sbox_value[0][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[6][j], Sbox_value[1][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[10][j], Sbox_value[2][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[14][j], Sbox_value[3][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[3][j], Sbox_value[4][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[7][j], Sbox_value[5][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[11][j], Sbox_value[6][j], ek.getiksk<iksP>());
+            TFHEpp::IdentityKeySwitch<iksP>(y[15][j], Sbox_value[7][j], ek.getiksk<iksP>());
         }
 #if 1
-        XOR_Two(y[3], y[3], RoundConstantTLWE, 8);
-        XOR_Two(y[7], y[7], RoundConstantTLWE, 8);
-        XOR_Two(y[11], y[11], RoundConstantTLWE, 8);
-        XOR_Two(y[15], y[15], RoundConstantTLWE, 8);
+        XOR_Two(y[2], y[2], RoundConstantTLWE, 8);
+        XOR_Two(y[6], y[6], RoundConstantTLWE, 8);
+        XOR_Two(y[10], y[10], RoundConstantTLWE, 8);
+        XOR_Two(y[14], y[14], RoundConstantTLWE, 8);
 #endif
 #if 0
         XOR_Four(y[3], cipher[0], y[3] , cipher[3], RoundConstantTLWE, 8);
@@ -484,44 +494,6 @@ void Sbox(std::vector<std::vector<TLWE_0>> &cipher,
             }
         }
     }
-#if 1
-#pragma omp parallel for
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            TFHEpp::SM4_CircuitBootstrappingFFT<iksP, bkP, privksP>(bootedTRGSW[i][j], cipher[i][j], ek);
-        }
-    }
-    std::vector<TRLWE_1> lut_result(16); //
-    for (int i = 0; i < 16; i++)
-    {
-        CipherSubBytesMixedPacking(lut_result[i], Table5, bootedTRGSW[i]);
-    }
-    // SampleExtract level 1
-    std::vector<std::vector<TLWE_1>> Sbox_value;
-    Sbox_value.resize(16);
-    for (int i = 0; i < Sbox_value.size(); i++)
-    {
-        Sbox_value[i].resize(8);
-    }
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            TFHEpp::SampleExtractIndex<typename privksP::targetP>(Sbox_value[i][j], lut_result[i], j);
-        }
-    }
-    // Key Switch to LWE B  on level 0
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            // level 1 -> level 0
-            TFHEpp::IdentityKeySwitch<iksP>(cipher[i][j], Sbox_value[i][j], ek.getiksk<iksP>());
-        }
-    }
-#endif
 }
 
 // decLinearLayer
@@ -670,11 +642,11 @@ std::vector<std::vector<TLWE_0>> slice_2d(const std::vector<std::vector<TLWE_0>>
     return slice; // 返回切片
 }
 
-//extern int KeyExpansion(unsigned char RoundKey[], int ROUND, int blockByte, unsigned char Key[]);
-//extern void addRoundKey(unsigned char state[], unsigned char RoundKey[], int round);
-//extern void encSboxFi(unsigned char state[], int begin);
-//extern void encLinearLayer(unsigned char state[]);
-//static const unsigned char roundConstant = 0xCD;
+extern int KeyExpansion(unsigned char RoundKey[], int ROUND, int blockByte, unsigned char Key[]);
+extern void addRoundKey(unsigned char state[], unsigned char RoundKey[], int round);
+extern void encSboxFi(unsigned char state[], int begin);
+extern void encLinearLayer(unsigned char state[]);
+static const unsigned char roundConstant = 0xCD;
 
 int main()
 {
@@ -844,292 +816,64 @@ int main()
         return 0;
     }
 #endif
-// Yux密钥拓展的tlwe加解密
-#if 1
-    std::vector<std::vector<TLWE_0>> rk;
-    rk.resize(16 * nRoundKeys);
-    encryptRoundKeys<bkP>(RoundKey, rk, *sk, nRoundKeys);
-#endif
-    std::cout << "Yux密钥扩展的tlwe加密完成" << endl;
-/* 前面两种方法均可以得到密钥拓展tlwe加密后的轮密钥rk[208][8]
-   下面解密前面的轮密钥rk，得到decrypt_rk[208][8]，
-   将其转为每行转为4为hex整数，再变为13行16列，最后与未加密的拓展密钥RoundKey2D进行逐元素比较
-*/
-#if 1
-    std::array<std::array<int, 16>, 13> decrypt_rk;
-    std::cout << "Yuxkey的tlwe解密开始" << std::endl;
-#pragma omp parallel for
+
+// 对密文进行加法运算，y=y<<1+y<<2+y<<3+y<<4+y<<5+y<<6+y<<7
+
+    std::cout << "密文加法运算开始" << endl;
+    std::vector<std::vector<TLWE_0>> y;
+    int n = 256;
+    int Q = 16 * n;
+    y.resize(Q);
+    for (int i = 0; i < Q; i++)
+    {
+        y[i].resize(8);
+    }
+   
     for (int i = 0; i < 16; i++)
     {
-        for (int j = 0; j < nRoundKeys; j++)
+        for (int j = 0; j < 8; j++)
         {
-            int dec_hex = 0;
-            int dec_bin[8];
-            for (int k = 0; k < 8; k++)
-            {
-                // typename P::T a = TFHEpp::tlweSymIntDecrypt<typename bkP::domainP>();
-                dec_bin[k] = TFHEpp::tlweSymIntDecrypt<typename bkP::domainP>(rk[16 * j + i][k], sk->key.get<typename bkP::domainP>());
-                // bootsSymDecrypt(&rk[0][i][j], key);
-            }
-            // 将二进制转为十六进制
-            BinStrToHex(dec_bin, dec_hex, 8);
-            decrypt_rk[j][i] = dec_hex;
+            for (int k = 0; k < n; k++)
+            TFHEpp::HomCOPY<typename bkP::domainP>(y[i+16*k][j], cipher[(i+k)%16][j]);
         }
     }
-    std::cout << "Yuxkey的tlwe解密完成" << endl;
-    // 将解密后的轮密钥与原始轮密钥进行比较
-    flag = 1;
-    for (int i = 0; i < nRoundKeys; i++)
+    // y = y + y1 + y2 + y3
+    for (int i = 0; i < 16; i++)
     {
-        for (int j = 0; j < 16; j++)
-        {
-            if (RoundKey2D[i][j] != decrypt_rk[i][j])
-            {
-                std::cout << "Yuxkey的tlwe解密失败" << std::endl;
-                flag = 0;
-                return 0;
-            }
+        for (int k=1;k<n;k++){
+            XOR_Two(cipher[i], cipher[i], y[i+16*k], 8);
         }
     }
-    if (flag)
-    {
-        std::cout << "Yuxkey的tlwe解密成功!!!" << std::endl;
-    }
-#endif
-
-// 前面已经得到了AES密文且用tlwe对其进行加密得到了cipher，现在使用tlwe下的AES密钥扩展对cipher进行AES解密，这样就间接得到了用tlwe直接加密明文结果
-#if 1
-    // 将常数roundConstant加密成tlwe;
-    std::vector<TLWE_0> RoundConstantTLWE;
-    RoundConstantTLWE.resize(8);
-    int bin_str[8];
-    HexToBinStr(roundConstant, bin_str, 8);
-    // #pragma omp parallel for num_threads(8)
-    for (int j = 0; j < 8; j++)
-    {
-        RoundConstantTLWE[j] = TFHEpp::tlweSymIntEncrypt<typename bkP::domainP>((typename bkP::domainP::T)bin_str[j], bkP::domainP::alpha,
-                                                                                sk->key.get<typename bkP::domainP>());
-    }
-#endif
-// 最后一轮第12轮解密
-#if 1
-    // 定义总时间
-    double total_time = 0;
-    std::vector<std::vector<TLWE_0>> rk_slice;
-    rk_slice.resize(16);
+    // 同理，对state执行同样运算
+    unsigned char state1[Q];
     for (int i = 0; i < 16; i++)
     {
-        rk_slice[i].resize(8);
+        for (int k = 0; k < n; k++)
+        {
+            state1[i + 16 * k] = state[(i + k) % 16];
+        }
+        
     }
-    std::cout << "第" << ROUND << "轮解密开始" << endl;
-    // 记录开始时间
-    auto start = std::chrono::system_clock::now();
-
-    rk_slice = slice_2d(rk, 16 * nRoundKeys - 16);
-// std::cout << "第12轮XOR开始" << endl;
-//  使用切片进行 XOR_Two 操作
-#pragma omp parallel for
     for (int i = 0; i < 16; i++)
     {
-        XOR_Two(cipher[i], cipher[i], rk_slice[i], 8);
+        for (int k = 1; k < n; k++)
+        {
+            state[i] = state[i] ^ state1[i + 16 * k];
+        }
     }
-    /*
-    // std::cout << "第12轮XOR完成" << endl;//  让state和 RoundKey2D[12]进行异或操作，tlwe解密后的结果和AES_state[11]进行比较
-
-    unsigned char t[16];
-    for (int i = 0; i < 16; i++)
-    {
-        t[i] = RoundKey2D[12][i] ^ state[i];
-    }
-    // 解密第12轮XOR
+    //解密验证
+    std::cout << "密文加法运算完成" << endl;
+    std::cout << "密文加法运算解密开始" << endl;
     decryptTLWE(cipher, *sk, decrypt);
-    flag = check_decrypt(decrypt, t);
+    std::cout << "密文加法运算解密完成" << endl;
+    flag = check_decrypt(decrypt, state);
     if (flag)
     {
-        std::cout << "第12轮tlweXOR解密成功" << endl;
+        std::cout << "密文加法运算解密成功!!!" << endl;
     }
     else
     {
-        std::cout << "第12轮tlweXOR解密失败" << endl;
-        return 0;
+        std::cout << "密文加法运算解密失败" << endl;
     }
-*/
-    // 逆S盒操作
-    Sbox(cipher, RoundConstantTLWE, Table1, Table2, Table3, Table4, Table5, ek);
-    // 记录结束时间
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::cout << "第" << ROUND << "轮解密完成" << endl;
-    std::cout << "第" << ROUND << "轮解密用时：" << elapsed_seconds.count() << "s" << endl;
-    total_time += elapsed_seconds.count();
-    // 第11轮tlwe解密
-    std::cout << "第" << ROUND << "轮tlwe解密开始" << endl;
-    // 调用解密函数
-    decryptTLWE(cipher, *sk, decrypt);
-    std::cout << "第" << ROUND << "轮tlwe解密完成" << endl;
-    // 检查解密结果是否正确
-    flag = check_decrypt(decrypt, Yux_state[33]);
-    if (flag)
-    {
-        std::cout << "第" << ROUND << "轮tlwe解密成功!!!" << endl;
-    }
-    else
-    {
-        std::cout << "第" << ROUND << "轮tlwe解密失败" << endl;
-        return 0;
-    }
-
-#endif
-// 常规轮1~11解密
-#if 1
-    for (int i = ROUND - 1; i > 0; i--) // 11 rounds
-    {
-        std::cout << "第" << i << "轮解密开始" << endl;
-        // 记录开始时间
-        start = std::chrono::system_clock::now();
-        rk_slice = slice_2d(rk, 16 * i);
-// 使用切片进行 XOR_Two 操作
-#pragma omp parallel for
-        for (int j = 0; j < 16; j++)
-        {
-            XOR_Two(cipher[j], cipher[j], rk_slice[j], 8);
-        }
-        /*
-        // 解密验证
-        decryptTLWE(cipher, *sk, decrypt);
-        flag = check_decrypt(decrypt, Yux_state[3 * i - 1]);
-        if (flag)
-        {
-            std::cout << "第" << i << "轮tlweXOR解密成功!!!" << endl;
-        }
-        else
-        {
-            std::cout << "第" << i << "轮tlweXOR解密失败" << endl;
-            return 0;
-        }
-        */
-        // 进行线性层逆变换
-        cipherinvLinearLayer(cipher, Table5, ek);
-        /*
-        // 解密验证
-        decryptTLWE(cipher, *sk, decrypt);
-        flag = check_decrypt(decrypt, Yux_state[3 * i - 2]);
-        if (flag)
-        {
-            std::cout << "第" << i << "轮tlwe线性层解密成功!!!" << endl;
-        }
-        else
-        {
-            std::cout << "第" << i << "轮tlwe线性层解密失败" << endl;
-            return 0;
-        }
-        */
-        // 进行s盒逆变换
-        Sbox(cipher, RoundConstantTLWE, Table1, Table2, Table3, Table4, Table5, ek);
-        // 记录结束时间
-        end = std::chrono::system_clock::now();
-        elapsed_seconds = end - start;
-        std::cout << "第" << i << "轮解密完成" << endl;
-        std::cout << "第" << i << "轮解密用时：" << elapsed_seconds.count() << "s" << endl;
-        total_time += elapsed_seconds.count();
-        std::cout << "第" << i << "轮tlwe解密开始" << endl;
-        // 调用解密函数
-        decryptTLWE(cipher, *sk, decrypt);
-        std::cout << "第" << i  << "轮tlwe解密完成" << endl;
-        // 检查解密结果是否正确
-        flag = check_decrypt(decrypt, Yux_state[3 * i - 3]);
-        if (flag)
-        {
-            std::cout << "第" << i << "轮tlwe解密成功!!!" << endl;
-        }
-        else
-        {
-            std::cout << "第" << i  << "轮tlwe解密失败" << endl;
-            return 0;
-        }
-    }
-#endif
-/*
-//输出decrypt
-    for (int i = 0; i < 16; i++)
-    {
-        printf("%02x ", decrypt[i]);
-    }
-    std::cout << std::endl;
-
-    // 对decrypt重新tlwe加密
-    std::vector<std::vector<TLWE_0>> cipher2;
-    cipher2.resize(16);
-    for (int j = 0; j < 16; j++)
-    {
-        cipher2[j].resize(8);
-    }
-    for (int j = 0; j < 16; j++)
-    {
-        int bin_str[8];
-        HexToBinStr(decrypt[j], bin_str, 8);
-        for (int k = 0; k < 8; k++)
-        {
-            cipher2[j][k] = TFHEpp::tlweSymIntEncrypt<typename bkP::domainP>((typename bkP::domainP::T)bin_str[k], bkP::domainP::alpha,
-                                                                             sk->key.get<typename bkP::domainP>());
-        }
-    }
-    // 对cipher2进行XOR
-    rk_slice = slice_2d(rk, 0);
-
-#pragma omp parallel for
-    for (int i = 0; i < 16; i++)
-    {
-        XOR_Two(cipher2[i], cipher2[i], rk_slice[i], 8);
-    }
-    // 解密验证
-    decryptTLWE(cipher2, *sk, decrypt);
-    // 输出解密结果
-    for (int j = 0; j < 16; j++)
-    {
-        printf("%02x ", decrypt[j]);
-    }
-    std::cout << std::endl;
-*/
-// 白化轮即第0轮解密
-#if 1
-    std::cout << "第0轮解密开始" << endl;
-    // 记录开始时间
-    start = std::chrono::system_clock::now();
-    // 使用切片进行 XOR_Two 操作
-    rk_slice = slice_2d(rk, 0);
-#pragma omp parallel for
-    for (int i = 0; i < 16; i++)
-    {
-        XOR_Two(cipher[i], cipher[i], rk_slice[i], 8);
-    }
-    // 记录结束时间
-    end = std::chrono::system_clock::now();
-    elapsed_seconds = end - start;
-    std::cout << "第0轮解密完成" << endl;
-    std::cout << "第0轮解密用时：" << elapsed_seconds.count() << "s" << endl;
-    total_time += elapsed_seconds.count();
-#endif
-// 至此，我们得到了用tlwe加密的AES明文的结果，下面将其用tlwe私钥解密，检验解密结果是否正确
-// tlwe明文解密
-#if 1
-    std::cout << "tlwe明文解密开始" << std::endl;
-    // 调用解密函数
-    decryptTLWE(cipher, *sk, decrypt);
-    // 记录结束时间
-    std::cout << "tlwe明文解密完成" << endl;
-    // 检查解密结果是否正确
-    flag = check_decrypt(decrypt, plain);
-    if (flag)
-    {
-        std::cout << "tlwe明文解密成功!!!" << endl;
-    }
-    else
-    {
-        std::cout << "tlwe明文解密失败" << endl;
-    }
-    // 输出总时间
-    std::cout << "解密总时间：" << total_time << "s" << std::endl;
-#endif
     return 0;
 }

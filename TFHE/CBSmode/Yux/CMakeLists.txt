@@ -1,6 +1,8 @@
 # 查找 OpenMP 包
 find_package(OpenMP REQUIRED)
 
+#set(CMAKE_CXX_COMPILER g++)
+
 # 设置编译器选项以禁止所有警告
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")

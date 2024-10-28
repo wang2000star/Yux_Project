@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-project(tfhe++ CXX)
+project(Yux CXX)
+
+#set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS
     "-march=native -O3 -g -funroll-loops -Wall -Wextra -pedantic -Wno-sign-compare -w"
