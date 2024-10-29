@@ -48,7 +48,7 @@ bool dec_test() {
         0x0152e, 0x034b6, 0x0a16f, 0x01219, 0x00b83, 0x09ab7, 0x06b12, 0x0e2b1};
     uint64_t temp3[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    Vec<uint64_t> ptxt(INIT_SIZE, nBlocks*Nk); //8*10
+    Vec<uint64_t> ptxt(INIT_SIZE, nBlocks*Nk); //2*16
     Vec<uint64_t> symEnced(INIT_SIZE, nBlocks*Nk);
 
     // Copy the Key and PlainText
@@ -61,7 +61,7 @@ bool dec_test() {
       ptxt[i]=plain1[i];
     }
 
-    Yux_F_p cipher = Yux_F_p(Nk, Nr, plain_mod);
+    Yux_F_p cipher = Yux_F_p(Nk, Nr, plain_mod);//分组数，轮数，模数
     
     
     //             ********************************************************

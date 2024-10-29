@@ -1,37 +1,57 @@
-Hybrid Sysmmetric Scheme
-========================
+# Hybrid Sysmmetric Scheme
 
----
+## Build and Run
 
-Implementation based on HElib v2.2.1
-
-# Build and Run
-
-前期准备：
+### 前期准备
 
 * Ubuntu-22.04
+* 依赖项
+
+  ```bash
+  sudo apt update
+  sudo apt install build-essential
+  ```
 * GNU make >=3.82
+
   版本查看：
 
   ```bash
   make --version
   ```
 * **Pthreads**
-  什么是Pthreads？[Pthreads概述
-  ](https://www.cnblogs.com/blueclue/archive/2010/07/16/1779006.html)版本查看
+
+  什么是Pthreads？[Pthreads概述](https://www.cnblogs.com/blueclue/archive/2010/07/16/1779006.html)版本查看
 
   ```bash
   getconf GNU_LIBPTHREAD_VERSION
   ```
 * git >= 1.83
 
-版本查看：
+  版本查看：
 
 ```bash
 git --version
 ```
 
 * g++ >= 7.3.1
+
+  ```bash
+  # 假设你已经编译并安装了 g++，并且它位于 /usr/local/bin/g++
+
+  # 创建符号链接
+  sudo ln -sf /usr/local/bin/g++ /usr/bin/g++
+
+  # 使用 update-alternatives 管理 g++ 版本
+  sudo update-alternatives --install /usr/bin/g++ g++ /usr/local/bin/g++ 100
+  sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++ 50
+
+  # 选择默认的 g++ 版本
+  sudo update-alternatives --config g++
+
+  # 验证设置
+  g++ --version
+  ```
+
   版本查看：
 
   ```bash
@@ -47,12 +67,12 @@ git --version
 
 Our implementation relies on [HElib v2.2.1](https://github.com/homenc/HElib/tree/v2.2.1), which is a famous homomomorphic encryption scheme library and `v2.2.1` is now (July, 2022) the newest release version. Therefore, you firstly need to install HElib. The HElib iteratively relies on [NTL](https://libntl.org/), [GMP](https://gmplib.org) and M4 libraries. We suggest that install them to your default user's program path `/usr/local`, and the suggeted version of them are showed in following table. What's more, using `./configure SHARED=on` to get a shared library when compile NTL is also suggested.
 
-| Libraries | Version | Website                          |
-| --------- | ------- | -------------------------------- |
-| M4        | v1.4.18 | http://mirrors.kernel.org/gnu/m4 |
-| GMP       | v6.2.1  | https://gmplib.org               |
-| NTL       | v11.4.3 | https://libntl.org               |
-| HElib     | v2.2.1  | https://github.com/homenc/HElib  |
+| Libraries | Version | Website                                                           |
+| --------- | ------- | ----------------------------------------------------------------- |
+| M4        | v1.4.18 | [http://mirrors.kernel.org/gnu/m4](http://mirrors.kernel.org/gnu/m4) |
+| GMP       | v6.2.1  | [https://gmplib.org](https://gmplib.org)                             |
+| NTL       | v11.4.3 | [https://libntl.org](https://libntl.org)                             |
+| HElib     | v2.2.1  | [https://github.com/homenc/HElib](https://github.com/homenc/HElib)   |
 
 m4下载安装：
 
@@ -74,7 +94,7 @@ hash -r
 m4 --version
 ```
 
-patchelf：
+* patchelf：
 
 ```bash
 wget https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.gz
@@ -150,7 +170,7 @@ NTL版本查看：
 grep "define NTL_VERSION" /usr/local/include/NTL/version.h
 ```
 
-We suggest that follow the command below to install HElib. You can also refer to the website https://github.com/homenc/HElib.
+We suggest that follow the command below to install HElib. You can also refer to the website [HElib GitHub repository](https://github.com/homenc/HElib).
 
 ```bash
 wget https://github.com/homenc/HElib/archive/refs/tags/v2.3.0.tar.gz
@@ -180,10 +200,6 @@ export LD_LIBRARY_PATH=/home/Alice/helib_install/lib:$LD_LIBRARY_PATH
 
 ```
 
-export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib:$LD_LIBRARY_PATH
-
-LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib:$LD_LIBRARY_PATH/usr/local/bin/cmake..
-
 错误排查：HElib-2.3.0文件夹里面的VERSION需要编辑为2.3.0
 
 helib_pack/share/cmake/helib里面的：
@@ -203,7 +219,7 @@ set(helib_VERSION 2.3.0)
 include("${CMAKE_CURRENT_LIST_DIR}/helibConfigVersion.cmake")
 ```
 
-```
+```bash
 CMake Error at CMakeLists.txt:39 (find_package):
   Could not find a configuration file for package "helib" that exactly
   matches requested version "2.2.0".
@@ -229,9 +245,11 @@ else()
 endif()
 ```
 
+本人强烈推荐的一个安装教程：[安装HElib并运行示例程序](https://blog.csdn.net/baishuiniyaonulia/article/details/122737035)
+
 测试：
 
-```
+```bash
 cd HElib-2.3.0/examples
 mkdir build
 cd build
@@ -252,4 +270,7 @@ make
 ```
 
 Symmetic test:
+
+```bash
 g++ test-Yu2x-8.cpp -Iinclude ../Yux/Yu2x-8.cpp -o test-Yu2x-8
+```
