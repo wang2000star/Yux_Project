@@ -433,6 +433,7 @@ void Sbox(std::vector<std::vector<TLWE_0>> &cipher,
                 TFHEpp::IdentityKeySwitch<iksP>(cipher[i][j], Sbox_value[i][j], ek.getiksk<iksP>());
             }
         }
+        //解密
     }
 }
 // decLinearLayer
