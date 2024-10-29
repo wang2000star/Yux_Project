@@ -3,6 +3,7 @@
 
 Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o
  /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp
+ /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.hpp
  /usr/include/c++/11/cstring
  /usr/include/c++/11/pstl/pstl_config.h
  /usr/include/features-time64.h
@@ -28,6 +29,7 @@ Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o
 
 Yux/CMakeFiles/homoYux2.dir/Yux2_homo.cpp.o
  /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2_homo.cpp
+ /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.hpp
  /home/wfz/Yux/TFHE/CBSmode/include/axell/mpparam.hpp
  /home/wfz/Yux/TFHE/CBSmode/include/INTorus.hpp
  /home/wfz/Yux/TFHE/CBSmode/include/axell/gate.hpp

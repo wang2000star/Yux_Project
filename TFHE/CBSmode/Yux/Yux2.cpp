@@ -1,9 +1,6 @@
-#include <cstring>
+#include "Yux2.hpp"
 //#include "Yu2x-8.h"
 // The round number is ROUND =12
-
-static const unsigned char roundConstant = 0xCD;
-static const unsigned char roundConstant_4bit = 0xD; // x^3+x^2+1
 
 // This function adds the round key to state.
 // The round key is added to the state by an XOR function.

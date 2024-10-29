@@ -9,9 +9,9 @@
 #include <vector>
 #include <algorithm> // 用于 std::copy
 #include <iomanip>   // 包含此头文件以使用 std::setw 和 std::setfill#include <iomanip> // 包含此头文件以使用 std::setw 和 std::setfill
-using namespace std;
 
-const double clocks2seconds = 1. / CLOCKS_PER_SEC;
+#include "Yux2.hpp"
+//using namespace std;
 
 // key-switching parameters
 using iksP = TFHEpp::lvl10param;
@@ -58,6 +58,30 @@ void XOR_Two(P &result, P &a, P &b, int N)
         }
     }
 }
+// 四个一维数组a,b,c,d相加，结果保存在数组result中，数组大小为8*(n+1)
+template <class P>
+void XOR_Four(P &result, P &a, P &b, P &c, P &d, int N)
+{
+    for (int i = 0; i < N; i++)
+    {
+        for (int num = 0; num < bkP::domainP::n + 1; num++)
+        {
+            result[i][num] = a[i][num] + b[i][num] + c[i][num] + d[i][num];
+        }
+    }
+}
+// 类似的，写7个一维数组相加的函数
+template <class P>
+void XOR_Seven(P &result, P &a, P &b, P &c, P &d, P &e, P &f, P &g, int N)
+{
+    for (int i = 0; i < N; i++)
+    {
+        for (int num = 0; num < bkP::domainP::n + 1; num++)
+        {
+            result[i][num] = a[i][num] + b[i][num] + c[i][num] + d[i][num] + e[i][num] + f[i][num] + g[i][num];
+        }
+    }
+}
 template <class P>
 void TRlWE1_XOR_Two(P &result, P &a, P &b)
 {
@@ -71,19 +95,14 @@ void TRlWE1_XOR_Two(P &result, P &a, P &b)
 }
 void TRLWE1_XOR_Four(TRLWE_1 &result, TRLWE_1 &a, TRLWE_1 &b, TRLWE_1 &c, TRLWE_1 &d)
 {
-    TRlWE1_XOR_Two(result, a, b);
-    TRlWE1_XOR_Two(result, result, c);
-    TRlWE1_XOR_Two(result, result, d);
+    for (int k = 0; k < 2; k++)
+    {
+        for (int num = 0; num < 1024; num++)
+        {
+            result[k][num] = a[k][num] + b[k][num] + c[k][num] + d[k][num];
+        }
+    }
 }
-// 四个一维数组a,b,c,d相加，结果保存在数组result中，数组大小为8*(n+1)
-template <class P>
-void XOR_Four(P &result, P &a, P &b, P &c, P &d, int N)
-{
-    XOR_Two<P>(result, a, b, N);
-    XOR_Two<P>(result, result, c, N);
-    XOR_Two<P>(result, result, d, N);
-}
-
 // 定义4个s盒，分别用于固定低四位为0或高四位为0的8位多项式相乘
 static const unsigned char AmBm[16][16] = {
     // 0    1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
@@ -380,12 +399,6 @@ void Sbox(std::vector<std::vector<TLWE_0>> &cipher,
     {
         Sbox_value[i].resize(8);
     }
-    std::vector<std::vector<TFHEpp::TRGSWFFT<typename privksP::targetP>>> bootedTRGSW;
-    bootedTRGSW.resize(16);
-    for (int i = 0; i < 16; i++)
-    {
-        bootedTRGSW[i].resize(8);
-    }
     std::vector<TRLWE_1> lut_result(16);
     int index[16] = {2, 3, 0, 1, 6, 7, 4, 5, 10, 11, 8, 9, 14, 15, 12, 13};
     for (int r = 0; r < 2; r++)
@@ -459,60 +472,10 @@ void Sbox(std::vector<std::vector<TLWE_0>> &cipher,
 //  输入x[16]，输出x[16]
 //  temp0=x<<<0,temp3=x<<<3,temp4=x<<<4,temp8=x<<<8,temp9=x<<<9,temp12=x<<<12,temp14=x<<<14
 //  x=temp0^temp3^temp4^temp8^temp9^temp12^temp14
-void cipherinvLinearLayer(std::vector<std::vector<TLWE_0>> &cipher, std::vector<TRLWE_1> &Table5, TFHEpp::EvalKey &ek)
+void cipherinvLinearLayer(std::vector<std::vector<TLWE_0>> &cipher, TFHEpp::EvalKey &ek)
 {
-    // 开始自举
-#if 1
-    std::vector<std::vector<TFHEpp::TRGSWFFT<typename privksP::targetP>>> bootedTRGSW;
-    bootedTRGSW.resize(16);
-    for (int i = 0; i < 16; i++)
-    {
-        bootedTRGSW[i].resize(8);
-    }
-#pragma omp parallel for
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            TFHEpp::SM4_CircuitBootstrappingFFT<iksP, bkP, privksP>(bootedTRGSW[i][j], cipher[i][j], ek);
-        }
-    }
-    std::vector<TRLWE_1> lut_result(16); //
-    for (int i = 0; i < 16; i++)
-    {
-        CipherSubBytesMixedPacking(lut_result[i], Table5, bootedTRGSW[i]);
-    }
-    // SampleExtract level 1
-    std::vector<std::vector<TLWE_1>> Sbox_value;
-    Sbox_value.resize(16);
-    for (int i = 0; i < Sbox_value.size(); i++)
-    {
-        Sbox_value[i].resize(8);
-    }
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            TFHEpp::SampleExtractIndex<typename privksP::targetP>(Sbox_value[i][j], lut_result[i], j);
-        }
-    }
-    // Key Switch to LWE B  on level 0
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            // level 1 -> level 0
-            TFHEpp::IdentityKeySwitch<iksP>(cipher[i][j], Sbox_value[i][j], ek.getiksk<iksP>());
-        }
-    }
-#endif
-    //
-    std::vector<std::vector<TLWE_0>> temp;
-    temp.resize(16);
-    for (int i = 0; i < 16; i++)
-    {
-        temp[i].resize(8);
-    }
+    std::vector<std::vector<TLWE_0>> temp(16, std::vector<TLWE_0>(8));
+//#pragma omp parallel for collapse(2)
     for (int i = 0; i < 16; i++)
     {
         for (int j = 0; j < 8; j++)
@@ -520,11 +483,10 @@ void cipherinvLinearLayer(std::vector<std::vector<TLWE_0>> &cipher, std::vector<
             TFHEpp::HomCOPY<typename bkP::domainP>(temp[i][j], cipher[i][j]);
         }
     }
-    std::vector<TLWE_0> t(8);
+//#pragma omp parallel for
     for (int i = 0; i < 16; i++)
     {
-        XOR_Four(t, temp[i], temp[(i + 3) % 16], temp[(i + 4) % 16], temp[(i + 8) % 16], 8);
-        XOR_Four(cipher[i], t, temp[(i + 9) % 16], temp[(i + 12) % 16], temp[(i + 14) % 16], 8);
+        XOR_Seven(cipher[i], temp[i], temp[(i + 3) % 16], temp[(i + 4) % 16], temp[(i + 8) % 16], temp[(i + 9) % 16], temp[(i + 12) % 16], temp[(i + 14) % 16], 8);
     }
 }
 // 密钥扩展的tlwe加密
@@ -601,16 +563,9 @@ std::vector<std::vector<TLWE_0>> slice_2d(const std::vector<std::vector<TLWE_0>>
     return slice; // 返回切片
 }
 
-extern int KeyExpansion(unsigned char RoundKey[], int ROUND, int blockByte, unsigned char Key[]);
-extern void addRoundKey(unsigned char state[], unsigned char RoundKey[], int round);
-extern void encSboxFi(unsigned char state[], int begin);
-extern void encLinearLayer(unsigned char state[]);
-static const unsigned char roundConstant = 0xCD;
-extern unsigned char mul(unsigned char a, unsigned char b);
 int main()
 {
-
-    std::cout << "Program start" << std::endl;
+   std::cout << "Yux加密开始" << std::endl;
     // omp_set_num_threads(16); // 设置线程数为16
 // 生成tlwe密钥，自举密钥，key-switching密钥等等
 #if 1
@@ -898,18 +853,6 @@ int main()
     auto start2 = std::chrono::system_clock::now();
     // 调用解密函数
     decryptTLWE(cipher, *sk, decrypt);
-    //输出解密结果
-    for (int i = 0; i < 16; i++)
-    {
-        std::cout << hex << (int)decrypt[i] << " ";
-    }
-    std::cout << std::endl;
-    // 输出Yux_state[33]
-    for (int i = 0; i < 16; i++)
-    {
-        std::cout << hex << (int)Yux_state[33][i] << " ";
-    }
-    std::cout << std::endl;
     // 检查解密结果是否正确
     flag = check_decrypt(decrypt, Yux_state[33]);
     if (flag)
@@ -978,8 +921,9 @@ int main()
         }
         // 记录解密验证时间
         start2 = std::chrono::system_clock::now();
-        if (0)
+        if (0)//是否开启线性自举
         {
+            #pragma omp parallel for
             for (int i = 0; i < 16; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -1013,7 +957,7 @@ int main()
         // 记录时间
         end2 = std::chrono::system_clock::now();
         // 进行线性层逆变换
-        cipherinvLinearLayer(cipher, Table5, ek);
+        cipherinvLinearLayer(cipher, ek);
         // 记录解密验证时间
         start3 = std::chrono::system_clock::now();
         // 解密验证
