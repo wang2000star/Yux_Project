@@ -6,7 +6,7 @@ using namespace NTL;
 
 Transcipher16_F_p::Transcipher16_F_p(std::shared_ptr<helib::Context> con)
     : context(con),
-      he_sk(*context),
+    helib::SecKey he_sk(*context),
       ea(context->getEA()) {
   
   cout << "Transcipher16_F_p init ..." <<endl;
@@ -246,7 +246,7 @@ void Transcipher16_F_p::decSboxFunc(vector<Ctxt>& eData, long begin, Ctxt& encA)
 {
     Ctxt c0(eData[begin]);
     Ctxt c1(eData[begin+1]);
-    Ctxt c2(eData[begin+2]);;
+    Ctxt c2(eData[begin+2]);
     Ctxt c3(eData[begin+3]);
     Ctxt temp(c1);
     temp.multiplyBy(c2);

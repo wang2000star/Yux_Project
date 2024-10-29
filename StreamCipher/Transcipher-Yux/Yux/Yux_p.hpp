@@ -11,7 +11,7 @@ using namespace std;
 #include "params_Yux_p.hpp"
 
 
-static uint64_t roundConstant = 0xCD;
+static uint64_t RoundConstant = 0xCD;
 
 void decSboxFi(uint64_t state[], int begin);
 

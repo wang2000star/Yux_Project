@@ -37,6 +37,11 @@ void decodeTo16Ctxt(Vec<uint8_t>& data, const Vec<ZZX>& encData,
 
 bool verifyDecryption16(const vector<Ctxt> &encryptedVec, const SecKey &secretKey,
                       const EncryptedArrayDerived<PA_GF2> &ea, const Vec<uint8_t> &originalVec);
+bool verifyDecryption_p16(const vector<Ctxt>& encryptedSymKey, const vector<uint64_t>& originalSymKey, const SecKey& secretKey, const EncryptedArray& ea);
+
+void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<uint64_t>& data, const EncryptedArray& ea);
+
+void decodeTo16Ctxt_p(vector<uint64_t>& data, const vector<vector<long>>& encData, const EncryptedArray& ea);
 // 通用写入函数模板
 template <typename T>
 bool writeToFile(const T *data, const std::string &filename, size_t length)

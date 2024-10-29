@@ -6,41 +6,26 @@ using namespace NTL;
 
 
 
-// run the Yux key-expansion and then encrypt the expanded key.
-void encryptSymKey(vector<Ctxt> &encryptedSymKey, Vec<uint8_t> &roundKeySchedule, const PubKey &hePK,
-                   const EncryptedArrayDerived<PA_GF2> &ea)
-{
-    auto start_encryptSymKey = std::chrono::steady_clock::now();
 
-    long nRoundKeys = 1;
-    long round_key_length = BlockByte;
-    long length_s = round_key_length * nRoundKeys;
-    long blocksPerCtxt = ea.size() / BlockByte;
-
-    Vec<uint8_t> expanded(INIT_SIZE, nRoundKeys * blocksPerCtxt * BlockByte);
-    for (long i = 0; i < nRoundKeys; i++)
+void encryptSymKey(vector<Ctxt>& eKey, vector<uint64_t>& Key, unique_ptr<PubKey>& he_pk, EncryptedArray& ea)
+{   
+    //将key拷贝exKey
+    vector<uint64_t> exKey(Key.size()*PlainBlock);
+    for (size_t i = 0; i < Key.size(); i++)
     {
-        uint8_t *roundKey = &roundKeySchedule[16 * i];
-        for (long j = 0; j < blocksPerCtxt; j++)
-            memcpy(&expanded[16 * (i * blocksPerCtxt + j)], roundKey, 16);
+        for (size_t j = 0; j < PlainBlock; j++)
+        {
+            exKey[i*PlainBlock+j] = Key[i];
+        }
     }
-
-    Vec<ZZX> encoded;
-    encodeTo16Ctxt(encoded, expanded, ea);
-
-    {
-        Ctxt tmpCtxt(hePK);
-        encryptedSymKey.resize(encoded.length(), tmpCtxt);
+    //编码
+    vector<vector<long>> encoded;
+    encodeTo16Ctxt_p(encoded, exKey, ea);
+    //加密
+    eKey.resize(encoded.size(), Ctxt(*he_pk));
+    for (long i=0; i<encoded.size(); i++){ // encrypt the encoded key
+      ea.encrypt(eKey[i], *he_pk, encoded[i]);
     }
-    // 设置 OpenMP 使用的线程数
-   // omp_set_num_threads(16);
-    //#pragma omp parallel for
-    for (long i = 0; i < (long)encryptedSymKey.size(); i++)
-        hePK.Encrypt(encryptedSymKey[i], encoded[i]);
-
-    auto end_encryptSymKey = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed_seconds_encryptSymKey = end_encryptSymKey - start_encryptSymKey;
-    std::cout << "SymKey FHE time: " << elapsed_seconds_encryptSymKey.count() << "s\n";
 }
 
 bool writeEncryptedSymKey(const vector<Ctxt> &encryptedSymKey, const std::string &filename)
@@ -62,7 +47,7 @@ bool writeEncryptedSymKey(const vector<Ctxt> &encryptedSymKey, const std::string
     return true;
 }
 
-namespace C1ient_Yux2_8_C16{
+namespace C1ient_Yux_p_C16{
 bool Client_offline()
 {
     printf("Client offline 16 start!\n");
@@ -82,7 +67,7 @@ bool Client_offline()
     random(rnd, 8 * SymKey0.length());
     BytesFromGF2X(SymKey0.data(), rnd, SymKey0.length());
 
-    Vec<uint64_t> SymKey(INIT_SIZE, BlockByte);
+    vector<uint64_t> SymKey(BlockByte);
     // SymKey0的两个字节合并成一个16位的字，即一个uint16_t，存入SymKey
     for (unsigned i = 0; i < BlockByte; i++)
     {
@@ -181,7 +166,7 @@ bool Client_offline()
         return false;
     }
 
-    // Encrypt the symmetric key
+    // generate FHE sk and pk；use it Encrypt the symmetric key
     auto start_keyEncryption = std::chrono::steady_clock::now();
 
     int idx = 1;
@@ -197,31 +182,23 @@ bool Client_offline()
     long d = 1;
     long k = 128;
     long s = 1;
-std::shared_ptr<helib::Context> create_context(
-      uint64_t m, uint64_t p, uint64_t r, uint64_t L, uint64_t c,
-      uint64_t d = 1, uint64_t k = 128, uint64_t s = 1);
-    
-    
-    long c = 9;
-    bool packed = true;
-    if (idx > 5)
-        idx = 5;
-    long p = mValues[idx][0];
-    long m = mValues[idx][2];
-    long bits = mValues[idx][4];
-    long phi_m = mValues[idx][1];
-    long d = mValues[idx][3];
-    long nslots = phi_m / d;
-    if (d % 8 != 0 || nslots < PlainByte)
-    {
-        throw std::logic_error("Invalid parameters for encryption.");
-    }
 
-    Context context(ContextBuilder<BGV>().m(m).p(p).r(1).c(c).bits(bits).build());
-    SecKey secretKey(context);
-    PubKey &publicKey = secretKey;
+    if (!m) m = FindM(k, L, c, p, d, s, 0);
+
+    shared_ptr<Context> context(ContextBuilder<BGV>()
+                                             .m(m)
+                                             .p(p)
+                                             .r(r)
+                                             .bits(L)
+                                             .c(c)
+                                             .buildPtr());
+    SecKey secretKey(*context);
     secretKey.GenSecKey();
-    addSome1DMatrices(secretKey);
+    unique_ptr<PubKey> publicKey = std::make_unique<helib::PubKey>(secretKey);
+    helib::EncryptedArray ea(context->getEA());
+    long nslots = ea.size();
+    printf("nslots = %ld\n", nslots);
+    
 
     std::ofstream outContext("Client_context", std::ios::binary);
     if (!outContext.is_open())
@@ -229,7 +206,7 @@ std::shared_ptr<helib::Context> create_context(
         std::cerr << "Failed to open Client_context for writing" << std::endl;
         return false;
     }
-    context.writeTo(outContext);
+    context->writeTo(outContext);
     outContext.close();
 
     std::ofstream outPublicKey("Client_publickey", std::ios::binary);
@@ -238,7 +215,7 @@ std::shared_ptr<helib::Context> create_context(
         std::cerr << "Failed to open Client_publickey for writing" << std::endl;
         return false;
     }
-    publicKey.writeTo(outPublicKey);
+    publicKey->writeTo(outPublicKey);
     outPublicKey.close();
 
     std::ofstream outSecretKey("Client_secretkey", std::ios::binary);
@@ -249,10 +226,6 @@ std::shared_ptr<helib::Context> create_context(
     }
     secretKey.writeTo(outSecretKey);
     outSecretKey.close();
-
-    static const uint8_t YuxPolyBytes[] = {0x1B, 0x1};
-    const GF2X YuxPoly = GF2XFromBytes(YuxPolyBytes, 2);
-    EncryptedArrayDerived<PA_GF2> ea(context, YuxPoly, context.getAlMod());
 
     vector<Ctxt> encryptedSymKey;
     encryptSymKey(encryptedSymKey, SymKey, publicKey, ea);
@@ -266,13 +239,17 @@ std::shared_ptr<helib::Context> create_context(
     // Verify the decryption of the encrypted symmetric key
     std::cout << "Verifying decryption of encrypted symmetric key..." << std::endl;
 
-    Vec<uint8_t> expanded(INIT_SIZE, PlainByte);
-    for (long i = 0; i < 1; i++)
+    vector<uint64_t> expanded(PlainByte*BlockByte);
+    // 分别把每个SymKey的元素赋值PlainByte次
+    for (unsigned i = 0; i < BlockByte; i++)
     {
-        for (long j = 0; j < PlainBlock; j++)
-            memcpy(&expanded[16 * (i * PlainBlock + j)], &SymKey[BlockByte * i], BlockByte);
+        for (unsigned j = 0; j < PlainByte; j++)
+        {
+            expanded[i * PlainByte + j] = SymKey[i];
+        }
     }
-    bool decryptionCorrect = verifyDecryption16(encryptedSymKey, secretKey, ea, expanded);
+    // 解密验证
+    bool decryptionCorrect = verifyDecryption_p16(encryptedSymKey, expanded, secretKey, ea);
     if (!decryptionCorrect)
     {
         std::cerr << "Decryption verification failed for SymKey." << std::endl;
@@ -299,22 +276,31 @@ bool Client_online()
     auto start = std::chrono::steady_clock::now();
 
     GF2X rnd;
-    Vec<uint8_t> PlainStream(INIT_SIZE, PlainByte);
-    random(rnd, 8 * PlainStream.length());
-    BytesFromGF2X(PlainStream.data(), rnd, PlainByte);
+    Vec<uint8_t> PlainStream0(INIT_SIZE, 2*BlockByte*PlainBlock);
+    random(rnd, 8 * PlainStream0.length());
+    BytesFromGF2X(PlainStream0.data(), rnd, PlainStream0.length());
 
-    if (!writeToFile<uint8_t>(PlainStream.data(), "Client_PlainStream.txt", PlainByte))
+    vector<uint64_t> PlainStream(BlockByte*PlainBlock);
+    for (unsigned i = 0; i < PlainBlock; i++)
+    {
+        for (unsigned j = 0; j < BlockByte; j++)
+        {
+            PlainStream[i * BlockByte + j] = (PlainStream0[2 * (i * BlockByte + j)] << 8) | PlainStream0[2 * (i * BlockByte + j) + 1];
+        }
+    }
+
+    if (!writeToFile<uint64_t>(PlainStream.data(), "Client_PlainStream.txt", PlainByte))
     {
         return false;
     }
 
-    Vec<uint8_t> KeyStream(INIT_SIZE, PlainByte);
-    if (!readFromFile<uint8_t>(KeyStream.data(), "Client_KeyStream.txt", PlainByte))
+    vector<uint64_t> KeyStream(PlainByte);
+    if (!readFromFile<uint64_t>(KeyStream.data(), "Client_KeyStream.txt", PlainByte))
     {
         return false;
     }
 
-    Vec<uint8_t> CipherStream(INIT_SIZE, PlainByte);
+    vector<uint64_t> CipherStream(PlainByte);
     auto start_encryption = std::chrono::steady_clock::now();
     for (unsigned i = 0; i < PlainByte; i++)
     {
@@ -345,4 +331,4 @@ bool Client_online()
     std::cout << "Encryption online time: " << elapsed_seconds_encryption.count() << "s\n";
     return true;
 }
-} // namespace C1ient_Yux2_8_C16
+} // namespace C1ient_Yux_p_C16

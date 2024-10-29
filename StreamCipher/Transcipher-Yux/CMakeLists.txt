@@ -15,7 +15,7 @@ set(CMAKE_BUILD_TYPE "Debug")
 #set(CMAKE_CXX_)
 #add_compile_options("-ferror-limit=40")
 
-find_package(helib 2.2.0)
+find_package(helib 2.3.0)
 if (helib_NOTFOUND)
     message("helib have not found")
 else()

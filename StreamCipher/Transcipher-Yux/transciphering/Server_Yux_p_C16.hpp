@@ -1,6 +1,5 @@
-#ifndef CLIENT_YUX_P_HPP
-#define CLIENT_YUX_P_HPP
-
+#ifndef SERVER_YUX_P_C16_HPP
+#define SERVER_YUX_P_C16_HPP
 
 
 #include <iostream>
@@ -15,16 +14,17 @@
 #include <helib/ArgMap.h>
 #include <helib/DoubleCRT.h>
 
-#include "params_Yux_p.hpp"
-
 #include "FHEtool.hpp"
 #include "random_bit.hpp"
 #include "tool.hpp"
 #include "Yux_p.hpp"
 
-namespace C1ient_Yux_p_C16{
-    bool Client_offline();
-    bool Client_online();
+#include "params_Yux_p.hpp"
+
+namespace Server_Yux_p_C16
+{
+    bool Server_offline();
+    bool Server_online();
 }
 
-#endif // CLIENT_YUX_P_HPP
+#endif // CLIENT_HPP

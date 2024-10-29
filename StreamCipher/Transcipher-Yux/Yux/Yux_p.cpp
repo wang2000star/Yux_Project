@@ -45,7 +45,7 @@ void decSboxFi(uint64_t state[], int begin)
   uint64_t c2=state[begin+2];
   uint64_t c3=state[begin+3];
 
-  uint64_t temp = (c1*c2+c0+c3+roundConstant) % PlainMod;
+  uint64_t temp = (c1*c2+c0+c3+RoundConstant) % PlainMod;
 
   state[begin] = c1;
   state[begin+1] = c2;
@@ -126,7 +126,7 @@ void Yux_F_p::encSboxFi(uint64_t state[], int begin)
   uint64_t c2=state[begin+2];
   uint64_t c3=state[begin+3];
 
-  uint64_t temp = (PlainMod -(c0*c1+c2 +roundConstant+(PlainMod -(c3)%PlainMod))% PlainMod) % PlainMod;
+  uint64_t temp = (PlainMod -(c0*c1+c2 +RoundConstant+(PlainMod -(c3)%PlainMod))% PlainMod) % PlainMod;
 
   state[begin] = temp;
   state[begin+1] = c0;
