@@ -14,7 +14,7 @@
 #include <helib/ArgMap.h>
 #include <helib/DoubleCRT.h>
 
-#include "FHEtool.hpp"
+#include "FHEtool_Yux_p.hpp"
 #include "random_bit.hpp"
 #include "tool.hpp"
 #include "Yux_p.hpp"

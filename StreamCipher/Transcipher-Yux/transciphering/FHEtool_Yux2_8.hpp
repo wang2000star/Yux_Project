@@ -1,5 +1,5 @@
-#ifndef FHETOOL_HPP
-#define FHETOOL_HPP
+#ifndef FHETOOL_YUX2_8_HPP
+#define FHETOOL_YUX2_8_HPP
 
 #include <iostream>
 #include <cstring>

@@ -165,7 +165,6 @@ bool Client_offline()
     {
         return false;
     }
-
     // generate FHE sk and pk；use it Encrypt the symmetric key
     auto start_keyEncryption = std::chrono::steady_clock::now();
 
@@ -184,21 +183,25 @@ bool Client_offline()
     long s = 1;
 
     if (!m) m = FindM(k, L, c, p, d, s, 0);
+    printf("Selected m = %ld\n", m);
 
-    shared_ptr<Context> context(ContextBuilder<BGV>()
+    
+   shared_ptr<Context> context(ContextBuilder<BGV>()
                                              .m(m)
                                              .p(p)
                                              .r(r)
                                              .bits(L)
                                              .c(c)
                                              .buildPtr());
+    
+    printf("Security");
     SecKey secretKey(*context);
     secretKey.GenSecKey();
     unique_ptr<PubKey> publicKey = std::make_unique<helib::PubKey>(secretKey);
     helib::EncryptedArray ea(context->getEA());
     long nslots = ea.size();
     printf("nslots = %ld\n", nslots);
-    
+  
 
     std::ofstream outContext("Client_context", std::ios::binary);
     if (!outContext.is_open())

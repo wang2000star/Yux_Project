@@ -16,7 +16,7 @@
 #include "Yux2_8.hpp"
 
 #include "params_Yux2_8.hpp"
-#include "FHEtool.hpp"
+#include "FHEtool_Yux2_8.hpp"
 #include "Client_Yux2_8_C1.hpp"
 
 namespace Server_Yux2_8_C1{

@@ -8,10 +8,13 @@
 #include <vector>
 using namespace std;
 
-#include "params_Yux_p.hpp"
+static uint64_t roundConstant = 0xCD;
 
+static uint64_t pmod = 65537;
 
-static uint64_t RoundConstant = 0xCD;
+static uint64_t blockByte = 16;
+
+static uint64_t ROUND = 4;
 
 void decSboxFi(uint64_t state[], int begin);
 

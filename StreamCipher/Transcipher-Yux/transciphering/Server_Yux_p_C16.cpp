@@ -179,19 +179,18 @@ bool Server_offline()
     std::chrono::duration<double> elapsed_seconds_Xset = end_Xset - start_Xset;
     std::cout << "Xset generation succeeded! Time: " << elapsed_seconds_Xset.count() << "s\n";
 
-    // 读取公钥
+    // 读取context
     std::ifstream inContext("Client_context", std::ios::binary);
     if (!inContext.is_open())
     {
         std::cerr << "Failed to open Client_context for reading" << std::endl;
         throw std::runtime_error("Failed to open context file");
     }
-    // 创建一个空的 Context 对象
-    auto context = std::make_shared<helib::Context>();
-    context->readFrom(inContext);
+    // 从文件中读取 Context 对象
+    auto context = helib::Context::readFrom(inContext);
     inContext.close();
 
-    helib::EncryptedArray ea(context->getEA());
+    helib::EncryptedArray ea(context.getEA());
 
     std::ifstream inPublicKey("Client_publickey", std::ios::binary);
     if (!inPublicKey.is_open())
@@ -199,11 +198,8 @@ bool Server_offline()
         std::cerr << "Failed to open Client_publickey for reading" << std::endl;
         throw std::runtime_error("Failed to open public key file");
     }
-     // 创建一个空的 PubKey 对象
-    auto publicKey = std::make_unique<helib::PubKey>(*context);
-
-    // 从文件中读取 PubKey 对象
-    publicKey->readFrom(inPublicKey, *context);
+    // 从文件中读取公钥
+    auto publicKey = std::make_unique<helib::PubKey>(context);
     inPublicKey.close();
 
 #if 1
@@ -214,7 +210,7 @@ bool Server_offline()
         std::cerr << "Failed to open Client_secretkey for reading" << std::endl;
         throw std::runtime_error("Failed to open secret key file");
     }
-    SecKey secretKey = SecKey::readFrom(inSecretKey, *context);
+    SecKey secretKey = SecKey::readFrom(inSecretKey, context);
     inSecretKey.close();
 #endif
 
@@ -569,9 +565,7 @@ bool Server_online()
         std::cerr << "Failed to open Client_context for reading" << std::endl;
         throw std::runtime_error("Failed to open context file");
     }
-    // 创建一个空的 Context 对象
-    auto context = std::make_shared<helib::Context>();
-    context->readFrom(inContext);
+    auto context = helib::Context::readFrom(inContext);
     inContext.close();
 
     // 从文件中读取公钥
@@ -582,10 +576,10 @@ bool Server_online()
         throw std::runtime_error("Failed to open public key file");
     }
     // 创建一个空的 PubKey 对象
-    auto publicKey = std::make_unique<helib::PubKey>(*context);
+    auto publicKey = std::make_unique<helib::PubKey>(context);
 
     // 从文件中读取 PubKey 对象
-    publicKey->readFrom(inPublicKey, *context);
+    publicKey->readFrom(inPublicKey, context);
     inPublicKey.close();
     printf("Public key read succeeded!\n");
 #endif
@@ -615,7 +609,7 @@ bool Server_online()
     // 定义CipherStream FHE开始时间
     auto start_CipherStream_FHE = std::chrono::steady_clock::now();
     // 定义ea
-    helib::EncryptedArray ea(*context);
+    helib::EncryptedArray ea(context);
 
     vector<Ctxt> encryptedCipherStream;
     encryptXset(encryptedCipherStream, CipherStream, publicKey, ea);
@@ -659,7 +653,7 @@ bool Server_online()
         std::cerr << "Failed to open Client_secretkey for reading" << std::endl;
         throw std::runtime_error("Failed to open secret key file");
     }
-    SecKey secretKey = SecKey::readFrom(inSecretKey, *context);
+    SecKey secretKey = SecKey::readFrom(inSecretKey, context);
     inSecretKey.close();
     printf("Secret key read succeeded!\n");
 #endif
