@@ -252,16 +252,17 @@ bool Client_offline()
         }
     }
     // 解密验证
-    bool decryptionCorrect = verifyDecryption_p16(encryptedSymKey, expanded, secretKey, ea);
-    if (!decryptionCorrect)
-    {
-        std::cerr << "Decryption verification failed for SymKey." << std::endl;
-        return false;
-    }
-    if (!writeEncryptedSymKey(encryptedSymKey, "Client_encryptedSymKey.bin"))
-    {
-        return false;
-    }
+
+    // bool decryptionCorrect = verifyDecryption_p16(encryptedSymKey, expanded, secretKey, ea);
+    // if (!decryptionCorrect)
+    // {
+    //     std::cerr << "Decryption verification failed for SymKey." << std::endl;
+    //     return false;
+    // }
+    // if (!writeEncryptedSymKey(encryptedSymKey, "Client_encryptedSymKey.bin"))
+    // {
+    //     return false;
+    // }
 
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;

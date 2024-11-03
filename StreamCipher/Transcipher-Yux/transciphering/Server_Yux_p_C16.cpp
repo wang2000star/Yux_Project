@@ -189,6 +189,7 @@ bool Server_offline()
     // 从文件中读取 Context 对象
     auto context = helib::Context::readFrom(inContext);
     inContext.close();
+    std::cout << "Context read succeeded!\n";
 
     helib::EncryptedArray ea(context.getEA());
 
@@ -201,6 +202,7 @@ bool Server_offline()
     // 从文件中读取公钥
     auto publicKey = std::make_unique<helib::PubKey>(context);
     inPublicKey.close();
+    std::cout << "Public key read succeeded!\n";
 
 #if 1
     // 从文件中读取私钥
@@ -212,6 +214,7 @@ bool Server_offline()
     }
     SecKey secretKey = SecKey::readFrom(inSecretKey, context);
     inSecretKey.close();
+    std::cout << "Secret key read succeeded!\n";
 #endif
 
     // 读取对称密钥
@@ -220,7 +223,7 @@ bool Server_offline()
     {
         return false;
     }
-
+    std::cout << "Symmetric key read succeeded!\n";
     // 对 Xset 进行加密
     auto start_Xset_FHE = std::chrono::steady_clock::now();
     vector<Ctxt> encryptedXset;

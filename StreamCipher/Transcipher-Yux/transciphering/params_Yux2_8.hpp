@@ -8,7 +8,7 @@
 
 static const unsigned BlockByte = 16;                               // 分组字节长度
 static const unsigned BlockSize = 8 * BlockByte;                    // 分组比特长度
-static const unsigned PlainBlock = 60;                              // 明文分组数
+static const unsigned PlainBlock = 960;                              // 明文分组数
 static const uint64_t PlainByte = BlockByte * PlainBlock;           // 明文字节长度
 // PlainByte = nslots
 static const uint64_t PlainSize = BlockSize * PlainBlock;           // 明文比特长度

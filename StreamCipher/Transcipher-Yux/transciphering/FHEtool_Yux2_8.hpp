@@ -28,15 +28,16 @@ void decodeTo1Ctxt(NTL::Vec<uint8_t>& data, const NTL::Vec<NTL::ZZX>& encData,
 bool verifyDecryption1(const vector<Ctxt> &encryptedVec, const SecKey &secretKey,
                       const EncryptedArrayDerived<PA_GF2> &ea, const Vec<uint8_t> &originalVec);
 
-void encodeTo16Ctxt(Vec<ZZX>& encData, const Vec<uint8_t>& data,
+void encodeTo16Ctxt(vector<ZZX>& encData, const vector<uint8_t>& data,
 		const EncryptedArrayDerived<PA_GF2>& ea);
 
 // Decode native HE plaintext as Yux plaintext/ciphertext bytes
-void decodeTo16Ctxt(Vec<uint8_t>& data, const Vec<ZZX>& encData,
+void decodeTo16Ctxt(vector<uint8_t>& data, const vector<ZZX>& encData,
 		const EncryptedArrayDerived<PA_GF2>& ea);
 
 bool verifyDecryption16(const vector<Ctxt> &encryptedVec, const SecKey &secretKey,
-                      const EncryptedArrayDerived<PA_GF2> &ea, const Vec<uint8_t> &originalVec);
+                      const EncryptedArrayDerived<PA_GF2> &ea, const vector<uint8_t> &originalVec);
+                      
 bool verifyDecryption_p16(const vector<Ctxt>& encryptedSymKey, const vector<uint64_t>& originalSymKey, const SecKey& secretKey, const EncryptedArray& ea);
 
 void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<uint64_t>& data, const EncryptedArray& ea);

@@ -37,7 +37,8 @@ void decSboxFi(unsigned char state[], unsigned begin)
     unsigned char c2 = state[begin + 2];
     unsigned char c3 = state[begin + 3];
 
-    unsigned char temp = mul(c1, c2) ^ c0 ^ c3 ^ roundConstant;
+    //unsigned char temp = mul(c1, c2) ^ c0 ^ c3 ^ roundConstant;
+    unsigned char temp = mul(c1^c2,c1^c2) ^ c0 ^ c3 ^ roundConstant;
 
     state[begin] = c1;
     state[begin + 1] = c2;

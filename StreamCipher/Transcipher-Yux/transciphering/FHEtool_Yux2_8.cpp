@@ -117,21 +117,22 @@ bool verifyDecryption1(const vector<Ctxt> &encryptedVec, const SecKey &secretKey
 
 // Encode  plaintext/ciphertext bytes as native HE plaintext
 // packing
-void encodeTo16Ctxt(Vec<ZZX>& encData, const Vec<uint8_t>& data,
+void encodeTo16Ctxt(vector<ZZX>& encData, const vector<uint8_t>& data,
 		const EncryptedArrayDerived<PA_GF2>& ea)
 {
-  long R = divc(data.length(), PlainByte);
+  long data_length = data.size();
+  long R = divc(data_length, PlainByte);
   long nCtxt = BlockByte * R;
-  encData.SetLength(nCtxt);
+  encData.resize(nCtxt);
+  vector<GF2X> slots(ea.size(), GF2X::zero());
   for (long r = 0; r < R; r++)
   {
     for (long i = 0; i < BlockByte; i++)
     {
-      vector<GF2X> slots(ea.size(), GF2X::zero());
       for (long j = 0; j < PlainBlock; j++)
       { // j is the block number in this ctxt
         long byteIdx = j * BlockByte + i + r * PlainByte;
-        if (byteIdx < data.length())
+        if (byteIdx < data_length)
         {
           GF2XFromBytes(slots[j], &data[byteIdx], 1);
         }
@@ -142,39 +143,13 @@ void encodeTo16Ctxt(Vec<ZZX>& encData, const Vec<uint8_t>& data,
 }
 
 // Decode native HE plaintext as Yux plaintext/ciphertext bytes
-void decodeTo16Ctxt2(Vec<uint8_t>& data, const Vec<ZZX>& encData,
-		const EncryptedArrayDerived<PA_GF2>& ea)
-{
-  // Check the size of the data array
-  long nAllBytes = encData.length() * ea.size(); // total number of input bytes
-  if (data.length()<=0 || data.length()>nAllBytes)
-    data.SetLength(nAllBytes);
-
-  // 一个分组有16个字节
-  long nBytes = BlockByte;
-  long nAllBlocks = divc(data.length(), nBytes); // ceil( data.length()/16 ) =(a + b - 1)/b
-  // long blocksPerCtxt = ea.size() / 16;  // = nSlots/16
-  long nCtxt = nBytes;
-
-  vector<GF2X> slots;
-  for (long i=0; i<nCtxt; i++) {
-    ea.decode(slots, encData[i]);
-    for(long j=0; j<nAllBlocks; j++) {
-      long slotIdx = j;
-      long byteIdx = i + nBytes*j;
-      if (byteIdx < data.length()) {
-        BytesFromGF2X(&data[byteIdx], slots[slotIdx], 1);
-      }
-    }
-  }
-}
-void decodeTo16Ctxt(Vec<uint8_t>& data, const Vec<ZZX>& encData,
+void decodeTo16Ctxt(vector<uint8_t>& data, const vector<ZZX>& encData,
                       const EncryptedArrayDerived<PA_GF2>& ea)
 {
-    long R = encData.length() / BlockByte;
-    long nBytes = R * PlainByte;
+    long R = encData.size() / BlockByte;
+    long data_length = R * PlainByte;
 
-    data.SetLength(nBytes);
+    data.resize(data_length);
 
     for (long r = 0; r < R; r++)
     {
@@ -186,7 +161,7 @@ void decodeTo16Ctxt(Vec<uint8_t>& data, const Vec<ZZX>& encData,
             for (long j = 0; j < PlainBlock; j++)
             { // j is the block number in this ctxt
                 long byteIdx = j * BlockByte + i + r * PlainByte;
-                if (byteIdx < data.length())
+                if (byteIdx < data_length)
                 {
                     BytesFromGF2X(&data[byteIdx], slots[j], 1); // copy poly as byte
                 }
@@ -196,13 +171,13 @@ void decodeTo16Ctxt(Vec<uint8_t>& data, const Vec<ZZX>& encData,
 }
 // 函数：解密并验证密文是否正确
 bool verifyDecryption16(const vector<Ctxt> &encryptedVec, const SecKey &secretKey,
-                      const EncryptedArrayDerived<PA_GF2> &ea, const Vec<uint8_t> &originalVec)
+                      const EncryptedArrayDerived<PA_GF2> &ea, const vector<uint8_t> &originalVec)
 {
     // 定义解密开始时间
     auto start_decrypt = std::chrono::steady_clock::now();
 
-    Vec<uint8_t> decryptedVec(INIT_SIZE, originalVec.length());
-    Vec<ZZX> decryptedPolys(INIT_SIZE, encryptedVec.size());
+    vector<uint8_t> decryptedVec(originalVec.size());
+    vector<ZZX> decryptedPolys(encryptedVec.size());
 
     // 使用 secretKey 逐个解密 encryptedVec
     for (long i = 0; i < encryptedVec.size(); ++i)
@@ -215,7 +190,7 @@ bool verifyDecryption16(const vector<Ctxt> &encryptedVec, const SecKey &secretKe
 
     // 验证解密结果是否与原始明文一致
     bool isDecryptionCorrect = true;
-    for (long i = 0; i < originalVec.length(); ++i)
+    for (long i = 0; i < originalVec.size(); ++i)
     {
         if (decryptedVec[i] != originalVec[i])
         {
