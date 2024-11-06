@@ -308,6 +308,7 @@ void HE_Sbox(vector<Ctxt> &eData)
 
 int main()
 {
+//=============客户端offline阶段================
     // 定义初始向量
     vector<long> IV(BlockByte);
     for (unsigned i = 0; i < BlockByte; i++)
@@ -348,15 +349,14 @@ int main()
     if (progress_step == 0)
         progress_step = 1; // 防止除零
     RandomBit<BlockSize> randomBit(Nr);
-#pragma omp parallel for firstprivate(randomBit)
+    #pragma omp parallel for firstprivate(randomBit)
     for (long counter = counter_begin; counter <= counter_end; counter++)
     {
-        long nonce = generate_secure_random_int(NonceSize);
-
-        randomBit.generate_Instance_all_new(nonce, counter);
-        auto &RanVecs = randomBit.roundconstants;
-        // long nonce = counter;
-        // std::vector<std::bitset<544>> RanVecs(Nr + 1);
+        // long nonce = generate_secure_random_int(NonceSize);
+        // randomBit.generate_Instance_all_new(nonce, counter);
+        // auto &RanVecs = randomBit.roundconstants;
+        long nonce = counter;
+        std::vector<std::bitset<544>> RanVecs(Nr + 1);
 
         NonceSet[counter - counter_begin] = nonce;
         // 使用 std::array 代替 vector 并固定大小
@@ -425,7 +425,7 @@ int main()
         // 定期打印进度
         if (local_completed % progress_step == 0 || local_completed == total_tasks)
         {
-#pragma omp critical
+        #pragma omp critical
             {
                 std::cout << "Progress: " << (local_completed * 100) / total_tasks << "% completed.\r" << std::flush;
             }
@@ -495,7 +495,7 @@ int main()
     // 离线客户端时间=KeyStream Generation time+PublicKey generation and SymKey FHE time
     double total_time_off = elapsed_seconds_keyStream.count() + elapsed_seconds_PubKey.count() + keyEncryption;
     std::cout << "Encryption offline total time: " << total_time_off << "s\n";
-
+//=============服务端offline阶段================
     // 计算 encryptedRoundKeySet
     auto start_RoundKeySet_FHE = std::chrono::steady_clock::now();
     vector<Ctxt> encryptedRoundKeySet;
@@ -747,7 +747,7 @@ int main()
     std::cout << "Sbox time: " << sbox_time << "s\n";
     std::cout << "Linear Layer time: " << linear_layer_time << "s\n";
     // 计算总时间
-    double total_time = roundkey_time + sbox_time + linear_layer_time;
-    std::cout << "Encryption total time: " << total_time << "s\n";
+    double total_time = roundkey_time + sbox_time + linear_layer_time + elapsed_seconds_RoundKeySet_FHE.count();
+    std::cout << "Server offline total time: " << total_time << "s\n";
     return 0;
 }

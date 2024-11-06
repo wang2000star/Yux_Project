@@ -4,7 +4,8 @@
 
 using namespace std;
 
-static long pmod = 257;
+//static long pmod = 257;
+static long pmod = 65537;
 
 // 一维数组可以看作按照列优先存储的矩阵
 const std::array<long, 64> constMC = {0, 1, 0, 1, 1, 1, 65536, 65536,

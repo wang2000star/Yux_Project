@@ -161,7 +161,7 @@ bool Server_offline()
         for (unsigned r = 0; r <= Nr; r++)
         {
             Vec<long> X(INIT_SIZE, BlockByte);
-            long temp;
+            uint64_t temp;
             for (unsigned i = 0; i < BlockByte; ++i)
             {
                 bool bit_array[Bytebits];

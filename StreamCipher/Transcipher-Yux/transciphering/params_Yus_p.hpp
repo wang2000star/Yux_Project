@@ -5,10 +5,10 @@
  * PlainMod = 257, Bytebits = 9, BlockSize = 32*9 = 288, PlainBlock = (Plainmod-1)/2 = 128
  * PlainByte = 65537, Bytebits = 17, BlockSize = 32*17 = 544, PlainBlock = (Plainmod-1)/2 = 32768
  */
-constexpr long PlainMod = 257;    //2^8+1
-constexpr unsigned Bytebits = 9;       // 字节比特长度=ceil(log2(PlainMod))  
-// constexpr long PlainMod = 65537;    //2^16+1
-// constexpr unsigned Bytebits = 17;       // 字节比特长度=ceil(log2(PlainMod))  
+// constexpr long PlainMod = 257;    //2^8+1
+// constexpr unsigned Bytebits = 9;       // 字节比特长度=ceil(log2(PlainMod))  
+constexpr long PlainMod = 65537;    //2^16+1
+constexpr unsigned Bytebits = 17;       // 字节比特长度=ceil(log2(PlainMod))  
 
 constexpr long BlockByte = 32;       // 分组字节长度
 constexpr unsigned BlockSize = Bytebits * BlockByte;      // 分组比特长度=BlockByte*Bytebits
@@ -37,8 +37,8 @@ static long RoundConstant = 0xCD;
 static long mValues[][4] = { 
 //{   p,       m,    L,    c}
   { 65537,  131072,  1320, 6}, 
-  { 257,    256,     320,  23},
-  //{ 65537,  65536,   853,  17}, 
+  //{ 257,    256,     320,  23},
+  { 65537,  65536,   853,  17}, 
 };
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 
