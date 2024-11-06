@@ -82,5 +82,6 @@
         "text_encoding": "cpp",
         "shared_mutex": "cpp",
         "*.ipp": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/home/wfz/Yux/TFHE/CBSmode/test/axell"
 }

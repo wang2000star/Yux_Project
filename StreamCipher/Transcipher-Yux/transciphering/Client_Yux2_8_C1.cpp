@@ -77,7 +77,7 @@ bool Client_offline()
     random(rnd, 8 * SymKey.length());
     BytesFromGF2X(SymKey.data(), rnd, SymKey.length());
 
-    Vec<uint64_t> NonceSet(INIT_SIZE, PlainBlock);
+    Vec<long> NonceSet(INIT_SIZE, PlainBlock);
     Vec<uint8_t> Xset(INIT_SIZE, PlainByte * (Nr + 1));
     Vec<uint8_t> RoundKeySet(INIT_SIZE, PlainByte * (Nr + 1));
     Vec<uint8_t> KeyStream(INIT_SIZE, PlainByte);
@@ -85,12 +85,12 @@ bool Client_offline()
     RandomBit<BlockSize> randomBit(Nr);
     auto &RanVecs = randomBit.roundconstants;
 
-    uint64_t counter_begin = 0;
-    uint64_t counter_end = PlainBlock + counter_begin - 1;
+    long counter_begin = 0;
+    long counter_end = PlainBlock + counter_begin - 1;
 
-    for (uint64_t counter = counter_begin; counter <= counter_end; counter++)
+    for (long counter = counter_begin; counter <= counter_end; counter++)
     {
-        uint64_t nonce = generate_secure_random_int(NonceSize);
+        long nonce = generate_secure_random_int(NonceSize);
         NonceSet[counter - counter_begin] = nonce;
         randomBit.generate_Instance_all_new(nonce, counter);
 
@@ -99,7 +99,7 @@ bool Client_offline()
         {
             Vec<uint8_t> X(INIT_SIZE, BlockByte);
             Vec<uint8_t> RoundKey(INIT_SIZE, BlockByte);
-            uint64_t temp;
+            long temp;
             for (unsigned i = 0; i < BlockByte; ++i)
             {
                 bool bit_array[8];

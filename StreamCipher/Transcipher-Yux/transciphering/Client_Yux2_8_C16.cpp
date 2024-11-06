@@ -58,7 +58,6 @@ namespace C1ient_Yux2_8_C16
 {
     bool Client_offline()
     {
-        printf("Client offline 16 start!\n");
         // 定义初始向量 IV
         vector<uint8_t> iv(BlockByte);
         for (unsigned i = 0; i < BlockByte; i++)
@@ -72,17 +71,17 @@ namespace C1ient_Yux2_8_C16
         random(rnd, 8 * SymKey.size());
         BytesFromGF2X(SymKey.data(), rnd, SymKey.size());
 
-        vector<uint64_t> NonceSet(PlainBlock);
+        vector<long> NonceSet(PlainBlock);
         vector<uint8_t> Xset(PlainByte * (Nr + 1));
         vector<uint8_t> RoundKeySet(PlainByte * (Nr + 1));
         vector<uint8_t> KeyStream(PlainByte);
 
-        RandomBit<BlockSize> randomBit(Nr);
+        RandomBit<BlockSize> randomBit(Nr+1);
 
 #pragma omp parallel for firstprivate(randomBit)
-        for (uint64_t counter = counter_begin; counter <= counter_end; counter++)
+        for (long counter = counter_begin; counter <= counter_end; counter++)
         {
-            uint64_t nonce = generate_secure_random_int(NonceSize);
+            long nonce = generate_secure_random_int(NonceSize);
             NonceSet[counter - counter_begin] = nonce;
             randomBit.generate_Instance_all_new(nonce, counter);
             auto &RanVecs = randomBit.roundconstants;
@@ -91,7 +90,7 @@ namespace C1ient_Yux2_8_C16
             {
                 vector<uint8_t> X(BlockByte);
                 vector<uint8_t> RoundKey(BlockByte);
-                uint64_t temp;
+                long temp;
                 for (unsigned i = 0; i < BlockByte; ++i)
                 {
                     bool bit_array[8];

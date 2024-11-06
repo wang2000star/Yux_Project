@@ -6,7 +6,7 @@
 #include <string>
 #include <cstdint>
 
-typedef uint64_t tKeccakLane;
+typedef long tKeccakLane;
 
 template <unsigned BlockSize>
 class RandomBit
@@ -25,8 +25,8 @@ public:
     void KeccakF1600_StatePermute(void *state);
     bool getrandbit();
     block getrandblock();
-    void initrand(const uint64_t nonce, const uint64_t counter);
-    void generate_Instance_all_new(const uint64_t nonce, const uint64_t counter);
+    void initrand(const long nonce, const long counter);
+    void generate_Instance_all_new(const long nonce, const long counter);
 
     // 成员变量
     unsigned rounds; // Number of rounds
@@ -91,7 +91,7 @@ unsigned RandomBit<BlockSize>::rank_of_Matrix(const std::vector<block> &matrix)
 }
 
 // Shake taken from Keccak Code package
-#define ROL64(a, offset) ((((uint64_t)a) << offset) ^ (((uint64_t)a) >> (64 - offset)))
+#define ROL64(a, offset) ((((long)a) << offset) ^ (((long)a) >> (64 - offset)))
 #define fun(x, y) ((x) + 5 * (y))
 #define readLane(x, y) (((tKeccakLane *)state)[fun(x, y)])
 #define writeLane(x, y, lane) (((tKeccakLane *)state)[fun(x, y)]) = (lane)
@@ -210,7 +210,7 @@ typename RandomBit<BlockSize>::block RandomBit<BlockSize>::getrandblock()
 
 // Shake like rand functions
 template <unsigned BlockSize>
-void RandomBit<BlockSize>::initrand(const uint64_t nonce, const uint64_t counter)
+void RandomBit<BlockSize>::initrand(const long nonce, const long counter)
 {
 
     for (unsigned i = 0; i < 200; ++i)
@@ -237,7 +237,7 @@ void RandomBit<BlockSize>::initrand(const uint64_t nonce, const uint64_t counter
 }
 
 template <unsigned BlockSize>
-void RandomBit<BlockSize>::generate_Instance_all_new(const uint64_t nonce, const uint64_t counter)
+void RandomBit<BlockSize>::generate_Instance_all_new(const long nonce, const long counter)
 {
     // Initialize RNG state
     initrand(nonce, counter);

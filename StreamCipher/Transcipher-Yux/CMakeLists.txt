@@ -31,19 +31,20 @@ endif()
 # add symmetric library
 aux_source_directory("${CMAKE_SOURCE_DIR}/Yux" SYMMETRIC_SRC_LIST)
 add_library(Symmetric ${SYMMETRIC_SRC_LIST})
-# add NTL and GMP include directories
-
-#target_include_directories(Symmetric PUBLIC "${CMAKE_SOURCE_DIR}/../thirdparty/ntl-11.5.1/include" "${CMAKE_SOURCE_DIR}/../thirdparty/gmp-6.2.1/include")
-
 # Output SYMMETRIC_SRC_LIST for debugging
 message(STATUS "SYMMETRIC_SRC_LIST: ${SYMMETRIC_SRC_LIST}")
 
+# add UTILS library
+aux_source_directory("${CMAKE_SOURCE_DIR}/utils" UTILS_SRC_LIST)
+add_library(Utils ${UTILS_SRC_LIST})
+# Output UTILS_SRC_LIST for debugging
+message(STATUS "UTILS_SRC_LIST: ${UTILS_SRC_LIST}")
+
+# add TRANSCIPHER library
 aux_source_directory("${CMAKE_SOURCE_DIR}/transciphering" TRANSCIPHER_SRC_LIST)
 add_library(Transcipher ${TRANSCIPHER_SRC_LIST})
 # add NTL and GMP include directories
-target_include_directories(Transcipher PUBLIC "${CMAKE_SOURCE_DIR}/Yux" "/usr/local/include")
-#target_include_directories(Transcipher PUBLIC "${CMAKE_SOURCE_DIR}/../thirdparty/ntl-11.5.1/include" "${CMAKE_SOURCE_DIR}/../thirdparty/gmp-6.2.1/include" "${CMAKE_SOURCE_DIR}/Yux")
-
+target_include_directories(Transcipher PUBLIC "${CMAKE_SOURCE_DIR}/Yux" "${CMAKE_SOURCE_DIR}/utils" "/usr/local/include")
 # Output TRANSCIPHER_SRC_LIST for debugging
 message(STATUS "TRANSCIPHER_SRC_LIST: ${TRANSCIPHER_SRC_LIST}")
 

@@ -38,11 +38,11 @@ void decodeTo16Ctxt(vector<uint8_t>& data, const vector<ZZX>& encData,
 bool verifyDecryption16(const vector<Ctxt> &encryptedVec, const SecKey &secretKey,
                       const EncryptedArrayDerived<PA_GF2> &ea, const vector<uint8_t> &originalVec);
                       
-bool verifyDecryption_p16(const vector<Ctxt>& encryptedSymKey, const vector<uint64_t>& originalSymKey, const SecKey& secretKey, const EncryptedArray& ea);
+bool verifyDecryption_p16(const vector<Ctxt>& encryptedSymKey, const vector<long>& originalSymKey, const SecKey& secretKey, const EncryptedArray& ea);
 
-void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<uint64_t>& data, const EncryptedArray& ea);
+void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<long>& data, const EncryptedArray& ea);
 
-void decodeTo16Ctxt_p(vector<uint64_t>& data, const vector<vector<long>>& encData, const EncryptedArray& ea);
+void decodeTo16Ctxt_p(vector<long>& data, const vector<vector<long>>& encData, const EncryptedArray& ea);
 // 通用写入函数模板
 template <typename T>
 bool writeToFile(const T *data, const std::string &filename, size_t length)
@@ -52,7 +52,7 @@ bool writeToFile(const T *data, const std::string &filename, size_t length)
     {
         for (size_t i = 0; i < length; ++i)
         {
-            out << std::hex << std::setw(sizeof(T) * 2) << std::setfill('0') << static_cast<uint64_t>(data[i]) << " ";
+            out << std::hex << std::setw(sizeof(T) * 2) << std::setfill('0') << static_cast<long>(data[i]) << " ";
         }
         out.close();
         return true;
@@ -77,7 +77,7 @@ bool readFromFile(T *data, const std::string &filename, size_t length)
 
     for (size_t i = 0; i < length; ++i)
     {
-        uint64_t temp;
+        long temp;
         in >> std::hex >> temp;
         data[i] = static_cast<T>(temp);
     }

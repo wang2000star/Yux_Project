@@ -7,10 +7,10 @@ using namespace NTL;
 
 
 
-void encryptSymKey(vector<Ctxt>& eKey, vector<uint64_t>& Key, unique_ptr<PubKey>& he_pk, EncryptedArray& ea)
+void encryptSymKey(vector<Ctxt>& eKey, vector<long>& Key, unique_ptr<PubKey>& he_pk, EncryptedArray& ea)
 {   
     //将key拷贝exKey
-    vector<uint64_t> exKey(Key.size()*PlainBlock);
+    vector<long> exKey(Key.size()*PlainBlock);
     for (size_t i = 0; i < Key.size(); i++)
     {
         for (size_t j = 0; j < PlainBlock; j++)
@@ -67,7 +67,7 @@ bool Client_offline()
     random(rnd, 8 * SymKey0.length());
     BytesFromGF2X(SymKey0.data(), rnd, SymKey0.length());
 
-    vector<uint64_t> SymKey(BlockByte);
+    vector<long> SymKey(BlockByte);
     // SymKey0的两个字节合并成一个16位的字，即一个uint16_t，存入SymKey
     for (unsigned i = 0; i < BlockByte; i++)
     {
@@ -75,28 +75,28 @@ bool Client_offline()
     }
 
 
-    Vec<uint64_t> NonceSet(INIT_SIZE, PlainBlock);
-    Vec<uint64_t> Xset(INIT_SIZE, PlainByte * (Nr + 1));
-    Vec<uint64_t> RoundKeySet(INIT_SIZE, PlainByte * (Nr + 1));
-    Vec<uint64_t> KeyStream(INIT_SIZE, PlainByte);
+    Vec<long> NonceSet(INIT_SIZE, PlainBlock);
+    Vec<long> Xset(INIT_SIZE, PlainByte * (Nr + 1));
+    Vec<long> RoundKeySet(INIT_SIZE, PlainByte * (Nr + 1));
+    Vec<long> KeyStream(INIT_SIZE, PlainByte);
 
     RandomBit<BlockSize> randomBit(Nr);
     auto &RanVecs = randomBit.roundconstants;
 
-    uint64_t counter_begin = 0;
-    uint64_t counter_end = PlainBlock + counter_begin - 1;
+    long counter_begin = 0;
+    long counter_end = PlainBlock + counter_begin - 1;
 
-    for (uint64_t counter = counter_begin; counter <= counter_end; counter++)
+    for (long counter = counter_begin; counter <= counter_end; counter++)
     {
-        uint64_t nonce = generate_secure_random_int(NonceSize);
+        long nonce = generate_secure_random_int(NonceSize);
         NonceSet[counter - counter_begin] = nonce;
         randomBit.generate_Instance_all_new(nonce, counter);
 
-        Vec<uint64_t> state(INIT_SIZE, BlockByte);
+        Vec<long> state(INIT_SIZE, BlockByte);
         for (unsigned r = 0; r <= Nr; r++)
         {
-            Vec<uint64_t> X(INIT_SIZE, BlockByte);
-            Vec<uint64_t> RoundKey(INIT_SIZE, BlockByte);
+            Vec<long> X(INIT_SIZE, BlockByte);
+            Vec<long> RoundKey(INIT_SIZE, BlockByte);
             uint64_t temp;
             for (unsigned i = 0; i < BlockByte; ++i)
             {
@@ -106,7 +106,7 @@ bool Client_offline()
                     bit_array[j] = RanVecs[r][i * Bytebits + j];
                 }
                 BinStrToHex(bit_array, temp, Bytebits);
-                X[i] = static_cast<uint64_t>(temp);
+                X[i] = static_cast<long>(temp);
                 // RoundKey[i] = (SymKey[i]+X[i])%PlainMod;
                 RoundKey[i] = (SymKey[i]*X[i])%PlainMod;
             }
@@ -242,7 +242,7 @@ bool Client_offline()
     // Verify the decryption of the encrypted symmetric key
     std::cout << "Verifying decryption of encrypted symmetric key..." << std::endl;
 
-    vector<uint64_t> expanded(PlainByte*BlockByte);
+    vector<long> expanded(PlainByte*BlockByte);
     // 分别把每个SymKey的元素赋值PlainByte次
     for (unsigned i = 0; i < BlockByte; i++)
     {
@@ -284,7 +284,7 @@ bool Client_online()
     random(rnd, 8 * PlainStream0.length());
     BytesFromGF2X(PlainStream0.data(), rnd, PlainStream0.length());
 
-    vector<uint64_t> PlainStream(BlockByte*PlainBlock);
+    vector<long> PlainStream(BlockByte*PlainBlock);
     for (unsigned i = 0; i < PlainBlock; i++)
     {
         for (unsigned j = 0; j < BlockByte; j++)
@@ -293,18 +293,18 @@ bool Client_online()
         }
     }
 
-    if (!writeToFile<uint64_t>(PlainStream.data(), "Client_PlainStream.txt", PlainByte))
+    if (!writeToFile<long>(PlainStream.data(), "Client_PlainStream.txt", PlainByte))
     {
         return false;
     }
 
-    vector<uint64_t> KeyStream(PlainByte);
-    if (!readFromFile<uint64_t>(KeyStream.data(), "Client_KeyStream.txt", PlainByte))
+    vector<long> KeyStream(PlainByte);
+    if (!readFromFile<long>(KeyStream.data(), "Client_KeyStream.txt", PlainByte))
     {
         return false;
     }
 
-    vector<uint64_t> CipherStream(PlainByte);
+    vector<long> CipherStream(PlainByte);
     auto start_encryption = std::chrono::steady_clock::now();
     for (unsigned i = 0; i < PlainByte; i++)
     {

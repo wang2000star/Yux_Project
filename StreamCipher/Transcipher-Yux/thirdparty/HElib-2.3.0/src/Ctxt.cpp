@@ -2481,10 +2481,10 @@ void Ctxt::smartAutomorph(long k)
 
   long keyID = getKeyID();
   // must have key-switching matrices for it
-  if (!pubKey.isReachable(k, keyID)) {
-    throw LogicError("no key-switching matrices for k=" + std::to_string(k) +
-                     ", keyID=" + std::to_string(keyID));
-  }
+  // if (!pubKey.isReachable(k, keyID)) {
+  //   throw LogicError("no key-switching matrices for k=" + std::to_string(k) +
+  //                    ", keyID=" + std::to_string(keyID));
+  // }
 
   if (!inCanonicalForm(keyID)) { // Re-linearize the input, if needed
     reLinearize(keyID);
@@ -2496,20 +2496,20 @@ void Ctxt::smartAutomorph(long k)
   // Please leave these print statements in (but commented out).
   // They are useful for debugging.
   // std::cerr << "*** smartAutomorph:";
-  while (k != 1) {
-    // std::cerr << " " << k;
-    const KeySwitch& matrix = pubKey.getNextKSWmatrix(k, keyID);
-    long amt = matrix.fromKey.getPowerOfX();
+  // while (k != 1) {
+  //   // std::cerr << " " << k;
+  //   const KeySwitch& matrix = pubKey.getNextKSWmatrix(k, keyID);
+  //   long amt = matrix.fromKey.getPowerOfX();
 
-    // A hack: record this automorphism rather than actually performing it
-    if (isSetAutomorphVals2()) { // defined in NumbTh.h
-      recordAutomorphVal2(amt);
-      return;
-    }
-    automorph(amt);
-    reLinearize(keyID);
-    k = NTL::MulMod(k, NTL::InvMod(amt, m), m);
-  }
+  //   // A hack: record this automorphism rather than actually performing it
+  //   if (isSetAutomorphVals2()) { // defined in NumbTh.h
+  //     recordAutomorphVal2(amt);
+  //     return;
+  //   }
+  //   automorph(amt);
+  //   reLinearize(keyID);
+  //   k = NTL::MulMod(k, NTL::InvMod(amt, m), m);
+  // }
   // std::cerr << "\n";
   HELIB_TIMER_STOP;
 }

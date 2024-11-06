@@ -1,5 +1,5 @@
-#ifndef FHETOOL_YUX_P_HPP
-#define FHETOOL_YUX_P_HPP
+#ifndef FHETOOL_YUS_P_HPP
+#define FHETOOL_YUS_P_HPP
 
 #include <iostream>
 #include <cstring>
@@ -13,18 +13,21 @@
 #include <helib/ArgMap.h>
 #include <helib/DoubleCRT.h>
 
-#include "params_Yux_p.hpp"
+#include "params_Yus_p.hpp"
 
 using namespace std;
 using namespace helib;
 using namespace NTL;
 
-bool verifyDecryption_p16(const vector<Ctxt>& encryptedSymKey, const vector<long>& originalSymKey, const SecKey& secretKey, const EncryptedArray& ea);
 
-void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<long>& data, const EncryptedArray& ea);
+void encodeTo32Ctxt(vector<ZZX> &encData, const vector<long> &data, const EncryptedArray &ea);
 
-void decodeTo16Ctxt_p(vector<long>& data, const vector<vector<long>>& encData, const EncryptedArray& ea);
-// 通用写入函数模板
+void decodeTo32Ctxt(vector<long> &data, const vector<vector<long>> &encData,
+                    const EncryptedArray &ea);
+
+bool verifyDecryption32(const std::vector<Ctxt> &encryptedVec, const vector<long> &originalVec, const SecKey &secretKey,
+                        const EncryptedArray &ea);
+
 template <typename T>
 bool writeToFile(const T *data, const std::string &filename, size_t length)
 {

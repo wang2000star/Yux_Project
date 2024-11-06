@@ -48,7 +48,7 @@ bool readEncryptedKeyStream(vector<Ctxt> &encryptedKeyStream, const std::string 
     return true;
 }
 // encryptXset函数既可以用于加密Xset, 也可以用于加密CipherStream
-void encryptXset(vector<Ctxt>& encryptedXset, vector<uint64_t>& Xset, unique_ptr<PubKey>& he_pk, EncryptedArray& ea)
+void encryptXset(vector<Ctxt>& encryptedXset, vector<long>& Xset, unique_ptr<PubKey>& he_pk, EncryptedArray& ea)
 {   
     //编码
     vector<vector<long>> encoded;
@@ -61,10 +61,10 @@ void encryptXset(vector<Ctxt>& encryptedXset, vector<uint64_t>& Xset, unique_ptr
 
 }
 
-void encryptIV(vector<Ctxt>& eKey, vector<uint64_t>& Key, unique_ptr<PubKey>& he_pk, EncryptedArray& ea)
+void encryptIV(vector<Ctxt>& eKey, vector<long>& Key, unique_ptr<PubKey>& he_pk, EncryptedArray& ea)
 {   
     //将key拷贝exKey
-    vector<uint64_t> exKey(Key.size()*PlainBlock);
+    vector<long> exKey(Key.size()*PlainBlock);
     for (size_t i = 0; i < Key.size(); i++)
     {
         for (size_t j = 0; j < PlainBlock; j++)
@@ -136,32 +136,32 @@ bool Server_offline()
     auto start = std::chrono::steady_clock::now();
 
     // 生成初始向量 IV
-    vector<uint64_t> IV(BlockByte);
+    vector<long> IV(BlockByte);
     for (unsigned i = 0; i < BlockByte; i++)
     {
         IV[i] = i + 1;
     }
 
     // 读取 Client_NonceSet.txt，生成 Xset
-    vector<uint64_t> Xset(PlainByte * (Nr + 1));
+    vector<long> Xset(PlainByte * (Nr + 1));
     RandomBit<BlockSize> randomBit(Nr);
     auto &RanVecs = randomBit.roundconstants;
-    vector<uint64_t> NonceSet(PlainBlock);
-    if (!readFromFile<uint64_t>(NonceSet.data(), "Client_NonceSet.txt", PlainBlock))
+    vector<long> NonceSet(PlainBlock);
+    if (!readFromFile<long>(NonceSet.data(), "Client_NonceSet.txt", PlainBlock))
     {
         std::cerr << "Failed to open Client_NonceSet.txt for reading" << std::endl;
         return false;
     }
 
     auto start_Xset = std::chrono::steady_clock::now();
-    for (uint64_t counter = counter_begin; counter <= counter_end; counter++)
+    for (long counter = counter_begin; counter <= counter_end; counter++)
     {
-        uint64_t nonce = NonceSet[counter - counter_begin];
+        long nonce = NonceSet[counter - counter_begin];
         randomBit.generate_Instance_all_new(nonce, counter);
         for (unsigned r = 0; r <= Nr; r++)
         {
-            Vec<uint64_t> X(INIT_SIZE, BlockByte);
-            uint64_t temp;
+            Vec<long> X(INIT_SIZE, BlockByte);
+            long temp;
             for (unsigned i = 0; i < BlockByte; ++i)
             {
                 bool bit_array[Bytebits];
@@ -170,7 +170,7 @@ bool Server_offline()
                     bit_array[j] = RanVecs[r][i * Bytebits + j];
                 }
                 BinStrToHex(bit_array, temp, Bytebits);
-                X[i] = static_cast<uint64_t>(temp);
+                X[i] = static_cast<long>(temp);
             }
             memcpy(&Xset[PlainByte * r + BlockByte * (counter - counter_begin)], X.data(), BlockByte);
         }
@@ -240,8 +240,8 @@ bool Server_offline()
     }
     std::cout << "Decryption verification succeeded for Xset." << std::endl;
     // 读取Client_RoundKeySet.txt，生成 RoundKeySet
-    vector<uint64_t> RoundKeySet(PlainByte * (Nr + 1));
-    if (!readFromFile<uint64_t>(RoundKeySet.data(), "Client_RoundKeySet.txt", PlainByte * (Nr + 1)))
+    vector<long> RoundKeySet(PlainByte * (Nr + 1));
+    if (!readFromFile<long>(RoundKeySet.data(), "Client_RoundKeySet.txt", PlainByte * (Nr + 1)))
     {
         std::cerr << "Failed to open Client_RoundKeySet.txt for reading" << std::endl;
         return false;
@@ -283,7 +283,7 @@ bool Server_offline()
     std::chrono::duration<double> elapsed_seconds_IV_FHE = end_IV_FHE - start_IV_FHE;
     std::cout << "IV FHE succeeded! Time: " << elapsed_seconds_IV_FHE.count() << "s\n";
     // 使用 verifyDecryption 函数解密并验证 IV
-    vector<uint64_t> expandedIV(PlainByte*BlockByte);
+    vector<long> expandedIV(PlainByte*BlockByte);
     for (unsigned i = 0; i < BlockByte; i++)
     {
         for (unsigned j = 0; j < PlainByte; j++)
@@ -323,7 +323,7 @@ bool Server_offline()
     auto end_roundkey = std::chrono::steady_clock::now();
     roundkey_time += std::chrono::duration<double>(end_roundkey - start_roundkey).count();
     // 明文密钥流
-    vector<uint64_t> KeyStream(PlainByte);
+    vector<long> KeyStream(PlainByte);
     // 对IV和RoundKeySet进行模加
     for (long i = 0; i < PlainByte; i++)
     {
@@ -356,7 +356,7 @@ bool Server_offline()
         sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
         for (unsigned t = 0; t < PlainBlock; t++)
         {
-            vector<uint64_t> key(BlockByte);
+            vector<long> key(BlockByte);
             memcpy(key.data(), &KeyStream[BlockByte * t], BlockByte);
             for (unsigned k = 0; k < 4; k++)
             {
@@ -402,7 +402,7 @@ bool Server_offline()
         //
         for (unsigned t = 0; t < PlainBlock; t++)
         {
-            vector<uint64_t> key(BlockByte);
+            vector<long> key(BlockByte);
             memcpy(key.data(), &KeyStream[BlockByte * t], BlockByte);
             decLinearLayer(key.data());
             memcpy(&KeyStream[BlockByte * t], key.data(), BlockByte);
@@ -465,7 +465,7 @@ bool Server_offline()
     sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
     for (unsigned t = 0; t < PlainBlock; t++)
     {
-        vector<uint64_t> key(BlockByte);
+        vector<long> key(BlockByte);
         memcpy(key.data(), &KeyStream[BlockByte * t], BlockByte);
         for (unsigned k = 0; k < 4; k++)
         {
@@ -589,8 +589,8 @@ bool Server_online()
 
     // 读取Client_CipherStream.txt，生成cipherStream
 #if 1
-    vector<uint64_t> CipherStream(PlainByte);
-    if (!readFromFile<uint64_t>(CipherStream.data(), "Client_CipherStream.txt", PlainByte))
+    vector<long> CipherStream(PlainByte);
+    if (!readFromFile<long>(CipherStream.data(), "Client_CipherStream.txt", PlainByte))
     {
         return false;
     }
@@ -643,8 +643,8 @@ bool Server_online()
     // 重点8：对encryptedPlainStream进行解密，得到PlainStream
 // 读取CLient_PlainStream.txt，生成PlainStream
 #if 1
-    vector<uint64_t> PlainStream(PlainByte);
-    if (!readFromFile<uint64_t>(PlainStream.data(), "Client_PlainStream.txt", PlainByte))
+    vector<long> PlainStream(PlainByte);
+    if (!readFromFile<long>(PlainStream.data(), "Client_PlainStream.txt", PlainByte))
     {
         return false;
     }

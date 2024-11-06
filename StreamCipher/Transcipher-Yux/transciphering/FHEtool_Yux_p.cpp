@@ -4,7 +4,7 @@ using namespace std;
 using namespace helib;
 using namespace NTL;
 
-void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<uint64_t>& data, const EncryptedArray& ea)
+void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<long>& data, const EncryptedArray& ea)
 {
     long R = divc(data.size(), PlainByte);
     long nCtxt = BlockByte * R;
@@ -25,7 +25,7 @@ void encodeTo16Ctxt_p(vector<vector<long>>& encData, const vector<uint64_t>& dat
   }
 }
 // encodeTo16Ctxt_p对应的解码
-void decodeTo16Ctxt_p(vector<uint64_t>& data, const vector<vector<long>>& encData, const EncryptedArray& ea)
+void decodeTo16Ctxt_p(vector<long>& data, const vector<vector<long>>& encData, const EncryptedArray& ea)
 {
     long nCtxt = encData.size();
     long R = nCtxt / BlockByte;
@@ -47,7 +47,7 @@ void decodeTo16Ctxt_p(vector<uint64_t>& data, const vector<vector<long>>& encDat
 }
 
 // 函数：解密并验证密文是否正确，需要解码
-bool verifyDecryption_p16(const vector<Ctxt>& encryptedSymKey, const vector<uint64_t>& originalSymKey, const SecKey& secretKey, const EncryptedArray& ea)
+bool verifyDecryption_p16(const vector<Ctxt>& encryptedSymKey, const vector<long>& originalSymKey, const SecKey& secretKey, const EncryptedArray& ea)
 {
     // 解密加密的对称密钥
     vector<vector<long>> decryptedSymKey(encryptedSymKey.size());

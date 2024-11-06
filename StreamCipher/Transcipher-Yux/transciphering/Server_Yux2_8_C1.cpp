@@ -323,22 +323,22 @@ bool Server_offline()
     Vec<uint8_t> Xset(INIT_SIZE, PlainByte * (Nr + 1));
     RandomBit<BlockSize> randomBit(Nr);
     auto &RanVecs = randomBit.roundconstants;
-    Vec<uint64_t> NonceSet(INIT_SIZE, PlainBlock);
-    if (!readFromFile<uint64_t>(NonceSet.data(), "Client_NonceSet.txt", PlainBlock))
+    Vec<long> NonceSet(INIT_SIZE, PlainBlock);
+    if (!readFromFile<long>(NonceSet.data(), "Client_NonceSet.txt", PlainBlock))
     {
         std::cerr << "Failed to open Client_NonceSet.txt for reading" << std::endl;
         return false;
     }
 
     auto start_Xset = std::chrono::steady_clock::now();
-    for (uint64_t counter = counter_begin; counter <= counter_end; counter++)
+    for (long counter = counter_begin; counter <= counter_end; counter++)
     {
-        uint64_t nonce = NonceSet[counter - counter_begin];
+        long nonce = NonceSet[counter - counter_begin];
         randomBit.generate_Instance_all_new(nonce, counter);
         for (unsigned r = 0; r <= Nr; r++)
         {
             Vec<uint8_t> X(INIT_SIZE, BlockByte);
-            uint64_t temp;
+            long temp;
             for (unsigned i = 0; i < BlockByte; ++i)
             {
                 bool bit_array[8];

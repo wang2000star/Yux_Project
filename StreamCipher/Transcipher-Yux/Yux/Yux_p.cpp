@@ -3,7 +3,7 @@
 #include "Yux_p.hpp"
 
 
-int Model_p(uint64_t state)
+int Model_p(long state)
 {
   if(state < 0)
   {
@@ -17,7 +17,7 @@ int Model_p(uint64_t state)
 
 // This function adds the round key to state.
 // The round key is added to the state by an XOR function.
-void addRoundKey(uint64_t state[], uint64_t RoundKey[], int round)
+void addRoundKey(long state[], long RoundKey[], int round)
 {
   int i;
   for(i=0;i<blockByte;i++)
@@ -27,7 +27,7 @@ void addRoundKey(uint64_t state[], uint64_t RoundKey[], int round)
     }
 }
 
-void subtractRoundKey(uint64_t state[], uint64_t RoundKey[], int round)
+void subtractRoundKey(long state[], long RoundKey[], int round)
 {
   int i;
   for(i=0;i<blockByte;i++)
@@ -38,14 +38,14 @@ void subtractRoundKey(uint64_t state[], uint64_t RoundKey[], int round)
 }
 
 
-void decSboxFi(uint64_t state[], int begin)
+void decSboxFi(long state[], int begin)
 {
-  uint64_t c0=state[begin];
-  uint64_t c1=state[begin+1];
-  uint64_t c2=state[begin+2];
-  uint64_t c3=state[begin+3];
+  long c0=state[begin];
+  long c1=state[begin+1];
+  long c2=state[begin+2];
+  long c3=state[begin+3];
 
-  uint64_t temp = (c1*c2+c0+c3+roundConstant) % pmod;
+  long temp = (c1*c2+c0+c3+roundConstant) % pmod;
 
   state[begin] = c1;
   state[begin+1] = c2;
@@ -54,10 +54,10 @@ void decSboxFi(uint64_t state[], int begin)
 }
 
 
-void decLinearLayer(uint64_t in[16])
+void decLinearLayer(long in[16])
 {
     int j;  
-    uint64_t temp[16];
+    long temp[16];
     for(j=0;j<16;j++){
       temp[j] = in[j];
     }  
@@ -74,7 +74,7 @@ void decLinearLayer(uint64_t in[16])
 }
 
 // Cipher is the main function that encrypts the PlainText.
-void decryption(uint64_t out[], uint64_t in[], uint64_t RoundKey[])
+void decryption(long out[], long in[], long RoundKey[])
 {
   int i, r;
   // initial key addition
@@ -119,14 +119,14 @@ void decryption(uint64_t out[], uint64_t in[], uint64_t RoundKey[])
 
 }
 
-void encSboxFi(uint64_t state[], int begin)
+void encSboxFi(long state[], int begin)
 {
-  uint64_t c0=state[begin];
-  uint64_t c1=state[begin+1];
-  uint64_t c2=state[begin+2];
-  uint64_t c3=state[begin+3];
+  long c0=state[begin];
+  long c1=state[begin+1];
+  long c2=state[begin+2];
+  long c3=state[begin+3];
 
-  uint64_t temp = (pmod -(c0*c1+c2 +roundConstant+(pmod -(c3)%pmod))% pmod) % pmod;
+  long temp = (pmod -(c0*c1+c2 +roundConstant+(pmod -(c3)%pmod))% pmod) % pmod;
 
   state[begin] = temp;
   state[begin+1] = c0;
@@ -135,9 +135,9 @@ void encSboxFi(uint64_t state[], int begin)
 }
 
 
-void encLinearLayer(uint64_t in[16])
+void encLinearLayer(long in[16])
 {
-    uint64_t temp[16];
+    long temp[16];
     int j;
     
     for(j=0;j<16;j++){
@@ -159,7 +159,7 @@ void encLinearLayer(uint64_t in[16])
 
 
 // Cipher is the main function that encrypts the PlainText.
-void encryption(uint64_t out[], uint64_t in[], uint64_t RoundKey[])
+void encryption(long out[], long in[], long RoundKey[])
 {
   int i, r;
   // initial key addition
@@ -201,7 +201,7 @@ void encryption(uint64_t out[], uint64_t in[], uint64_t RoundKey[])
 
 // This function produces Nb(Nr+1) round keys.
 // The round keys are used in each round to encrypt the states.
-void constantForKey(uint64_t RC[56][4])
+void constantForKey(long RC[56][4])
 {
     // Nr is the round number
     // Nk is the number of 64-bit Feistel works in the key 4bytes each round.
@@ -210,7 +210,7 @@ void constantForKey(uint64_t RC[56][4])
     int i,j,k;
     for(i=0;i<56;i++)
     {
-      uint64_t tmp[4];
+      long tmp[4];
       for(j=0; j<4; j++)
       {
         tmp[j] = 4*i+j+1;
@@ -236,9 +236,9 @@ void constantForKey(uint64_t RC[56][4])
 }
 
 // array a, length = l, <<<3
-void rotation(uint64_t *a, int l,int r)
+void rotation(long *a, int l,int r)
 {
-	uint64_t temp[l];
+	long temp[l];
 	for (int i = 0; i < l; i++){
 		temp[i] = a[(i+r)%l];
 	}
@@ -250,7 +250,7 @@ void rotation(uint64_t *a, int l,int r)
 
 // This function produces Nb(Nr+1) round keys.
 // The round keys are used in each round to encrypt the states.
-long KeyExpansion(uint64_t RoundKey[], uint64_t Key[])
+long KeyExpansion(long RoundKey[], long Key[])
 {
     // Nr is the round number
     // Nk is the number of 64-bit Feistel works in the key 4bytes each round.
@@ -264,7 +264,7 @@ long KeyExpansion(uint64_t RoundKey[], uint64_t Key[])
         RoundKey[i]=Key[i];
     }
 
-    uint64_t RC[56][4];
+    long RC[56][4];
     constantForKey(RC);
 
     int x4id = 16;
@@ -277,7 +277,7 @@ long KeyExpansion(uint64_t RoundKey[], uint64_t Key[])
       int x2id = i*4+8;
       int x3id = i*4+12;
       // x4 = x1+x2+x3
-      uint64_t x4[4];
+      long x4[4];
       for(j=0;j<4;j++) 
       {
         x4[j] = (RoundKey[x1id+j] + RoundKey[x2id+j] + RoundKey[x3id+j])%pmod;
@@ -307,7 +307,7 @@ long KeyExpansion(uint64_t RoundKey[], uint64_t Key[])
 //  1. roundkey in reversed order
 //  2. Except the first and the last roundkey, 
 //     others are the roundkey with inverse transformation of the linear function.
-void decRoundKey(uint64_t RoundKey_invert[], uint64_t RoundKey[])
+void decRoundKey(long RoundKey_invert[], long RoundKey[])
 {
     int Nr = ROUND;
     int Nk = blockByte; // 128/8= 16
@@ -325,7 +325,7 @@ void decRoundKey(uint64_t RoundKey_invert[], uint64_t RoundKey[])
     {
         Begin = Nk*i;
         invertBegin = Nk*(Nr-i);
-        uint64_t tempKey[Nk];
+        long tempKey[Nk];
         // memcpy(&tempKey[0], &RoundKey[Begin], Nk);
             for(int j = 0; j<Nk; j++) {
               tempKey[j]= RoundKey[Begin+j];
