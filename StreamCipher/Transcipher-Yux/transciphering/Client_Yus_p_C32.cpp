@@ -4,6 +4,8 @@ using namespace std;
 using namespace helib;
 using namespace NTL;
 
+YusP yusP(PlainMod);
+
 void encryptSymKey(vector<Ctxt> &encryptedSymKey, vector<long> &SymKey, unique_ptr<PubKey> &pk, EncryptedArray &ea)
 {
     long nslots = ea.size();
@@ -164,9 +166,9 @@ namespace C1ient_Yus_p_C32
                 }
                 else if (r < Nr)
                 {                // 常规轮
-                    MC(state);   // 行移位
-                    MR(state);   // 列混淆
-                    Sbox(state); // S盒
+                    yusP.MC32(state);   // 行移位
+                    yusP.MR32(state);   // 列混淆
+                    yusP.Sbox(state); // S盒
                     for (unsigned i = 0; i < BlockByte; i++)
                     {
                         state[i] = (state[i] + RoundKey[i]) % PlainMod;
@@ -174,11 +176,11 @@ namespace C1ient_Yus_p_C32
                 }
                 else
                 {                // 最后一轮
-                    MC(state);   // 行移位
-                    MR(state);   // 列混淆
-                    Sbox(state); // S盒
-                    MC(state);   // 再次行移位
-                    MR(state);   // 再次列混淆
+                    yusP.MC32(state);   // 行移位
+                    yusP.MR32(state);   // 列混淆
+                    yusP.Sbox(state); // S盒
+                    yusP.MC32(state);   // 再次行移位
+                    yusP.MR32(state);   // 再次列混淆
                     for (unsigned i = 0; i < BlockByte; i++)
                     {
                         state[i] = (state[i] + RoundKey[i]) % PlainMod;

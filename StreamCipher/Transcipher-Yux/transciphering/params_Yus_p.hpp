@@ -1,5 +1,5 @@
-#ifndef PARAMS_YUX_P_HPP
-#define PARAMS_YUX_P_HPP
+#ifndef PARAMS_YUS_P_HPP
+#define PARAMS_YUS_P_HPP
 
 /************
  * PlainMod = 257, Bytebits = 9, BlockSize = 32*9 = 288, PlainBlock = (Plainmod-1)/2 = 128
@@ -18,7 +18,7 @@ static const long PlainByte = BlockByte * PlainBlock;           // 明文字节�
 // PlainByte = nslots
 static const long PlainSize = BlockSize * PlainBlock;           // 明文比特长度
 static const unsigned NonceSize = 32;                               // Nonce比特长度
-static const unsigned Nr = 2;                                       // 轮数
+static const unsigned Nr = 6;                                       // 轮数
 static const long counter_begin = 0;                            // 计数器起始值
 static const long counter_end = PlainBlock + counter_begin - 1; // 计数器结束值
 
@@ -42,4 +42,4 @@ static long mValues[][4] = {
 };
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 
-#endif // PARAMS_YUX_P_HPP
+#endif // PARAMS_YUS_P_HPP

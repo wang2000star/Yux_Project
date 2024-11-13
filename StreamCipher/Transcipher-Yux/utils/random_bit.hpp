@@ -242,23 +242,23 @@ void RandomBit<BlockSize>::generate_Instance_all_new(const long nonce, const lon
     // Initialize RNG state
     initrand(nonce, counter);
     // Create LinMatrices and invLinMatrices
-    LinMatrices.clear();
-    for (unsigned r = 0; r <= rounds; ++r)
-    {
-        // Create matrix
-        std::vector<block> mat;
-        // Fill matrix with random bits
-        do
-        {
-            mat.clear();
-            for (unsigned i = 0; i < BlockSize; ++i)
-            {
-                mat.push_back(getrandblock());
-            }
-            // Repeat if matrix is not invertible
-        } while (rank_of_Matrix(mat) != BlockSize);
-        LinMatrices.push_back(mat);
-    }
+    // LinMatrices.clear();
+    // for (unsigned r = 0; r <= rounds; ++r)
+    // {
+    //     // Create matrix
+    //     std::vector<block> mat;
+    //     // Fill matrix with random bits
+    //     do
+    //     {
+    //         mat.clear();
+    //         for (unsigned i = 0; i < BlockSize; ++i)
+    //         {
+    //             mat.push_back(getrandblock());
+    //         }
+    //         // Repeat if matrix is not invertible
+    //     } while (rank_of_Matrix(mat) != BlockSize);
+    //     LinMatrices.push_back(mat);
+    // }
 
     // Create roundconstants
     roundconstants.clear();

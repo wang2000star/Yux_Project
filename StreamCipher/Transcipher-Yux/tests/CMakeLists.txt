@@ -45,7 +45,20 @@ include_directories("${CMAKE_SOURCE_DIR}/transciphering")
 #    COMMAND ${CMAKE_COMMAND} -E copy
 #    ${CMAKE_SOURCE_DIR}/tests/run_Yus_p_C32.sh $<TARGET_FILE_DIR:test_Yus_p_C32_Clientoff>)
 
-    
-add_executable(test_Yus_p_C32_ClientAndServer test_Yus_p_C32_ClientAndServer.cpp)
+add_executable(test_Yus_p_C64_ClientAndServer test_Yus_p_C64_ClientAndServer.cpp)
+target_link_libraries(test_Yus_p_C64_ClientAndServer PUBLIC Transcipher Symmetric Utils helib)
 
+add_executable(test_Yus_p_C32_ClientAndServer test_Yus_p_C32_ClientAndServer.cpp)
 target_link_libraries(test_Yus_p_C32_ClientAndServer PUBLIC Transcipher Symmetric Utils helib)
+
+add_executable(test_Yus_p_C32_ClientAndServer2 test_Yus_p_C32_ClientAndServer2.cpp)
+target_link_libraries(test_Yus_p_C32_ClientAndServer2 PUBLIC Transcipher Symmetric Utils helib)
+
+add_executable(test_Yux_p_C16_ClientAndServer test_Yux_p_C16_ClientAndServer.cpp)
+target_link_libraries(test_Yux_p_C16_ClientAndServer PUBLIC Transcipher Symmetric Utils helib)
+
+add_executable(test_Yux_p_C16_ClientAndServer2 test_Yux_p_C16_ClientAndServer2.cpp)
+target_link_libraries(test_Yux_p_C16_ClientAndServer2 PUBLIC Transcipher Symmetric Utils helib)
+
+add_executable(test_Hera test_Hera.cpp)
+target_link_libraries(test_Hera PUBLIC Transcipher Symmetric Utils helib)
