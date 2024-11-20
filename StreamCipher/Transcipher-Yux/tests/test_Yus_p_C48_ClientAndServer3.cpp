@@ -1,12 +1,7 @@
 #include <iostream>
-#include <cstring>
-#include <stdint.h>
-#include <chrono>
+#include <filesystem>
 #include <vector>
-#include <omp.h>
 #include <array>
-#include <cstdint>
-#include <cstring>
 #include <atomic>
 #include <cmath>
 #include <chrono>
@@ -14,7 +9,7 @@
 #include <memory>
 #include <random>
 #include <climits>
-#include <thread>
+#include <omp.h>
 
 #include <NTL/ZZX.h>
 #include <NTL/GF2X.h>
@@ -29,6 +24,7 @@
 using namespace std;
 using namespace helib;
 using namespace NTL;
+namespace fs = std::filesystem;
 /************************************************************************
   long p;          // plaintext primeplain_mod;
   long m;          // m-th cyclotomic polynomial
@@ -42,12 +38,12 @@ using namespace NTL;
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 
 static const unsigned Nr = 4;         // 轮数
-static const unsigned Sbox_depth = 2; // S盒深度
+static const unsigned Sbox_depth = 1; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
 constexpr long mValues[][4] = {
     // {p, log2(m), bits, c}
     {65537, 15, 390, 2},    // 0, 安全性85.7423
-    {65537, 16, 400, 2},    // 1，安全性183.748
+    {65537, 16, 250, 2},    // 1，安全性183.748
     {17367041, 15, 490, 2}, // 2, 安全性64.4997
     {17367041, 16, 500, 2}, // 3, 安全性145.949
     {32440321, 15, 510, 2}, // 3, 安全性62.9747
@@ -74,11 +70,11 @@ constexpr unsigned int log2_constexpr(unsigned long long n, unsigned int p = 0)
     return (n <= 1) ? p : log2_constexpr(n / 2, p + 1);
 }
 constexpr long PlainMod = Para_p;
-constexpr unsigned Bytebits = log2_constexpr(PlainMod - 1)+1;
+constexpr unsigned Bytebits = log2_constexpr(PlainMod - 1) + 1;
 ; // 字节比特长度=ceil(log2(PlainMod-1))
 
 //!!!!!!!!!!!!!!!!
-constexpr long BlockByte = 32; // 分组字节长度
+constexpr long BlockByte = 48; // 分组字节长度
 
 constexpr unsigned BlockSize = Bytebits * BlockByte;  // 分组比特长度=BlockByte*Bytebits
 static const long PlainByte = BlockByte * PlainBlock; // 明文字节长度
@@ -92,7 +88,7 @@ static bool Rkflag = 1;                                         // true/1表示�
 
 YusP yusP(PlainMod);
 
-void encodeTo32Ctxt(vector<ZZX> &encData, const vector<long> &data, const EncryptedArray &ea)
+void encodeTo48Ctxt(vector<ZZX> &encData, const vector<long> &data, const EncryptedArray &ea)
 {
     long R = data.size() / PlainByte;
     long nCtxt = BlockByte * R;
@@ -116,8 +112,8 @@ void encodeTo32Ctxt(vector<ZZX> &encData, const vector<long> &data, const Encryp
         }
     }
 }
-// encodeTo32Ctxt对应的解码
-void decodeTo32Ctxt(vector<long> &data, const vector<vector<long>> &encData,
+// encodeTo48Ctxt对应的解码
+void decodeTo48Ctxt(vector<long> &data, const vector<vector<long>> &encData,
                     const EncryptedArray &ea)
 {
     long R = encData.size() / BlockByte;
@@ -144,7 +140,7 @@ void decodeTo32Ctxt(vector<long> &data, const vector<vector<long>> &encData,
 }
 // 函数：解密并验证密文是否正确，需要解码
 // 函数：解密并验证密文是否正确
-bool verifyDecryption32(const std::vector<Ctxt> &encryptedVec, const vector<long> &originalVec, const SecKey &secretKey,
+bool verifyDecryption48(const std::vector<Ctxt> &encryptedVec, const vector<long> &originalVec, const SecKey &secretKey,
                         const EncryptedArray &ea)
 {
     auto start_decrypt = std::chrono::steady_clock::now();
@@ -157,12 +153,24 @@ bool verifyDecryption32(const std::vector<Ctxt> &encryptedVec, const vector<long
         ea.decrypt(encryptedVec[i], secretKey, decryptedPolys[i]);
     }
     // 解码
-    decodeTo32Ctxt(decryptedVec, decryptedPolys, ea);
+    decodeTo48Ctxt(decryptedVec, decryptedPolys, ea);
     // 验证解密结果
     bool isDecryptedVecCorrect = std::equal(decryptedVec.begin(), decryptedVec.end(), originalVec.begin());
     auto end_decrypt = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds = end_decrypt - start_decrypt;
     std::cout << "Decryption and verification finished! Time: " << elapsed_seconds.count() << "s\n";
+    // 如果解密结果不正确，输出第一个错误的位置
+    if (!isDecryptedVecCorrect)
+    {
+        for (size_t i = 0; i < decryptedVec.size(); i++)
+        {
+            if (decryptedVec[i] != originalVec[i])
+            {
+                std::cout << "Error at position " << i << ": " << decryptedVec[i] << " != " << originalVec[i] << std::endl;
+                break;
+            }
+        }
+    }
     return isDecryptedVecCorrect;
 }
 void encryptSymKey(vector<Ctxt> &encryptedSymKey, const vector<long> &SymKey, unique_ptr<PubKey> &pk, EncryptedArray &ea)
@@ -194,301 +202,217 @@ bool verify_encryptSymKey(vector<Ctxt> &encryptedSymKey, const vector<long> &Sym
     std::cout << "Decryption and verification finished! Time: " << elapsed_seconds.count() << "s\n";
     return isDecryptedSymKeyCorrect;
 }
-// A[id0] + A[id1] + t[2]   + A[id3] + t[4]   + A[id5] + t[6]   + t[7];
-// t[0]   + A[id1]          + t[3]   + A[id4] + t[5]   + A[id6] + t[7];
-// t[0]   + t[1]   + A[id2] + A[id3] + t[4]   + A[id5] + t[6]   + A[id7];
-// A[id0] + t[1]   + t[2]   + A[id3]          + t[5]   + A[id6] + t[7];
-// t[0]   + A[id1] + t[2]   + t[3]   + A[id4] + A[id5] + t[6]   + A[id7];
-// A[id0] + t[1]   + A[id2] + t[3]   + t[4]   + A[id5]          + t[7];
-// t[0]   + A[id1] + t[2]   + A[id3] + t[4]   + t[5]   + A[id6] + A[id7];
-//          t[1]   + A[id2] + t[3]   + A[id4] + t[5]   + t[6]   + A[id7];
 void HE_MC_MR(vector<Ctxt> &eData)
 {
     vector<Ctxt> temp = eData;
-    vector<int> index = {0, 1, 2, 3, 4, 5, 6, 7};
-    vector<Ctxt> t = eData;
+    vector<int> index = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     for (int i = 0; i < 4; i++)
     {
-        int s = 8 * i;
-        int id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s, id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s;
-        // 下面是60次加法
-        t[id0] += t[id0];
-        t[id1] += t[id1];
-        t[id2] += t[id2];
-        t[id3] += t[id3];
-        t[id4] += t[id4];
-        t[id5] += t[id5];
-        t[id6] += t[id6];
-        t[id7] += t[id7];
-        eData[id0] += temp[id1];
-        eData[id0] += t[id2];
+        int s = 12 * i;
+        int id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s, id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s, id8 = index[8] + s, id9 = index[9] + s, id10 = index[10] + s, id11 = index[11] + s; // 下面是92次加法
+        // 80次+=, 4次=
+        eData[id0] = temp[id1];
+        eData[id0] += temp[id2];
         eData[id0] += temp[id3];
-        eData[id0] += t[id4];
         eData[id0] += temp[id5];
-        eData[id0] += t[id6];
-        eData[id0] += t[id7];
-        eData[id1] += t[id0];
-        eData[id1] += t[id3];
-        eData[id1] += temp[id4];
-        eData[id1] += t[id5];
+        eData[id0] += temp[id6];
+        eData[id0] += temp[id7];
+        eData[id0] += temp[id9];
+        eData[id0] += temp[id10];
+        eData[id0] += temp[id11];
+
+        eData[id1] += temp[id0];
+        eData[id1] += temp[id5];
         eData[id1] += temp[id6];
-        eData[id1] += t[id7];
-        eData[id2] += t[id0];
-        eData[id2] += t[id1];
-        eData[id2] += temp[id3];
-        eData[id2] += t[id4];
+        eData[id1] += temp[id7];
+        eData[id1] += temp[id8];
+        eData[id1] += temp[id9];
+
+        eData[id2] += temp[id0];
+        eData[id2] += temp[id1];
+        eData[id2] += temp[id4];
         eData[id2] += temp[id5];
-        eData[id2] += t[id6];
-        eData[id2] += temp[id7];
-        eData[id3] += temp[id0];
-        eData[id3] += t[id1];
-        eData[id3] += t[id2];
-        eData[id3] += t[id5];
+        eData[id2] += temp[id6];
+        eData[id2] += temp[id10];
+
+        eData[id3] = temp[id0];
+        eData[id3] += temp[id2];
+        eData[id3] += temp[id4];
+        eData[id3] += temp[id5];
         eData[id3] += temp[id6];
-        eData[id3] += t[id7];
-        eData[id4] += t[id0];
-        eData[id4] += temp[id1];
-        eData[id4] += t[id2];
-        eData[id4] += t[id3];
-        eData[id4] += temp[id5];
-        eData[id4] += t[id6];
-        eData[id4] += temp[id7];
-        eData[id5] += temp[id0];
-        eData[id5] += t[id1];
+        eData[id3] += temp[id7];
+        eData[id3] += temp[id8];
+        eData[id3] += temp[id9];
+        eData[id3] += temp[id10];
+
+        eData[id4] += temp[id2];
+        eData[id4] += temp[id3];
+        eData[id4] += temp[id6];
+        eData[id4] += temp[id9];
+        eData[id4] += temp[id10];
+        eData[id4] += temp[id11];
+
+        eData[id5] += temp[id1];
         eData[id5] += temp[id2];
-        eData[id5] += t[id3];
-        eData[id5] += t[id4];
-        eData[id5] += t[id7];
-        eData[id6] += t[id0];
+        eData[id5] += temp[id3];
+        eData[id5] += temp[id4];
+        eData[id5] += temp[id7];
+        eData[id5] += temp[id9];
+
+        eData[id6] = temp[id0];
         eData[id6] += temp[id1];
-        eData[id6] += t[id2];
         eData[id6] += temp[id3];
-        eData[id6] += t[id4];
-        eData[id6] += t[id5];
+        eData[id6] += temp[id4];
+        eData[id6] += temp[id5];
         eData[id6] += temp[id7];
-        eData[id7] += t[id1];
+        eData[id6] += temp[id8];
+        eData[id6] += temp[id9];
+        eData[id6] += temp[id11];
+
+        eData[id7] += temp[id0];
+        eData[id7] += temp[id1];
         eData[id7] += temp[id2];
-        eData[id7] += t[id3];
-        eData[id7] += temp[id4];
-        eData[id7] += t[id5];
-        eData[id7] += t[id6];
+        eData[id7] += temp[id3];
+        eData[id7] += temp[id6];
+        eData[id7] += temp[id11];
+
+        eData[id8] += temp[id0];
+        eData[id8] += temp[id4];
+        eData[id8] += temp[id6];
+        eData[id8] += temp[id7];
+        eData[id8] += temp[id10];
+        eData[id8] += temp[id11];
+
+        eData[id9] = temp[id0];
+        eData[id9] += temp[id1];
+        eData[id9] += temp[id2];
+        eData[id9] += temp[id3];
+        eData[id9] += temp[id4];
+        eData[id9] += temp[id6];
+        eData[id9] += temp[id8];
+        eData[id9] += temp[id10];
+        eData[id9] += temp[id11];
+
+        eData[id10] += temp[id0];
+        eData[id10] += temp[id3];
+        eData[id10] += temp[id4];
+        eData[id10] += temp[id5];
+        eData[id10] += temp[id8];
+        eData[id10] += temp[id9];
+
+        eData[id11] += temp[id1];
+        eData[id11] += temp[id3];
+        eData[id11] += temp[id7];
+        eData[id11] += temp[id8];
+        eData[id11] += temp[id9];
+        eData[id11] += temp[id10];
     }
     temp = eData;
-    index = {0, 1, 8, 9, 16, 17, 24, 25};
-    t = eData;
+    index = {0, 1, 2, 12, 13, 14, 24, 25, 26, 36, 37, 38};
+    
     for (int i = 0; i < 4; i++)
     {
-        int s = 2 * i;
-        int id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s, id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s;
-        // 下面是60次加法
-        t[id0] += t[id0];
-        t[id1] += t[id1];
-        t[id2] += t[id2];
-        t[id3] += t[id3];
-        t[id4] += t[id4];
-        t[id5] += t[id5];
-        t[id6] += t[id6];
-        t[id7] += t[id7];
-        eData[id0] += temp[id1];
-        eData[id0] += t[id2];
+        int s = 3 * i;
+        int id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s, id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s, id8 = index[8] + s, id9 = index[9] + s, id10 = index[10] + s, id11 = index[11] + s; // 下面是92次加法
+        // 80次+=, 4次=
+        eData[id0] = temp[id1];
+        eData[id0] += temp[id2];
         eData[id0] += temp[id3];
-        eData[id0] += t[id4];
         eData[id0] += temp[id5];
-        eData[id0] += t[id6];
-        eData[id0] += t[id7];
-        eData[id1] += t[id0];
-        eData[id1] += t[id3];
-        eData[id1] += temp[id4];
-        eData[id1] += t[id5];
+        eData[id0] += temp[id6];
+        eData[id0] += temp[id7];
+        eData[id0] += temp[id9];
+        eData[id0] += temp[id10];
+        eData[id0] += temp[id11];
+
+        eData[id1] += temp[id0];
+        eData[id1] += temp[id5];
         eData[id1] += temp[id6];
-        eData[id1] += t[id7];
-        eData[id2] += t[id0];
-        eData[id2] += t[id1];
-        eData[id2] += temp[id3];
-        eData[id2] += t[id4];
+        eData[id1] += temp[id7];
+        eData[id1] += temp[id8];
+        eData[id1] += temp[id9];
+
+        eData[id2] += temp[id0];
+        eData[id2] += temp[id1];
+        eData[id2] += temp[id4];
         eData[id2] += temp[id5];
-        eData[id2] += t[id6];
-        eData[id2] += temp[id7];
-        eData[id3] += temp[id0];
-        eData[id3] += t[id1];
-        eData[id3] += t[id2];
-        eData[id3] += t[id5];
+        eData[id2] += temp[id6];
+        eData[id2] += temp[id10];
+
+        eData[id3] = temp[id0];
+        eData[id3] += temp[id2];
+        eData[id3] += temp[id4];
+        eData[id3] += temp[id5];
         eData[id3] += temp[id6];
-        eData[id3] += t[id7];
-        eData[id4] += t[id0];
-        eData[id4] += temp[id1];
-        eData[id4] += t[id2];
-        eData[id4] += t[id3];
-        eData[id4] += temp[id5];
-        eData[id4] += t[id6];
-        eData[id4] += temp[id7];
-        eData[id5] += temp[id0];
-        eData[id5] += t[id1];
+        eData[id3] += temp[id7];
+        eData[id3] += temp[id8];
+        eData[id3] += temp[id9];
+        eData[id3] += temp[id10];
+
+        eData[id4] += temp[id2];
+        eData[id4] += temp[id3];
+        eData[id4] += temp[id6];
+        eData[id4] += temp[id9];
+        eData[id4] += temp[id10];
+        eData[id4] += temp[id11];
+
+        eData[id5] += temp[id1];
         eData[id5] += temp[id2];
-        eData[id5] += t[id3];
-        eData[id5] += t[id4];
-        eData[id5] += t[id7];
-        eData[id6] += t[id0];
+        eData[id5] += temp[id3];
+        eData[id5] += temp[id4];
+        eData[id5] += temp[id7];
+        eData[id5] += temp[id9];
+
+        eData[id6] = temp[id0];
         eData[id6] += temp[id1];
-        eData[id6] += t[id2];
         eData[id6] += temp[id3];
-        eData[id6] += t[id4];
-        eData[id6] += t[id5];
+        eData[id6] += temp[id4];
+        eData[id6] += temp[id5];
         eData[id6] += temp[id7];
-        eData[id7] += t[id1];
+        eData[id6] += temp[id8];
+        eData[id6] += temp[id9];
+        eData[id6] += temp[id11];
+
+        eData[id7] += temp[id0];
+        eData[id7] += temp[id1];
         eData[id7] += temp[id2];
-        eData[id7] += t[id3];
-        eData[id7] += temp[id4];
-        eData[id7] += t[id5];
-        eData[id7] += t[id6];
+        eData[id7] += temp[id3];
+        eData[id7] += temp[id6];
+        eData[id7] += temp[id11];
+
+        eData[id8] += temp[id0];
+        eData[id8] += temp[id4];
+        eData[id8] += temp[id6];
+        eData[id8] += temp[id7];
+        eData[id8] += temp[id10];
+        eData[id8] += temp[id11];
+
+        eData[id9] = temp[id0];
+        eData[id9] += temp[id1];
+        eData[id9] += temp[id2];
+        eData[id9] += temp[id3];
+        eData[id9] += temp[id4];
+        eData[id9] += temp[id6];
+        eData[id9] += temp[id8];
+        eData[id9] += temp[id10];
+        eData[id9] += temp[id11];
+
+        eData[id10] += temp[id0];
+        eData[id10] += temp[id3];
+        eData[id10] += temp[id4];
+        eData[id10] += temp[id5];
+        eData[id10] += temp[id8];
+        eData[id10] += temp[id9];
+
+        eData[id11] += temp[id1];
+        eData[id11] += temp[id3];
+        eData[id11] += temp[id7];
+        eData[id11] += temp[id8];
+        eData[id11] += temp[id9];
+        eData[id11] += temp[id10];
     }
 }
-// HE_MC_MR2有问题，需要修改
-void HE_MC_MR2(vector<Ctxt> &eData)
-{
-    // auto start = std::chrono::steady_clock::now();
-    // for (int i = 0; i < eData.size(); i++)
-    // {
-    //     eData[i].cleanUp();
-    // }
-    // auto end = std::chrono::steady_clock::now();
-    // std::cout << "cleanUp finished! Time: " << std::chrono::duration<double>(end - start).count() << "s\n";
-    vector<Ctxt> temp = eData;
-    vector<int> index = {0, 1, 2, 3, 4, 5, 6, 7};
-    Ctxt D = eData[0];
-    Ctxt t06 = eData[0];
-    Ctxt t15 = eData[0];
-    Ctxt t24 = eData[0];
-    Ctxt t14 = eData[0];
-    Ctxt t05 = eData[0];
-    Ctxt D7 = eData[0];
-    Ctxt D3 = eData[0];
-    Ctxt D73 = eData[0];
-    for (int i = 0; i < 4; i++)
-    {
-        int s = 8 * i;
-        int id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s, id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s;
-        // 下面是33次加/减法, 17次赋值
-        D = temp[id0];           // 0 次
-        D += temp[id1];          // 1 次
-        D += temp[id2];          // 2 次
-        D += temp[id3];          // 3 次
-        D += temp[id4];          // 4 次
-        D += temp[id5];          // 5 次
-        D += temp[id6];          // 6 次
-        D += temp[id7];          // 7 次
-        D7 = D;                  // 7 次
-        D7 += temp[id7];         // 8 次
-        D73 = D7;                // 8 次
-        D73 += temp[id3];        // 9 次
-        D3 = D;                  // 9 次
-        D3 += temp[id3];         // 10 次
-        t06 = temp[id0];         // 10 次
-        t06 += temp[id6];        // 11 次
-        t15 = temp[id1];         // 11 次
-        t15 += temp[id5];        // 12 次
-        t24 = temp[id2];         // 12 次
-        t24 += temp[id4];        // 13 次
-        t14 = temp[id1];         // 13 次
-        t14 += temp[id4];        // 14 次
-        t05 = temp[id0];         // 14 次
-        t05 += temp[id5];        // 15 次
-        eData[id0] = D7;         // 15 次
-        eData[id0] += t24;       // 16 次
-        eData[id0] += temp[id6]; // 17 次
-        eData[id1] = D73;        // 17 次
-        eData[id1] += t05;       // 18 次
-        eData[id1] -= temp[id2]; // 19 次
-        eData[id2] = t06;        // 19 次
-        eData[id2] += D;         // 20 次
-        eData[id2] += t14;       // 21 次
-        eData[id3] = D7;         // 21 次
-        eData[id3] += t15;       // 22 次
-        eData[id3] += temp[id2]; // 23 次
-        eData[id3] -= temp[id4]; // 24 次
-        eData[id4] = D3;         // 24 次
-        eData[id4] += t06;       // 25 次
-        eData[id4] += temp[id2]; // 26 次
-        eData[id5] = D73;        // 26 次
-        eData[id5] += t14;       // 27 次
-        eData[id5] -= temp[id5]; // 28 次
-        eData[id6] = D;          // 28 次
-        eData[id6] += t24;       // 29 次
-        eData[id6] += t05;       // 30 次
-        eData[id7] = D3;         // 30 次
-        eData[id7] += t15;       // 31 次
-        eData[id7] -= temp[id0]; // 32 次
-        eData[id7] += temp[id6]; // 33 次
-    }
-    temp = eData;
-    index = {0, 1, 8, 9, 16, 17, 24, 25};
-    D = eData[0];
-    t06 = eData[0];
-    t15 = eData[0];
-    t24 = eData[0];
-    t14 = eData[0];
-    t05 = eData[0];
-    D7 = eData[0];
-    D3 = eData[0];
-    D73 = eData[0];
-    for (int i = 0; i < 4; i++)
-    {
-        int s = 2 * i;
-        int id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s, id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s;
-        // 下面是33次加/减法, 17次赋值
-        D = temp[id0];           // 0 次
-        D += temp[id1];          // 1 次
-        D += temp[id2];          // 2 次
-        D += temp[id3];          // 3 次
-        D += temp[id4];          // 4 次
-        D += temp[id5];          // 5 次
-        D += temp[id6];          // 6 次
-        D += temp[id7];          // 7 次
-        D7 = D;                  // 7 次
-        D7 += temp[id7];         // 8 次
-        D73 = D7;                // 8 次
-        D73 += temp[id3];        // 9 次
-        D3 = D;                  // 9 次
-        D3 += temp[id3];         // 10 次
-        t06 = temp[id0];         // 10 次
-        t06 += temp[id6];        // 11 次
-        t15 = temp[id1];         // 11 次
-        t15 += temp[id5];        // 12 次
-        t24 = temp[id2];         // 12 次
-        t24 += temp[id4];        // 13 次
-        t14 = temp[id1];         // 13 次
-        t14 += temp[id4];        // 14 次
-        t05 = temp[id0];         // 14 次
-        t05 += temp[id5];        // 15 次
-        eData[id0] = D7;         // 15 次
-        eData[id0] += t24;       // 16 次
-        eData[id0] += temp[id6]; // 17 次
-        eData[id1] = D73;        // 17 次
-        eData[id1] += t05;       // 18 次
-        eData[id1] -= temp[id2]; // 19 次
-        eData[id2] = t06;        // 19 次
-        eData[id2] += D;         // 20 次
-        eData[id2] += t14;       // 21 次
-        eData[id3] = D7;         // 21 次
-        eData[id3] += t15;       // 22 次
-        eData[id3] += temp[id2]; // 23 次
-        eData[id3] -= temp[id4]; // 24 次
-        eData[id4] = D3;         // 24 次
-        eData[id4] += t06;       // 25 次
-        eData[id4] += temp[id2]; // 26 次
-        eData[id5] = D73;        // 26 次
-        eData[id5] += t14;       // 27 次
-        eData[id5] -= temp[id5]; // 28 次
-        eData[id6] = D;          // 28 次
-        eData[id6] += t24;       // 29 次
-        eData[id6] += t05;       // 30 次
-        eData[id7] = D3;         // 30 次
-        eData[id7] += t15;       // 31 次
-        eData[id7] -= temp[id0]; // 32 次
-        eData[id7] += temp[id6]; // 33 次
-    }
-}
-// Compute the constants for Sbox
+// Compute the constants for Sbox_3
 void HE_Sbox(vector<Ctxt> &eData)
 {
     // for (int i = 0; i < eData.size(); i++)
@@ -497,21 +421,15 @@ void HE_Sbox(vector<Ctxt> &eData)
     // }
     vector<Ctxt> c = eData;
     // #pragma omp parallel for
-    for (long j = 0; j < BlockByte; j += 2)
+    for (long j = 0; j < BlockByte; j += 3)
     {
-        for (int i = 0; i < 2; i++)
-        {
-            Ctxt temp = c[j];
-            // c0.frobeniusAutomorph(1);
-            c[j].square();
-            c[j] += c[j + 1];
-            c[j + 1] = temp;
-        }
-        // #pragma omp critical
-        {
-            eData[j] = c[j];
-            eData[j + 1] = c[j + 1];
-        }
+        Ctxt temp13 = eData[j];
+        temp13.multiplyBy(eData[j+2]);
+        Ctxt temp12 = eData[j];
+        temp12.multiplyBy(eData[j+1]);
+        eData[j+1] += temp13;
+        eData[j+2] += temp13;
+        eData[j+2] -= temp12;
     }
 }
 int main()
@@ -611,9 +529,9 @@ int main()
             }
             else if (r < Nr)
             {                       // 常规轮
-                yusP.MC32_2(state); // 列混淆
-                yusP.MR32_2(state); // 行移位
-                yusP.Sbox(state);   // S盒
+                yusP.MC48_3(state); // 列混淆
+                yusP.MR48_3(state); // 行移位
+                yusP.Sbox_3(state);   // S盒
                 for (unsigned i = 0; i < BlockByte; i++)
                 {
                     state[i] = (state[i] + RoundKey[i]) % PlainMod;
@@ -621,11 +539,11 @@ int main()
             }
             else
             {                       // 最后一轮
-                yusP.MC32_2(state); // 列混淆
-                yusP.MR32_2(state); // 行移位
-                yusP.Sbox(state);   // S盒
-                yusP.MC32_2(state); // 列混淆
-                yusP.MR32_2(state); // 行移位
+                yusP.MC48_3(state); // 列混淆
+                yusP.MR48_3(state); // 行移位
+                yusP.Sbox_3(state);   // S盒
+                yusP.MC48_3(state); // 列混淆
+                yusP.MR48_3(state); // 行移位
                 for (unsigned i = 0; i < BlockByte; i++)
                 {
                     state[i] = (state[i] + RoundKey[i]) % PlainMod;
@@ -708,7 +626,8 @@ int main()
     // 输出 context
     context->printout();
     std::cout << std::endl;
-
+    long Qbits = context->bitSizeOfQ();
+    long SecurityLevel = context->securityLevel();
     // 输出 securityLevel
     std::cout << "Security: " << context->securityLevel() << std::endl;
 
@@ -718,8 +637,8 @@ int main()
     auto end_keyEncryption = std::chrono::steady_clock::now();
     double keyEncryption = std::chrono::duration<double>(end_keyEncryption - start_keyEncryption).count();
     std::cout << "SymKey FHE time: " << keyEncryption << "s\n";
-    //return 0;
-    // 解密验证
+    // return 0;
+    //  解密验证
     if (!verify_encryptSymKey(encryptedSymKey, SymKey, secretKey, ea))
     {
         return 0;
@@ -743,7 +662,7 @@ int main()
     }
 
     vector<ZZX> encodedXset;
-    encodeTo32Ctxt(encodedXset, Xset, ea); // encode as HE plaintext
+    encodeTo48Ctxt(encodedXset, Xset, ea); // encode as HE plaintext
     if (Rkflag)
     {
         for (int i = 0; i < eRk_len; i++)
@@ -762,7 +681,7 @@ int main()
     double RoundKeySet_FHE_time = std::chrono::duration<double>(end_RoundKeySet_FHE - start_RoundKeySet_FHE).count();
     std::cout << "RoundKeySet FHE succeeded! Time: " << RoundKeySet_FHE_time << "s\n";
     // // 使用 verifyDecryption 函数解密并验证 RoundKeySet
-    // if (!verifyDecryption32(encryptedRoundKeySet, RoundKeySet, secretKey, ea))
+    // if (!verifyDecryption48(encryptedRoundKeySet, RoundKeySet, secretKey, ea))
     // {
     //     std::cerr << "Decryption verification failed for RoundKeySet." << std::endl;
     //     return 0;
@@ -784,7 +703,7 @@ int main()
     }
     // 对expanded进行simd编码，这样会返回nRoundKeys个多项式数组即encoded，nRoundKeys=encoded.length()
     vector<ZZX> encoded_expandedIV;
-    encodeTo32Ctxt(encoded_expandedIV, expandedIV, ea); // encode as HE plaintext
+    encodeTo48Ctxt(encoded_expandedIV, expandedIV, ea); // encode as HE plaintext
 
     std::cout << "whiteround start" << std::endl;
     auto start_roundkey = std::chrono::high_resolution_clock::now();
@@ -804,12 +723,13 @@ int main()
     //     KeyStream2[i] = (expandedIV[i] + RoundKeySet[i]) % PlainMod;
     // }
     // // 使用 verifyDecryption 函数解密并验证 KeyStream
-    // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+    // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
     // {
     //     std::cerr << "Decryption verification failed for KeyStream." << std::endl;
     //     return 0;
     // }
     // std::cout << "Decryption verification succeeded for whiteround." << std::endl;
+    
 
     auto start_sbox = std::chrono::high_resolution_clock::now();
     auto start_linear = std::chrono::high_resolution_clock::now();
@@ -832,14 +752,14 @@ int main()
         //     {
         //         tmp[j] = KeyStream2[i * BlockByte + j];
         //     }
-        //     yusP.MC32_2(tmp);
-        //     yusP.MR32_2(tmp);
+        //     yusP.MC48_3(tmp);
+        //     yusP.MR48_3(tmp);
         //     for (int j = 0; j < BlockByte; j++)
         //     {
         //         KeyStream2[i * BlockByte + j] = tmp[j];
         //     }
         // }
-        // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+        // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
         // {
         //     std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
         //     return 0;
@@ -851,13 +771,13 @@ int main()
         end_sbox = std::chrono::high_resolution_clock::now();
         sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
 
-        // yusP.Sbox(KeyStream2);
-        // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+        // yusP.Sbox_3(KeyStream2);
+        // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
         // {
-        //     std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
+        //     std::cerr << "Decryption verification failed for KeyStream Sbox_3." << std::endl;
         //     return 0;
         // }
-        // std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
+        // std::cout << "Decryption verification succeeded for KeyStream Sbox_3." << std::endl;
         start_roundkey = std::chrono::high_resolution_clock::now();
         // #pragma omp parallel for
         for (long j = 0; j < BlockByte; j++)
@@ -870,7 +790,7 @@ int main()
         // {
         //     KeyStream2[i] = (KeyStream2[i] + RoundKeySet[r * PlainByte + i]) % PlainMod;
         // }
-        // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+        // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
         // {
         //     std::cerr << "Decryption verification failed for KeyStream Round Key Addition." << std::endl;
         //     return 0;
@@ -892,14 +812,14 @@ int main()
     //     {
     //         tmp[j] = KeyStream2[i * BlockByte + j];
     //     }
-    //     yusP.MC32_2(tmp);
-    //     yusP.MR32_2(tmp);
+    //     yusP.MC48_3(tmp);
+    //     yusP.MR48_3(tmp);
     //     for (int j = 0; j < BlockByte; j++)
     //     {
     //         KeyStream2[i * BlockByte + j] = tmp[j];
     //     }
     // }
-    // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+    // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
     // {
     //     std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
     //     return 0;
@@ -910,13 +830,13 @@ int main()
     HE_Sbox(encryptedKeyStream);
     end_sbox = std::chrono::high_resolution_clock::now();
     sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
-    // yusP.Sbox(KeyStream2);
-    // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+    // yusP.Sbox_3(KeyStream2);
+    // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
     // {
-    //     std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
+    //     std::cerr << "Decryption verification failed for KeyStream Sbox_3." << std::endl;
     //     return 0;
     // }
-    // std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
+    // std::cout << "Decryption verification succeeded for KeyStream Sbox_3." << std::endl;
     start_linear = std::chrono::high_resolution_clock::now();
     // MC Layer + MR Layer
     HE_MC_MR(encryptedKeyStream);
@@ -929,14 +849,14 @@ int main()
     //     {
     //         tmp[j] = KeyStream2[i * BlockByte + j];
     //     }
-    //     yusP.MC32_2(tmp);
-    //     yusP.MR32_2(tmp);
+    //     yusP.MC48_3(tmp);
+    //     yusP.MR48_3(tmp);
     //     for (int j = 0; j < BlockByte; j++)
     //     {
     //         KeyStream2[i * BlockByte + j] = tmp[j];
     //     }
     // }
-    // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+    // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
     // {
     //     std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
     //     return 0;
@@ -954,7 +874,7 @@ int main()
     // {
     //     KeyStream2[i] = (KeyStream2[i] + RoundKeySet[Nr * PlainByte + i]) % PlainMod;
     // }
-    // if (!verifyDecryption32(encryptedKeyStream, KeyStream2, secretKey, ea))
+    // if (!verifyDecryption48(encryptedKeyStream, KeyStream2, secretKey, ea))
     // {
     //     std::cerr << "Decryption verification failed for KeyStream Round Key Addition." << std::endl;
     //     return 0;
@@ -963,7 +883,7 @@ int main()
 
     // 输出 roundkey_time、sbox_time、linear_layer_time
     std::cout << "RoundKey time: " << roundkey_time << "s\n";
-    std::cout << "Sbox time: " << sbox_time << "s\n";
+    std::cout << "Sbox_3 time: " << sbox_time << "s\n";
     std::cout << "Linear Layer time: " << linear_layer_time << "s\n";
     // 计算总时间
     double total_time = roundkey_time + sbox_time + linear_layer_time + RoundKeySet_FHE_time;
@@ -976,15 +896,23 @@ int main()
     {
         encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
     }
-    if (!verifyDecryption32(encryptedKeyStream, KeyStream, secretKey, ea))
+    if (!verifyDecryption48(encryptedKeyStream, KeyStream, secretKey, ea))
     {
         std::cerr << "Decryption verification failed for KeyStream." << std::endl;
         return 0;
     }
     std::cout << "Decryption verification succeeded for KeyStream." << std::endl;
     // 将total_time, throughput, Nr, p, nslots, bits, c, roundkey_time, sbox_time, linear_layer_time, RoundKeySet_FHE_time写入文件test_Yus_p_C32_ClientAndServer2.txt,如果已存在则追加
-    // 指定文件路径
-    std::string filePath = "../tests/test_Yus_p_C32_ClientAndServer2.txt";
+    // 检查路径是否存在
+    std::string dirPath = "../tests";
+    std::string filePath;
+    if (!fs::exists(dirPath)) {
+       filePath = "test_Yus_p_C48_ClientAndServer3.txt"; 
+    }
+    else
+    {
+        filePath = "../tests/test_Yus_p_C48_ClientAndServer3.txt";
+    }
     std::ofstream outfile(filePath, std::ios::app);
     if (!outfile)
     {
@@ -994,16 +922,18 @@ int main()
     outfile << std::left << std::setw(20) << total_time
             << std::left << std::setw(20) << throughput
             << std::left << std::setw(10) << Nr
-            << std::left << std::setw(20) << p
-            << std::left << std::setw(20) << nslots
+            << std::left << std::setw(15) << p
+            << std::left << std::setw(15) << nslots
             << std::left << std::setw(15) << bits
             << std::left << std::setw(10) << c
+            << std::left << std::setw(15) << Qbits
+            << std::left << std::setw(15) << SecurityLevel
             << std::left << std::setw(20) << roundkey_time
             << std::left << std::setw(20) << sbox_time
             << std::left << std::setw(20) << linear_layer_time
             << std::left << std::setw(20) << RoundKeySet_FHE_time
             << std::endl;
     outfile.close();
-    std::cout << "test_Yus_p_C32_ClientAndServer2.txt updated." << std::endl;
+    std::cout << "test_Yus_p_C48_ClientAndServer3.txt updated." << std::endl;
     return 0;
 }

@@ -7,9 +7,14 @@
 #include <vector>
 #include <cmath>
 
-class YusP {
+class YusP
+{
 public:
     explicit YusP(long plainMod) : PlainMod(plainMod) {}
+    // MC32和MR32是老师第一个版本,MC_MR是合成
+    // MC32_2和MR32_2是老师第二个版本
+    // MC64和MR64是我对老师第一个版本的扩展
+    // 第一个版本和第二个版本的s盒都是Sbox,我对第一个版本拓展也是
 
     void MC32(std::vector<long> &A);
     void MR32(std::vector<long> &A);
@@ -19,6 +24,9 @@ public:
     void MC64(std::vector<long> &A);
     void MR64(std::vector<long> &A);
     void Sbox(std::vector<long> &A);
+    void MC48_3(std::vector<long> &A);
+    void MR48_3(std::vector<long> &A);
+    void Sbox_3(std::vector<long> &A);
 
 private:
     long PlainMod;
