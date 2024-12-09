@@ -22,6 +22,7 @@ else()
     message("helib ${HELIB_VERSION} have found.)")
 endif()
 
+
 # 添加 OpenMP 支持
 find_package(OpenMP REQUIRED)
 if (OpenMP_CXX_FOUND)

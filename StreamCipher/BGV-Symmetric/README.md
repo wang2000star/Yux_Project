@@ -6,7 +6,7 @@
 
 * Ubuntu-22.04
 * 依赖项
-
+  
   ```bash
   sudo apt update
   sudo apt install build-essential
@@ -27,7 +27,7 @@
   ```bash
   getconf GNU_LIBPTHREAD_VERSION
   ```
-  
+
 * git >= 1.83
 
   版本查看：
@@ -60,7 +60,7 @@ git --version
   ```bash
   g++ --version
   ```
-
+  
 * cmake >= 3.30
 
   版本查看：
@@ -181,30 +181,24 @@ wget https://github.com/homenc/HElib/archive/refs/tags/v2.3.0.tar.gz
 tar -xf v2.3.0.tar.gz
 rm v2.3.0.tar.gz
 cd HElib-2.3.0
+#错误排查：HElib-2.3.0文件夹里面的VERSION需要编辑为2.3.0
 mkdir build
 cd build
+# 开始构建安装
+（带测试的构建）
+cmake -DGMP_DIR=/usr/local -DNTL_DIR=/usr/local -DENABLE_TEST=ON ..
+（不带测试的构建）
+cmake -DGMP_DIR=/usr/local -DNTL_DIR=/usr/local ..
 
-（方法1）
-cmake -DPACKAGE_BUILD=ON -DENABLE_TEST=ON ..
-make
-ctest
-sudo make install
-
-（方法2）
-cmake -DPACKAGE_BUILD=ON -DENABLE_TEST=ON -DCMAKE_INSTALL_PREFIX=/home/Alice/helib_install ..
-make
 make -j$(nproc)
-ctest
-make install
+ctest #如果带测试构建了，可以选择这一步进行测试，就是较慢，
 
+sudo make install
 # 更新动态链接库缓存
 sudo ldconfig
-export PATH=/home/Alice/helib_install/bin:$PATH
-export LD_LIBRARY_PATH=/home/Alice/helib_install/lib:$LD_LIBRARY_PATH
-
 ```
 
-错误排查：HElib-2.3.0文件夹里面的VERSION需要编辑为2.3.0
+错误排查：如果没有更改VERSION就make install，可以尝试下面修改方式，仅供参考
 
 helib_pack/share/cmake/helib里面的：
 
@@ -249,7 +243,11 @@ else()
 endif()
 ```
 
-本人强烈推荐的一个安装教程：[安装HElib并运行示例程序](https://blog.csdn.net/baishuiniyaonulia/article/details/122737035)
+本人强烈推荐的两个安装教程：
+
+[Building and installing HElib](https://zpan-pam.oss-cn-shanghai.aliyuncs.com/video/INSTALL.pdf)：这个教程比较全面
+
+[安装HElib并运行示例程序](https://blog.csdn.net/baishuiniyaonulia/article/details/122737035)：这个教程也可以参考看看
 
 测试：
 

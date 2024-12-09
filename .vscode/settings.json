@@ -83,5 +83,5 @@
         "shared_mutex": "cpp",
         "*.ipp": "cpp"
     },
-    "cmake.sourceDirectory": "/home/wfz/Yux/TFHE/CBSmode/test/axell"
+    "cmake.sourceDirectory": "/home/wangfangzhen/Yux_Project/StreamCipher/BGV-Symmetric"
 }
