@@ -1,6 +1,8 @@
 Yux/CMakeFiles/homoYux2.dir/Yux2.cpp.o: \
- /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.cpp /usr/include/stdc-predef.h \
- /home/wfz/Yux/TFHE/CBSmode/Yux/Yux2.hpp /usr/include/c++/11/cstring \
+ /home/wfz/Yux_Project/TFHE/CBSmode/Yux/Yux2.cpp \
+ /usr/include/stdc-predef.h \
+ /home/wfz/Yux_Project/TFHE/CBSmode/Yux/Yux2.hpp \
+ /usr/include/c++/11/cstring \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \

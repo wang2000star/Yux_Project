@@ -1,1 +1,0 @@
-../mpn/x86_64/alderlake/mul_basecase.asm

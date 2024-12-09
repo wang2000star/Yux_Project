@@ -1,1 +1,0 @@
-../mpn/x86_64/coreibwl/sbpi1_bdiv_r.asm

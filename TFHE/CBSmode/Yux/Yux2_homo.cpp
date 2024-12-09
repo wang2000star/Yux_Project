@@ -3,7 +3,7 @@
 #include <iostream>
 #include <random>
 #include <tfhe++.hpp>
-#include <omp.h>
+//#include <omp.h>
 #include <immintrin.h> // 包含 SIMD 指令集
 #include <array>
 #include <vector>
@@ -921,16 +921,19 @@ int main()
         }
         // 记录解密验证时间
         start2 = std::chrono::system_clock::now();
-        if (0)//是否开启线性自举
+        if (1)//是否开启线性自举
         {
-            #pragma omp parallel for
+            //#pragma omp parallel for
+            auto time00 = std::chrono::system_clock::now();
             for (int i = 0; i < 16; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
+
                     TFHEpp::SM4_CircuitBootstrappingFFT<iksP, bkP, privksP>(bootedTRGSW[i][j], cipher[i][j], ek);
                 }
             }
+            
             for (int i = 0; i < 16; i++)
             {
                 CipherSubBytesMixedPacking(lut_result[i], Table5, bootedTRGSW[i]);
@@ -953,6 +956,8 @@ int main()
                     TFHEpp::IdentityKeySwitch<iksP>(cipher[i][j], Sbox_value[i][j], ek.getiksk<iksP>());
                 }
             }
+            auto time01 = std::chrono::system_clock::now();
+            std::cout << "第" << r << "轮cruitBootstrap用时：" << std::chrono::duration<double>(time01 - time00).count() << "s" << std::endl;
         }
         // 记录时间
         end2 = std::chrono::system_clock::now();

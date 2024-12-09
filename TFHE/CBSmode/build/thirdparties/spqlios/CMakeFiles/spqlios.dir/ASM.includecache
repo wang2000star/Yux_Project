@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s
+/home/wfz/Yux_Project/TFHE/CBSmode/thirdparties/spqlios/spqlios-fft-fma.s
 
-/home/wfz/Yux/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s
+/home/wfz/Yux_Project/TFHE/CBSmode/thirdparties/spqlios/spqlios-ifft-fma.s
 
