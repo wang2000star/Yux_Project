@@ -32,18 +32,18 @@ def add_to_set(N, intersection, num, sets):
     for r in intersection:
         sets[N][num].append(r)
 
-def check_intersections(sets,NN,colM,Max):
+def check_intersections(sets,setsN,NN,colM,Max,sumNNMax):
+    sum_max=0
     if NN == 2:
-        sum_max=0
-        for i1 in range(2,8-(NN-1)):
-            for i2 in range(i1,8-(NN-2)):
-                flag = 0
+        for i1 in range(0,setsN):
+            flag = 0
+            for i2 in range(i1,setsN): 
                 for x1 in sets[i1]:
                     for x2 in sets[i2]:
                         if len(set(x1))+len(set(x2)) > colM:
                             continue
                         if len(set(x1) & set(x2)) == 0:
-                            sum = Max[i1-2] + Max[i2-2]
+                            sum = Max[i1] + Max[i2]
                             if sum_max < sum:
                                 sum_max = sum
                                 flag = 1
@@ -52,22 +52,33 @@ def check_intersections(sets,NN,colM,Max):
                                 print(x1)
                                 print(x2)
                                 print("************************")
+                                if i1<setsN-1:
+                                    if sum_max > NN*Max[i1+1]: 
+                                        return sum_max
+                                    break
                                 break
                     if flag == 1:
                         break
+                if flag == 1:
+                    break
     if NN == 3: 
-        sum_max = 0 
-        for i1 in range(2,8-(NN-1)):
-            for i2 in range(i1,8-(NN-2)):
-                for i3 in range(i2,8-(NN-3)):
-                    flag = 0
+        for i1 in range(0,setsN):
+            if NN * Max[i1] < sumNNMax:
+                return sum_max 
+            for i2 in range(i1,setsN):
+                if Max[i1] + (NN-1)*Max[i2] < sumNNMax:
+                    break
+                flag = 0
+                for i3 in range(i2,setsN): 
+                    if Max[i1] + Max[i2] + Max[i3] < sumNNMax:
+                        break
                     for x1 in sets[i1]:
                         for x2 in sets[i2]:
                             for x3 in sets[i3]:
                                 if len(set(x1))+len(set(x2))+len(set(x3)) > colM:
                                     continue
                                 if len(set(x1) & set(x2)) == 0 and len(set(x1) & set(x3)) == 0 and len(set(x2) & set(x3)) == 0:     
-                                    sum = Max[i1-2] + Max[i2-2] + Max[i3-2]
+                                    sum = Max[i1] + Max[i2] + Max[i3]
                                     if sum_max < sum:
                                         sum_max = sum
                                         flag = 1
@@ -77,16 +88,31 @@ def check_intersections(sets,NN,colM,Max):
                                         print(x2)
                                         print(x3)
                                         print("************************")
-                                    break
+                                        if i1 < setsN-1:
+                                            if sum_max > NN*Max[i1+1]:
+                                                return sum_max
+                                            break
+                                        break        
                             if flag == 1:
                                 break
                         if flag == 1:
                             break
-    if NN == 4:
-        for i1 in range(2,8-(NN-1)):
-            for i2 in range(2,8-(NN-2)):
-                for i3 in range(2,8-(NN-3)):
-                    for i4 in range(2,8-(NN-4)):
+                    if flag == 1:
+                        break
+    if NN == 4: 
+        for i1 in range(0,setsN):
+            if NN * Max[i1] < sumNNMax:
+                return sum_max 
+            for i2 in range(i1,setsN):
+                if Max[i1] + (NN-1)*Max[i2] < sumNNMax:
+                    break
+                for i3 in range(i2,setsN):
+                    if Max[i1] + Max[i2] + (NN-2)*Max[i3] < sumNNMax:
+                        break
+                    flag = 0
+                    for i4 in range(i3,setsN):
+                        if Max[i1] + Max[i2] + Max[i3] + Max[i4] < sumNNMax:
+                            break
                         for x1 in sets[i1]:
                             for x2 in sets[i2]:
                                 for x3 in sets[i3]:
@@ -94,38 +120,134 @@ def check_intersections(sets,NN,colM,Max):
                                         if len(set(x1))+len(set(x2))+len(set(x3))+len(set(x4)) > colM:
                                             continue
                                         if len(set(x1) & set(x2)) == 0 and len(set(x1) & set(x3)) == 0 and len(set(x1) & set(x4)) == 0 and len(set(x2) & set(x3)) == 0 and len(set(x2) & set(x4)) == 0 and len(set(x3) & set(x4)) == 0:
-                                            print(x1)
-                                            print(x2)
-                                            print(x3)
-                                            print(x4)
-                                            print("************************")
-                                            return
+                                            sum = Max[i1] + Max[i2] + Max[i3] + Max[i4]
+                                            if sum_max < sum:
+                                                sum_max = sum
+                                                flag = 1
+                                                print(sum)
+                                                print(i1,i2,i3,i4)
+                                                print(x1)
+                                                print(x2)
+                                                print(x3)
+                                                print(x4)
+                                                print("************************")
+                                                if i1 < setsN-1:
+                                                    if sum_max > NN*Max[i1+1]:
+                                                        return sum_max
+                                                    break 
+                                                break
+                                    if flag == 1:
+                                        break        
+                                if flag == 1:
+                                    break
+                            if flag == 1:
+                                break
+                        if flag == 1:
+                            break
+    if NN == 5:
+        for i1 in range(0,setsN):
+            if NN * Max[i1] < sumNNMax:
+                return sum_max 
+            for i2 in range(i1,setsN):
+                if Max[i1] + (NN-1)*Max[i2] < sumNNMax:
+                    break
+                for i3 in range(i2,setsN):
+                    if Max[i1] + Max[i2] + (NN-2)*Max[i3] < sumNNMax:
+                        break
+                    for i4 in range(i3,setsN):
+                        if Max[i1] + Max[i2] + Max[i3] + (NN-3)*Max[i4] < sumNNMax:
+                            break
+                        flag = 0
+                        for i5 in range(i4,setsN):
+                            if Max[i1] + Max[i2] + Max[i3] + Max[i4] + Max[i5] < sumNNMax:
+                                break
+                            for x1 in sets[i1]:
+                                for x2 in sets[i2]:
+                                    for x3 in sets[i3]:
+                                        for x4 in sets[i4]:
+                                            for x5 in sets[i5]:
+                                                if len(set(x1))+len(set(x2))+len(set(x3))+len(set(x4))+len(set(x5)) > colM:
+                                                    continue
+                                                if len(set(x1) & set(x2)) == 0 and len(set(x1) & set(x3)) == 0 and len(set(x1) & set(x4)) == 0 and len(set(x1) & set(x5)) == 0 and len(set(x2) & set(x3)) == 0 and len(set(x2) & set(x4)) == 0 and len(set(x2) & set(x5)) == 0 and len(set(x3) & set(x4)) == 0 and len(set(x3) & set(x5)) == 0 and len(set(x4) & set(x5)) == 0:
+                                                    sum = Max[i1] + Max[i2] + Max[i3] + Max[i4] + Max[i5]
+                                                    if sum_max < sum:
+                                                        sum_max = sum
+                                                        flag = 1
+                                                        print(sum)
+                                                        print(i1,i2,i3,i4,i5)
+                                                        print(x1)
+                                                        print(x2)
+                                                        print(x3)
+                                                        print(x4)
+                                                        print(x5)
+                                                        print("************************")
+                                                        if i1 < setsN-1:
+                                                            if sum_max > NN*Max[i1+1]:
+                                                                return sum_max
+                                                            break
+                                                        break
+                                            if flag == 1:
+                                                    break
+                                        if flag == 1:
+                                            break
+                                    if flag == 1:
+                                        break
+                                if flag == 1:
+                                    break
+                            if flag == 1:
+                                break
+    return sum_max
 
-M = [
-    [ 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1 ],
-    [ 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0 ],
-    [ 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0 ],
-    [ 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0 ],
-    [ 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1 ],
-    [ 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0 ],
-    [ 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1 ],
-    [ 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1 ],
-    [ 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1 ],
-    [ 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0 ],
-    [ 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1 ]
-]
+M =[
+    [ 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1 ],
+    [ 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1 ],
+    [ 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0 ],
+    [ 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0 ],
+    [ 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0 ],
+    [ 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 ],
+    [ 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1 ],
+    [ 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0 ],
+    [ 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0 ],
+    [ 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1 ],
+    [ 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0 ],
+    [ 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1 ],
+    [ 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0 ],
+    [ 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0 ],
+    [ 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1 ],
+    [ 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1 ],
+    [ 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0 ],
+    [ 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0 ],
+    [ 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1 ],
+    [ 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1 ],
+    [ 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1 ],
+    [ 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0 ],
+    [ 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0 ],
+    [ 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1 ],
+    [ 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1 ],
+    [ 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0 ],
+    [ 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1 ],
+    [ 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0 ],
+    [ 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1 ],
+    [ 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0 ],
+    [ 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1 ],
+    [ 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0 ],
+    [ 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0 ],
+    [ 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1 ],
+    [ 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0 ],
+    [ 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0 ]
+];
 
-RowM = 12
-ColM = 12
+RowM = 32
+ColM = 32
 Index = IndexOfoneInMatrix(M, RowM, ColM)
 
 # 初始化集合
-sets = {2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
-Max = []
 
+sets = {2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9:[], 10:[], 11:[]}
+Max = []
+setsN = 12
 # 测试不同的 N 值
-for N in range(2, RowM + 1):
+for N in range(2, setsN):
     max_index_len, max_combinations = find_max_submatrix(Index, N)
     if max_index_len == 0:
         break
@@ -134,17 +256,35 @@ for N in range(2, RowM + 1):
     print(f"最大子矩阵大小: {max_index_len}")
     num = 0
     for combination in max_combinations:
-        print(f"行组合: {combination}")
+        #print(f"行组合: {combination}")
         intersection = set(Index[combination[0]])
         for row in combination[1:]:
             intersection &= set(Index[row])
-        print(f"列组合: {list(intersection)}")
+        #print(f"列组合: {list(intersection)}")
         add_to_set(N, intersection, num, sets)
         num += 1
 
+# 获取排序后的下标（递减排序）
+index = sorted(range(len(Max)), key=lambda i: Max[i], reverse=True)
+sortMax = sorted(Max, reverse=True)
+sortsets = {}
+num =0
+for i in index:
+    sortsets.update({num: sets[i+2]})
+    num += 1
 # 检查交集
-
+sum2Max = sortMax[0] + sortMax[1]
+print("sum2max",sum2Max)
+NN = 2
+sum2Max = check_intersections(sortsets,setsN-2,NN,ColM,sortMax,sum2Max)
+print("sum2max",sum2Max)
 NN = 3
-flag = 0
-
-check_intersections(sets,NN,ColM,Max)
+sum3Max = check_intersections(sortsets,setsN-2,NN,ColM,sortMax,sum2Max)
+print("sum3max",sum3Max)
+NN = 4
+sum4Max = check_intersections(sortsets,setsN-2,NN,ColM,sortMax,sum3Max)
+print("sum4max",sum4Max)
+NN = 5
+sum5Max = check_intersections(sortsets,setsN-2,NN,ColM,sortMax,sum4Max)
+print("sum5max",sum5Max)
+#这个函数可以优化一下，设置终止条件，比如最大值一定小于某个值
