@@ -29,10 +29,10 @@ def find_prime_numbers(p_min, p_max, n_min, N):
     return primes
 
 # 示例输入
-p_min = 2**16  # 最小 p 的值, p=k*2^n+1,k是奇数
-p_max = 2**17  # 最大 p 的值
-n_min = 15    # 最小 n 的值
-N = 100       # 找到的素数个数
+p_min = 2**12  # 最小 p 的值, p=k*2^n+1,k是奇数
+p_max = 2**24  # 最大 p 的值
+n_min = 12    # 最小 n 的值
+N = 10000       # 找到的素数个数
 
 # 调用函数
 primes = find_prime_numbers(p_min, p_max, n_min, N)

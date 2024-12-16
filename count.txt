@@ -1,0 +1,135 @@
+eData[id0] += temp[id2];
+        eData[id0] += temp[id4];
+        eData[id0] += temp[id8];
+        eData[id0] += temp[id9];
+        eData[id0] += temp[id11];
+        eData[id0] += temp[id12];
+        eData[id0] += temp[id13];
+
+        eData[id1] += temp[id0];
+        eData[id1] += temp[id3];
+        eData[id1] += temp[id4];
+        eData[id1] += temp[id7];
+        eData[id1] += temp[id8];
+        eData[id1] += temp[id10];
+        eData[id1] += temp[id11];
+        eData[id1] += temp[id15];
+
+        eData[id2] += temp[id0];
+        eData[id2] += temp[id1];
+        eData[id2] += temp[id5];
+        eData[id2] += temp[id6];
+        eData[id2] += temp[id7];
+        eData[id2] += temp[id8];
+        eData[id2] += temp[id10];
+        eData[id2] += temp[id13];
+        eData[id2] += temp[id15];
+
+        eData[id3] = temp[id1];
+        eData[id3] += temp[id2];
+        eData[id3] += temp[id6];
+        eData[id3] += temp[id7];
+        eData[id3] += temp[id8];
+        eData[id3] += temp[id14];
+
+        eData[id4] += temp[id0];
+        eData[id4] += temp[id6];
+        eData[id4] += temp[id8];
+        eData[id4] += temp[id9];
+        eData[id4] += temp[id12];
+        eData[id4] += temp[id13];
+        eData[id4] += temp[id15];
+
+        eData[id5] += temp[id0];
+        eData[id5] += temp[id3];
+        eData[id5] += temp[id4];
+        eData[id5] += temp[id7];
+        eData[id5] += temp[id11];
+        eData[id5] += temp[id12];
+        eData[id5] += temp[id14];
+        eData[id5] += temp[id15];
+
+        eData[id6] += temp[id1];
+        eData[id6] += temp[id2];
+        eData[id6] += temp[id3];
+        eData[id6] += temp[id4];
+        eData[id6] += temp[id5];
+        eData[id6] += temp[id9];
+        eData[id6] += temp[id11];
+        eData[id6] += temp[id12];
+        eData[id6] += temp[id14];
+
+        eData[id7] = temp[id2];
+        eData[id7] += temp[id3];
+        eData[id7] += temp[id5];
+        eData[id7] += temp[id6];
+        eData[id7] += temp[id10];
+        eData[id7] += temp[id12];
+
+        eData[id8] += temp[id0];
+        eData[id8] += temp[id1];
+        eData[id8] += temp[id3];
+        eData[id8] += temp[id4];
+        eData[id8] += temp[id5];
+        eData[id8] += temp[id10];
+        eData[id8] += temp[id12];
+
+        eData[id9] += temp[id0];
+        eData[id9] += temp[id2];
+        eData[id9] += temp[id3];
+        eData[id9] += temp[id7];
+        eData[id9] += temp[id8];
+        eData[id9] += temp[id11];
+        eData[id9] += temp[id12];
+        eData[id9] += temp[id15];
+
+        eData[id10] += temp[id0];
+        eData[id10] += temp[id2];
+        eData[id10] += temp[id5];
+        eData[id10] += temp[id7];
+        eData[id10] += temp[id8];
+        eData[id10] += temp[id9];
+        eData[id10] += temp[id13];
+        eData[id10] += temp[id14];
+        eData[id10] += temp[id15];
+
+        eData[id11] = temp[id0];
+        eData[id11] += temp[id6];
+        eData[id11] += temp[id9];
+        eData[id11] += temp[id10];
+        eData[id11] += temp[id14];
+        eData[id11] += temp[id15];
+
+        eData[id12] += temp[id0];
+        eData[id12] += temp[id1];
+        eData[id12] += temp[id4];
+        eData[id12] += temp[id5];
+        eData[id12] += temp[id7];
+        eData[id12] += temp[id8];
+        eData[id12] += temp[id14];
+
+        eData[id13] += temp[id3];
+        eData[id13] += temp[id4];
+        eData[id13] += temp[id6];
+        eData[id13] += temp[id7];
+        eData[id13] += temp[id8];
+        eData[id13] += temp[id11];
+        eData[id13] += temp[id12];
+        eData[id13] += temp[id15];
+
+        eData[id14] += temp[id1];
+        eData[id14] += temp[id3];
+        eData[id14] += temp[id4];
+        eData[id14] += temp[id6];
+        eData[id14] += temp[id9];
+        eData[id14] += temp[id10];
+        eData[id14] += temp[id11];
+        eData[id14] += temp[id12];
+        eData[id14] += temp[id13];
+
+        eData[id15] = temp[id2];
+        eData[id15] += temp[id4];
+        eData[id15] += temp[id10];
+        eData[id15] += temp[id11];
+        eData[id15] += temp[id13];
+        eData[id15] += temp[id14];
