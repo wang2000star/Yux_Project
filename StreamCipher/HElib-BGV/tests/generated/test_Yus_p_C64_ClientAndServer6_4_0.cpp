@@ -642,7 +642,7 @@ void HE_MC_MR(vector<Ctxt> &eData)
         eData[id15] += temp13_14;
     }
 }
-// Compute the constants for Sbox_3,(x0,x1,x2)——>(x0,x0*x2+x1,-x0*x1+x0*x2+x2)
+// Compute Sbox
 void HE_Sbox(vector<Ctxt> &eData)
 {
     // for (int i = 0; i < eData.size(); i++)

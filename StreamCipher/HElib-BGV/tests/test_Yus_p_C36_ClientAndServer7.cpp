@@ -39,24 +39,26 @@ namespace fs = std::filesystem;
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 // 更一般的，应该有d|ord_p(m)，slots=\phi(m)/ord_p(m)
 //!!!!!!!!!!!!!!!!
-constexpr long BlockByte = 64; // 分组字节长度
+constexpr long BlockByte = 36; // 分组字节长度
 // ===============模式设置================
-static bool Rkflag = 0;  // true/1表示乘法，false/0表示加法，指的是随机向量和密钥间的操作
-static bool deflag = 0;  // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
-static bool ompflag = 0; // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
+static bool Rkflag = 1;     // true/1表示乘法，false/0表示加法，指的是随机向量和密钥间的操作
+static bool deflag = 0;     // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
+static bool ompflag = 0;    // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
+static bool symkeyflag = 0; // true/1表示对称密钥同态解密验证加密，false/0表示不验证
+static bool plainflag = 0;  // true/1表示对称密文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
-static constexpr unsigned Nr = 8; // 轮数
-constexpr long idx = 0;
+static constexpr unsigned Nr = 4; // 轮数
+constexpr long idx = 2;
 constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
 // 硬编码参数值
 constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {// Nr = 4
      // {p, log2(m), bits, c}
-     {65537, 15, 200, 2},   // 0
-     {163841, 15, 250, 2},  // 1
-     {65537, 15, 300, 2},   // 2
-     {163841, 15, 300, 2},  // 3
+     {65537, 15, 230, 2},   // 0 *
+     {163841, 15, 240, 2},  // 1 
+     {65537, 14, 220, 2},   // 2 *
+     {163841, 14, 230, 2},  // 3 
      {65537, 15, 350, 2},   // 4
      {163841, 15, 350, 2},  // 5
      {65537, 15, 400, 2},   // 6
@@ -64,8 +66,8 @@ constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {
         // Nr = 5
         // {p, log2(m), bits, c}
-        {65537, 15, 250, 2},  // 0
-        {163841, 15, 300, 2}, // 1
+        {65537, 15, 240, 2},  // 0 *
+        {163841, 15, 280, 2}, // 1 
         {65537, 16, 300, 2},  // 2
         {65537, 16, 350, 2},  // 3
         {0, 0, 0, 0},         // 填充空位
@@ -76,9 +78,9 @@ constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {
         // Nr = 6
         // {p, log2(m), bits, c}
-        {65537, 15, 350, 2},  // 0
-        {163841, 15, 350, 2}, // 1
-        {65537, 16, 350, 2},// 2
+        {65537, 16, 340, 2}, // 0 *
+        {65537, 16, 360, 2}, // 
+        {65537, 16, 370, 2},
         {0, 0, 0, 0}, // 填充空位
         {0, 0, 0, 0}, // 填充空位
         {0, 0, 0, 0}, // 填充空位
@@ -88,26 +90,26 @@ constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {
         // Nr = 7
         // {p, log2(m), bits, c}
-        {65537, 16, 400, 2},
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}  // 填充空位
+        {65537, 16, 400, 2}, // 0 *
+        {0, 0, 0, 0},        // 填充空位
+        {0, 0, 0, 0},        // 填充空位
+        {0, 0, 0, 0},        // 填充空位
+        {0, 0, 0, 0},        // 填充空位
+        {0, 0, 0, 0},        // 填充空位
+        {0, 0, 0, 0},        // 填充空位
+        {0, 0, 0, 0}         // 填充空位
     },
     {
         // Nr = 8
         // {p, log2(m), bits, c}
-        {65537, 16, 450, 2},
-        {786433, 17, 450, 2},
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}  // 填充空位
+        {65537, 16, 430, 2}, // 0 *
+        {786433, 17, 450, 2}, // slots太大，不建议使用
+        {0, 0, 0, 0},         // 填充空位
+        {0, 0, 0, 0},         // 填充空位
+        {0, 0, 0, 0},         // 填充空位
+        {0, 0, 0, 0},         // 填充空位
+        {0, 0, 0, 0},         // 填充空位
+        {0, 0, 0, 0}          // 填充空位
     }};
 // p=k*m+1
 //  2^10=1024,2^11=2048,2^12=4096,2^13=8192,2^14=16384,2^15=32768,2^16=65536,
@@ -144,7 +146,8 @@ static const long counter_end = PlainBlock + counter_begin - 1; // 计数器结�
 
 YusP yusP(PlainMod); // 构建明文对称加密实例
 
-void encodeTo64Ctxt(vector<ZZX> &encData, const vector<long> &data, const EncryptedArray &ea)
+
+void encodeTo36Ctxt(vector<ZZX> &encData, const vector<long> &data, const EncryptedArray &ea)
 {
     long R = data.size() / PlainByte;
     long nCtxt = BlockByte * R;
@@ -169,8 +172,8 @@ void encodeTo64Ctxt(vector<ZZX> &encData, const vector<long> &data, const Encryp
         }
     }
 }
-// encodeTo64Ctxt对应的解码
-void decodeTo64Ctxt(vector<long> &data, const vector<vector<long>> &encData,
+// encodeTo36Ctxt对应的解码
+void decodeTo36Ctxt(vector<long> &data, const vector<vector<long>> &encData,
                     const EncryptedArray &ea)
 {
     long R = encData.size() / BlockByte;
@@ -193,19 +196,20 @@ void decodeTo64Ctxt(vector<long> &data, const vector<vector<long>> &encData,
 }
 // 函数：解密并验证密文是否正确，需要解码
 // 函数：解密并验证密文是否正确
-bool verifyDecryption64(const std::vector<Ctxt> &encryptedVec, const vector<long> &originalVec, const SecKey &secretKey,
+bool verifyDecryption36(const std::vector<Ctxt> &encryptedVec, const vector<long> &originalVec, const SecKey &secretKey,
                         const EncryptedArray &ea)
 {
     auto start_decrypt = std::chrono::steady_clock::now();
     vector<long> decryptedVec;
     std::vector<std::vector<long>> decryptedPolys(encryptedVec.size());
+    omp_set_num_threads(12); // 设置线程数为12
 #pragma omp parallel for
     for (std::size_t i = 0; i < encryptedVec.size(); ++i)
     {
         ea.decrypt(encryptedVec[i], secretKey, decryptedPolys[i]);
     }
     // 解码
-    decodeTo64Ctxt(decryptedVec, decryptedPolys, ea);
+    decodeTo36Ctxt(decryptedVec, decryptedPolys, ea);
     // 验证解密结果
     bool isDecryptedVecCorrect = std::equal(decryptedVec.begin(), decryptedVec.end(), originalVec.begin());
     auto end_decrypt = std::chrono::steady_clock::now();
@@ -240,6 +244,7 @@ bool verify_encryptSymKey(vector<Ctxt> &encryptedSymKey, const vector<long> &Sym
 {
     auto start_decrypt = std::chrono::steady_clock::now();
     vector<long> decryptedSymKey(BlockByte);
+    omp_set_num_threads(12); // 设置线程数为12
 #pragma omp parallel for
     for (long i = 0; i < BlockByte; i++)
     { // encrypt the encoded key
@@ -254,393 +259,713 @@ bool verify_encryptSymKey(vector<Ctxt> &encryptedSymKey, const vector<long> &Sym
     return isDecryptedSymKeyCorrect;
 }
 // Linear transformation
-
-void HE_MC_MR(vector<Ctxt> &eData)
+void HE_M(vector<Ctxt> &eData)
 {
     vector<Ctxt> temp = eData;
-    std::array<int, 16> index = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-    int s = 0;
-    int id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s,
-        id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s,
-        id8 = index[8] + s, id9 = index[9] + s, id10 = index[10] + s, id11 = index[11] + s,
-        id12 = index[12] + s, id13 = index[13] + s, id14 = index[14] + s, id15 = index[15] + s;
-    Ctxt temp0_1 = temp[id0];
-    temp0_1 += temp[id1];
-    Ctxt temp0_2 = temp[id0];
-    temp0_2 += temp[id2];
-    Ctxt temp1_2 = temp[id1];
-    temp1_2 += temp[id2];
+    Ctxt temp0_1 = temp[0];
+    temp0_1 += temp[1];
+    Ctxt temp0_2 = temp[0];
+    temp0_2 += temp[2];
+    Ctxt temp0_3 = temp[0];
+    temp0_3 += temp[3];
+    Ctxt temp1_2 = temp[1];
+    temp1_2 += temp[2];
+    Ctxt temp1_3 = temp[1];
+    temp1_3 += temp[3];
+    Ctxt temp2_3 = temp[2];
+    temp2_3 += temp[3];
     Ctxt temp0_1_2 = temp0_1;
-    temp0_1_2 += temp[id2];
-    Ctxt temp3_4 = temp[id3];
-    temp3_4 += temp[id4];
-    Ctxt temp3_5 = temp[id3];
-    temp3_5 += temp[id5];
-    Ctxt temp4_5 = temp[id4];
-    temp4_5 += temp[id5];
-    Ctxt temp3_4_5 = temp3_4;
-    temp3_4_5 += temp[id5];
-    Ctxt temp6_7 = temp[id6];
-    temp6_7 += temp[id7];
-    Ctxt temp6_8 = temp[id6];
-    temp6_8 += temp[id8];
-    Ctxt temp7_8 = temp[id7];
-    temp7_8 += temp[id8];
-    Ctxt temp6_7_8 = temp6_7;
-    temp6_7_8 += temp[id8];
-    Ctxt temp9_10 = temp[id9];
-    temp9_10 += temp[id10];
-    Ctxt temp9_11 = temp[id9];
-    temp9_11 += temp[id11];
-    Ctxt temp10_11 = temp[id10];
-    temp10_11 += temp[id11];
+    temp0_1_2 += temp[2];
+    Ctxt temp0_1_3 = temp0_1;
+    temp0_1_3 += temp[3];
+    Ctxt temp0_2_3 = temp0_2;
+    temp0_2_3 += temp[3];
+    Ctxt temp1_2_3 = temp1_2;
+    temp1_2_3 += temp[3];
+    Ctxt temp0_1_2_3 = temp0_1_2;
+    temp0_1_2_3 += temp[3];
+    Ctxt temp4_5 = temp[4];
+    temp4_5 += temp[5];
+    Ctxt temp4_6 = temp[4];
+    temp4_6 += temp[6];
+    Ctxt temp4_7 = temp[4];
+    temp4_7 += temp[7];
+    Ctxt temp5_6 = temp[5];
+    temp5_6 += temp[6];
+    Ctxt temp5_7 = temp[5];
+    temp5_7 += temp[7];
+    Ctxt temp6_7 = temp[6];
+    temp6_7 += temp[7];
+    Ctxt temp4_5_6 = temp4_5;
+    temp4_5_6 += temp[6];
+    Ctxt temp4_5_7 = temp4_5;
+    temp4_5_7 += temp[7];
+    Ctxt temp4_6_7 = temp4_6;
+    temp4_6_7 += temp[7];
+    Ctxt temp5_6_7 = temp5_6;
+    temp5_6_7 += temp[7];
+    Ctxt temp4_5_6_7 = temp4_5_6;
+    temp4_5_6_7 += temp[7];
+    Ctxt temp8_9 = temp[8];
+    temp8_9 += temp[9];
+    Ctxt temp8_10 = temp[8];
+    temp8_10 += temp[10];
+    Ctxt temp8_11 = temp[8];
+    temp8_11 += temp[11];
+    Ctxt temp9_10 = temp[9];
+    temp9_10 += temp[10];
+    Ctxt temp9_11 = temp[9];
+    temp9_11 += temp[11];
+    Ctxt temp10_11 = temp[10];
+    temp10_11 += temp[11];
+    Ctxt temp8_9_10 = temp8_9;
+    temp8_9_10 += temp[10];
+    Ctxt temp8_9_11 = temp8_9;
+    temp8_9_11 += temp[11];
+    Ctxt temp8_10_11 = temp8_10;
+    temp8_10_11 += temp[11];
     Ctxt temp9_10_11 = temp9_10;
-    temp9_10_11 += temp[id11];
-    Ctxt temp12_13 = temp[id12];
-    temp12_13 += temp[id13];
-    Ctxt temp12_14 = temp[id12];
-    temp12_14 += temp[id14];
-    Ctxt temp13_14 = temp[id13];
-    temp13_14 += temp[id14];
+    temp9_10_11 += temp[11];
+    Ctxt temp8_9_10_11 = temp8_9_10;
+    temp8_9_10_11 += temp[11];
+    Ctxt temp12_13 = temp[12];
+    temp12_13 += temp[13];
+    Ctxt temp12_14 = temp[12];
+    temp12_14 += temp[14];
+    Ctxt temp12_15 = temp[12];
+    temp12_15 += temp[15];
+    Ctxt temp13_14 = temp[13];
+    temp13_14 += temp[14];
+    Ctxt temp13_15 = temp[13];
+    temp13_15 += temp[15];
+    Ctxt temp14_15 = temp[14];
+    temp14_15 += temp[15];
     Ctxt temp12_13_14 = temp12_13;
-    temp12_13_14 += temp[id14];
+    temp12_13_14 += temp[14];
+    Ctxt temp12_13_15 = temp12_13;
+    temp12_13_15 += temp[15];
+    Ctxt temp12_14_15 = temp12_14;
+    temp12_14_15 += temp[15];
+    Ctxt temp13_14_15 = temp13_14;
+    temp13_14_15 += temp[15];
+    Ctxt temp12_13_14_15 = temp12_13_14;
+    temp12_13_14_15 += temp[15];
+    Ctxt temp16_17 = temp[16];
+    temp16_17 += temp[17];
+    Ctxt temp16_18 = temp[16];
+    temp16_18 += temp[18];
+    Ctxt temp16_19 = temp[16];
+    temp16_19 += temp[19];
+    Ctxt temp17_18 = temp[17];
+    temp17_18 += temp[18];
+    Ctxt temp17_19 = temp[17];
+    temp17_19 += temp[19];
+    Ctxt temp18_19 = temp[18];
+    temp18_19 += temp[19];
+    Ctxt temp16_17_18 = temp16_17;
+    temp16_17_18 += temp[18];
+    Ctxt temp16_17_19 = temp16_17;
+    temp16_17_19 += temp[19];
+    Ctxt temp16_18_19 = temp16_18;
+    temp16_18_19 += temp[19];
+    Ctxt temp17_18_19 = temp17_18;
+    temp17_18_19 += temp[19];
+    Ctxt temp16_17_18_19 = temp16_17_18;
+    temp16_17_18_19 += temp[19];
+    Ctxt temp20_21 = temp[20];
+    temp20_21 += temp[21];
+    Ctxt temp20_22 = temp[20];
+    temp20_22 += temp[22];
+    Ctxt temp20_23 = temp[20];
+    temp20_23 += temp[23];
+    Ctxt temp21_22 = temp[21];
+    temp21_22 += temp[22];
+    Ctxt temp21_23 = temp[21];
+    temp21_23 += temp[23];
+    Ctxt temp22_23 = temp[22];
+    temp22_23 += temp[23];
+    Ctxt temp20_21_22 = temp20_21;
+    temp20_21_22 += temp[22];
+    Ctxt temp20_21_23 = temp20_21;
+    temp20_21_23 += temp[23];
+    Ctxt temp20_22_23 = temp20_22;
+    temp20_22_23 += temp[23];
+    Ctxt temp21_22_23 = temp21_22;
+    temp21_22_23 += temp[23];
+    Ctxt temp20_21_22_23 = temp20_21_22;
+    temp20_21_22_23 += temp[23];
+    Ctxt temp24_25 = temp[24];
+    temp24_25 += temp[25];
+    Ctxt temp24_26 = temp[24];
+    temp24_26 += temp[26];
+    Ctxt temp24_27 = temp[24];
+    temp24_27 += temp[27];
+    Ctxt temp25_26 = temp[25];
+    temp25_26 += temp[26];
+    Ctxt temp25_27 = temp[25];
+    temp25_27 += temp[27];
+    Ctxt temp26_27 = temp[26];
+    temp26_27 += temp[27];
+    Ctxt temp24_25_26 = temp24_25;
+    temp24_25_26 += temp[26];
+    Ctxt temp24_25_27 = temp24_25;
+    temp24_25_27 += temp[27];
+    Ctxt temp24_26_27 = temp24_26;
+    temp24_26_27 += temp[27];
+    Ctxt temp25_26_27 = temp25_26;
+    temp25_26_27 += temp[27];
+    Ctxt temp24_25_26_27 = temp24_25_26;
+    temp24_25_26_27 += temp[27];
+    Ctxt temp28_29 = temp[28];
+    temp28_29 += temp[29];
+    Ctxt temp28_30 = temp[28];
+    temp28_30 += temp[30];
+    Ctxt temp28_31 = temp[28];
+    temp28_31 += temp[31];
+    Ctxt temp29_30 = temp[29];
+    temp29_30 += temp[30];
+    Ctxt temp29_31 = temp[29];
+    temp29_31 += temp[31];
+    Ctxt temp30_31 = temp[30];
+    temp30_31 += temp[31];
+    Ctxt temp28_29_30 = temp28_29;
+    temp28_29_30 += temp[30];
+    Ctxt temp28_29_31 = temp28_29;
+    temp28_29_31 += temp[31];
+    Ctxt temp28_30_31 = temp28_30;
+    temp28_30_31 += temp[31];
+    Ctxt temp29_30_31 = temp29_30;
+    temp29_30_31 += temp[31];
+    Ctxt temp28_29_30_31 = temp28_29_30;
+    temp28_29_30_31 += temp[31];
+    Ctxt temp32_33 = temp[32];
+    temp32_33 += temp[33];
+    Ctxt temp32_34 = temp[32];
+    temp32_34 += temp[34];
+    Ctxt temp32_35 = temp[32];
+    temp32_35 += temp[35];
+    Ctxt temp33_34 = temp[33];
+    temp33_34 += temp[34];
+    Ctxt temp33_35 = temp[33];
+    temp33_35 += temp[35];
+    Ctxt temp34_35 = temp[34];
+    temp34_35 += temp[35];
+    Ctxt temp32_33_34 = temp32_33;
+    temp32_33_34 += temp[34];
+    Ctxt temp32_33_35 = temp32_33;
+    temp32_33_35 += temp[35];
+    Ctxt temp32_34_35 = temp32_34;
+    temp32_34_35 += temp[35];
+    Ctxt temp33_34_35 = temp33_34;
+    temp33_34_35 += temp[35];
+    Ctxt temp32_33_34_35 = temp32_33_34;
+    temp32_33_34_35 += temp[35];
 
-    eData[id0] += temp[id2];
-    eData[id0] += temp[id4];
-    eData[id0] += temp[id8];
-    eData[id0] += temp9_11;
-    eData[id0] += temp12_13;
+    eData[0] += temp1_2_3;
+    eData[0] += temp4_5;
+    eData[0] += temp8_9_10_11;
+    eData[0] += temp14_15;
+    eData[0] += temp16_17_18;
+    eData[0] += temp[22];
+    eData[0] += temp24_26_27;
+    eData[0] += temp28_29_30_31;
+    eData[0] += temp[33];
+    eData[1] = temp0_2_3;
+    eData[1] += temp4_6_7;
+    eData[1] += temp9_10_11;
+    eData[1] += temp13_14_15;
+    eData[1] += temp[17];
+    eData[1] += temp20_21_22_23;
+    eData[1] += temp24_25_26_27;
+    eData[1] += temp29_30;
+    eData[1] += temp32_33_35;
+    eData[2] += temp1_3;
+    eData[2] += temp[6];
+    eData[2] += temp8_10_11;
+    eData[2] += temp[12];
+    eData[2] += temp16_17;
+    eData[2] += temp20_23;
+    eData[2] += temp26_27;
+    eData[2] += temp29_31;
+    eData[2] += temp[32];
+    eData[3] = temp[1];
+    eData[3] += temp5_6_7;
+    eData[3] += temp9_10;
+    eData[3] += temp12_14_15;
+    eData[3] += temp17_19;
+    eData[3] += temp20_21_23;
+    eData[3] += temp25_26;
+    eData[3] += temp28_29_30_31;
+    eData[3] += temp34_35;
+    eData[4] += temp[1];
+    eData[4] += temp5_6_7;
+    eData[4] += temp8_9;
+    eData[4] += temp12_13_14_15;
+    eData[4] += temp18_19;
+    eData[4] += temp20_21_22;
+    eData[4] += temp[26];
+    eData[4] += temp28_30_31;
+    eData[4] += temp32_33_34_35;
+    eData[5] = temp0_1_3;
+    eData[5] += temp4_6_7;
+    eData[5] += temp8_10_11;
+    eData[5] += temp13_14_15;
+    eData[5] += temp17_18_19;
+    eData[5] += temp[21];
+    eData[5] += temp24_25_26_27;
+    eData[5] += temp28_29_30_31;
+    eData[5] += temp33_34;
+    eData[6] += temp[0];
+    eData[6] += temp5_7;
+    eData[6] += temp[10];
+    eData[6] += temp12_14_15;
+    eData[6] += temp[16];
+    eData[6] += temp20_21;
+    eData[6] += temp24_27;
+    eData[6] += temp30_31;
+    eData[6] += temp33_35;
+    eData[7] = temp2_3;
+    eData[7] += temp[5];
+    eData[7] += temp9_10_11;
+    eData[7] += temp13_14;
+    eData[7] += temp16_18_19;
+    eData[7] += temp21_23;
+    eData[7] += temp24_25_27;
+    eData[7] += temp29_30;
+    eData[7] += temp32_33_34_35;
+    eData[8] += temp0_1_2_3;
+    eData[8] += temp[5];
+    eData[8] += temp9_10_11;
+    eData[8] += temp12_13;
+    eData[8] += temp16_17_18_19;
+    eData[8] += temp22_23;
+    eData[8] += temp24_25_26;
+    eData[8] += temp[30];
+    eData[8] += temp32_34_35;
+    eData[9] = temp1_2;
+    eData[9] += temp4_5_7;
+    eData[9] += temp8_10_11;
+    eData[9] += temp12_14_15;
+    eData[9] += temp17_18_19;
+    eData[9] += temp21_22_23;
+    eData[9] += temp[25];
+    eData[9] += temp28_29_30_31;
+    eData[9] += temp32_33_34_35;
+    eData[10] += temp1_3;
+    eData[10] += temp[4];
+    eData[10] += temp9_11;
+    eData[10] += temp[14];
+    eData[10] += temp16_18_19;
+    eData[10] += temp[20];
+    eData[10] += temp24_25;
+    eData[10] += temp28_31;
+    eData[10] += temp34_35;
+    eData[11] = temp0_1_2_3;
+    eData[11] += temp6_7;
+    eData[11] += temp[9];
+    eData[11] += temp13_14_15;
+    eData[11] += temp17_18;
+    eData[11] += temp20_22_23;
+    eData[11] += temp25_27;
+    eData[11] += temp28_29_31;
+    eData[11] += temp33_34;
+    eData[12] += temp0_2_3;
+    eData[12] += temp4_5_6_7;
+    eData[12] += temp[9];
+    eData[12] += temp13_14_15;
+    eData[12] += temp16_17;
+    eData[12] += temp20_21_22_23;
+    eData[12] += temp26_27;
+    eData[12] += temp28_29_30;
+    eData[12] += temp[34];
+    eData[13] = temp0_1_2_3;
+    eData[13] += temp5_6;
+    eData[13] += temp8_9_11;
+    eData[13] += temp12_14_15;
+    eData[13] += temp16_18_19;
+    eData[13] += temp21_22_23;
+    eData[13] += temp25_26_27;
+    eData[13] += temp[29];
+    eData[13] += temp32_33_34_35;
+    eData[14] += temp2_3;
+    eData[14] += temp5_7;
+    eData[14] += temp[8];
+    eData[14] += temp13_15;
+    eData[14] += temp[18];
+    eData[14] += temp20_22_23;
+    eData[14] += temp[24];
+    eData[14] += temp28_29;
+    eData[14] += temp32_35;
+    eData[15] = temp1_2;
+    eData[15] += temp4_5_6_7;
+    eData[15] += temp10_11;
+    eData[15] += temp[13];
+    eData[15] += temp17_18_19;
+    eData[15] += temp21_22;
+    eData[15] += temp24_26_27;
+    eData[15] += temp29_31;
+    eData[15] += temp32_33_35;
+    eData[16] += temp[2];
+    eData[16] += temp4_6_7;
+    eData[16] += temp8_9_10_11;
+    eData[16] += temp[13];
+    eData[16] += temp17_18_19;
+    eData[16] += temp20_21;
+    eData[16] += temp24_25_26_27;
+    eData[16] += temp30_31;
+    eData[16] += temp32_33_34;
+    eData[17] = temp0_1_2_3;
+    eData[17] += temp4_5_6_7;
+    eData[17] += temp9_10;
+    eData[17] += temp12_13_15;
+    eData[17] += temp16_18_19;
+    eData[17] += temp20_22_23;
+    eData[17] += temp25_26_27;
+    eData[17] += temp29_30_31;
+    eData[17] += temp[33];
+    eData[18] += temp0_3;
+    eData[18] += temp6_7;
+    eData[18] += temp9_11;
+    eData[18] += temp[12];
+    eData[18] += temp17_19;
+    eData[18] += temp[22];
+    eData[18] += temp24_26_27;
+    eData[18] += temp[28];
+    eData[18] += temp32_33;
+    eData[19] = temp0_1_3;
+    eData[19] += temp5_6;
+    eData[19] += temp8_9_10_11;
+    eData[19] += temp14_15;
+    eData[19] += temp[17];
+    eData[19] += temp21_22_23;
+    eData[19] += temp25_26;
+    eData[19] += temp28_30_31;
+    eData[19] += temp33_35;
+    eData[20] += temp0_1_2;
+    eData[20] += temp[6];
+    eData[20] += temp8_10_11;
+    eData[20] += temp12_13_14_15;
+    eData[20] += temp[17];
+    eData[20] += temp21_22_23;
+    eData[20] += temp24_25;
+    eData[20] += temp28_29_30_31;
+    eData[20] += temp34_35;
+    eData[21] = temp[1];
+    eData[21] += temp4_5_6_7;
+    eData[21] += temp8_9_10_11;
+    eData[21] += temp13_14;
+    eData[21] += temp16_17_19;
+    eData[21] += temp20_22_23;
+    eData[21] += temp24_26_27;
+    eData[21] += temp29_30_31;
+    eData[21] += temp33_34_35;
+    eData[22] += temp0_1;
+    eData[22] += temp4_7;
+    eData[22] += temp10_11;
+    eData[22] += temp13_15;
+    eData[22] += temp[16];
+    eData[22] += temp21_23;
+    eData[22] += temp[26];
+    eData[22] += temp28_30_31;
+    eData[22] += temp[32];
+    eData[23] = temp1_3;
+    eData[23] += temp4_5_7;
+    eData[23] += temp9_10;
+    eData[23] += temp12_13_14_15;
+    eData[23] += temp18_19;
+    eData[23] += temp[21];
+    eData[23] += temp25_26_27;
+    eData[23] += temp29_30;
+    eData[23] += temp32_34_35;
+    eData[24] += temp2_3;
+    eData[24] += temp4_5_6;
+    eData[24] += temp[10];
+    eData[24] += temp12_14_15;
+    eData[24] += temp16_17_18_19;
+    eData[24] += temp[21];
+    eData[24] += temp25_26_27;
+    eData[24] += temp28_29;
+    eData[24] += temp32_33_34_35;
+    eData[25] = temp1_2_3;
+    eData[25] += temp[5];
+    eData[25] += temp8_9_10_11;
+    eData[25] += temp12_13_14_15;
+    eData[25] += temp17_18;
+    eData[25] += temp20_21_23;
+    eData[25] += temp24_26_27;
+    eData[25] += temp28_30_31;
+    eData[25] += temp33_34_35;
+    eData[26] += temp[0];
+    eData[26] += temp4_5;
+    eData[26] += temp8_11;
+    eData[26] += temp14_15;
+    eData[26] += temp17_19;
+    eData[26] += temp[20];
+    eData[26] += temp25_27;
+    eData[26] += temp[30];
+    eData[26] += temp32_34_35;
+    eData[27] = temp0_2_3;
+    eData[27] += temp5_7;
+    eData[27] += temp8_9_11;
+    eData[27] += temp13_14;
+    eData[27] += temp16_17_18_19;
+    eData[27] += temp22_23;
+    eData[27] += temp[25];
+    eData[27] += temp29_30_31;
+    eData[27] += temp33_34;
+    eData[28] += temp0_1_2_3;
+    eData[28] += temp6_7;
+    eData[28] += temp8_9_10;
+    eData[28] += temp[14];
+    eData[28] += temp16_18_19;
+    eData[28] += temp20_21_22_23;
+    eData[28] += temp[25];
+    eData[28] += temp29_30_31;
+    eData[28] += temp32_33;
+    eData[29] = temp1_2_3;
+    eData[29] += temp5_6_7;
+    eData[29] += temp[9];
+    eData[29] += temp12_13_14_15;
+    eData[29] += temp16_17_18_19;
+    eData[29] += temp21_22;
+    eData[29] += temp24_25_27;
+    eData[29] += temp28_30_31;
+    eData[29] += temp32_34_35;
+    eData[30] += temp0_2_3;
+    eData[30] += temp[4];
+    eData[30] += temp8_9;
+    eData[30] += temp12_15;
+    eData[30] += temp18_19;
+    eData[30] += temp21_23;
+    eData[30] += temp[24];
+    eData[30] += temp29_31;
+    eData[30] += temp[34];
+    eData[31] = temp1_2;
+    eData[31] += temp4_6_7;
+    eData[31] += temp9_11;
+    eData[31] += temp12_13_15;
+    eData[31] += temp17_18;
+    eData[31] += temp20_21_22_23;
+    eData[31] += temp26_27;
+    eData[31] += temp[29];
+    eData[31] += temp33_34_35;
+    eData[32] += temp0_1;
+    eData[32] += temp4_5_6_7;
+    eData[32] += temp10_11;
+    eData[32] += temp12_13_14;
+    eData[32] += temp[18];
+    eData[32] += temp20_22_23;
+    eData[32] += temp24_25_26_27;
+    eData[32] += temp[29];
+    eData[32] += temp33_34_35;
+    eData[33] = temp0_2_3;
+    eData[33] += temp5_6_7;
+    eData[33] += temp9_10_11;
+    eData[33] += temp[13];
+    eData[33] += temp16_17_18_19;
+    eData[33] += temp20_21_22_23;
+    eData[33] += temp25_26;
+    eData[33] += temp28_29_31;
+    eData[33] += temp32_34_35;
+    eData[34] += temp[2];
+    eData[34] += temp4_6_7;
+    eData[34] += temp[8];
+    eData[34] += temp12_13;
+    eData[34] += temp16_19;
+    eData[34] += temp22_23;
+    eData[34] += temp25_27;
+    eData[34] += temp[28];
+    eData[34] += temp33_35;
+    eData[35] = temp1_2_3;
+    eData[35] += temp5_6;
+    eData[35] += temp8_10_11;
+    eData[35] += temp13_15;
+    eData[35] += temp16_17_19;
+    eData[35] += temp21_22;
+    eData[35] += temp24_25_26_27;
+    eData[35] += temp30_31;
+    eData[35] += temp[33];
 
-    eData[id1] += temp[id0];
-    eData[id1] += temp3_4;
-    eData[id1] += temp7_8;
-    eData[id1] += temp10_11;
-    eData[id1] += temp[id15];
-
-    eData[id2] += temp0_1;
-    eData[id2] += temp[id5];
-    eData[id2] += temp6_7_8;
-    eData[id2] += temp[id10];
-    eData[id2] += temp[id13];
-    eData[id2] += temp[id15];
-    eData[id3] = temp1_2;
-    eData[id3] += temp6_7_8;
-    eData[id3] += temp[id14];
-    eData[id4] += temp[id0];
-    eData[id4] += temp6_8;
-    eData[id4] += temp[id9];
-    eData[id4] += temp12_13;
-    eData[id4] += temp[id15];
-    eData[id5] += temp[id0];
-    eData[id5] += temp3_4;
-    eData[id5] += temp[id7];
-    eData[id5] += temp[id11];
-    eData[id5] += temp12_14;
-    eData[id5] += temp[id15];
-    eData[id6] += temp1_2;
-    eData[id6] += temp3_4_5;
-    eData[id6] += temp9_11;
-    eData[id6] += temp12_14;
-    eData[id7] = temp[id2];
-    eData[id7] += temp3_5;
-    eData[id7] += temp[id6];
-    eData[id7] += temp[id10];
-    eData[id7] += temp[id12];
-    eData[id8] += temp0_1;
-    eData[id8] += temp3_4_5;
-    eData[id8] += temp[id10];
-    eData[id8] += temp[id12];
-    eData[id9] += temp0_2;
-    eData[id9] += temp[id3];
-    eData[id9] += temp7_8;
-    eData[id9] += temp[id11];
-    eData[id9] += temp[id12];
-    eData[id9] += temp[id15];
-    eData[id10] += temp0_2;
-    eData[id10] += temp[id5];
-    eData[id10] += temp7_8;
-    eData[id10] += temp[id9];
-    eData[id10] += temp13_14;
-    eData[id10] += temp[id15];
-    eData[id11] = temp[id0];
-    eData[id11] += temp[id6];
-    eData[id11] += temp9_10;
-    eData[id11] += temp[id14];
-    eData[id11] += temp[id15];
-    eData[id12] += temp0_1;
-    eData[id12] += temp4_5;
-    eData[id12] += temp7_8;
-    eData[id12] += temp[id14];
-    eData[id13] += temp3_4;
-    eData[id13] += temp6_7_8;
-    eData[id13] += temp[id11];
-    eData[id13] += temp[id12];
-    eData[id13] += temp[id15];
-    eData[id14] += temp[id1];
-    eData[id14] += temp3_4;
-    eData[id14] += temp[id6];
-    eData[id14] += temp9_10_11;
-    eData[id14] += temp12_13;
-    eData[id15] = temp[id2];
-    eData[id15] += temp[id4];
-    eData[id15] += temp10_11;
-    eData[id15] += temp13_14;
-    for (int i = 1; i < 4; i++)
-    {
-        s = 16 * i;
-        id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s,
-        id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s,
-        id8 = index[8] + s, id9 = index[9] + s, id10 = index[10] + s, id11 = index[11] + s,
-        id12 = index[12] + s, id13 = index[13] + s, id14 = index[14] + s, id15 = index[15] + s;
-        temp0_1 = temp[id0];
-        temp0_1 += temp[id1];
-        temp0_2 = temp[id0];
-        temp0_2 += temp[id2];
-        temp1_2 = temp[id1];
-        temp1_2 += temp[id2];
-        temp0_1_2 = temp0_1;
-        temp0_1_2 += temp[id2];
-        temp3_4 = temp[id3];
-        temp3_4 += temp[id4];
-        temp3_5 = temp[id3];
-        temp3_5 += temp[id5];
-        temp4_5 = temp[id4];
-        temp4_5 += temp[id5];
-        temp3_4_5 = temp3_4;
-        temp3_4_5 += temp[id5];
-        temp6_7 = temp[id6];
-        temp6_7 += temp[id7];
-        temp6_8 = temp[id6];
-        temp6_8 += temp[id8];
-        temp7_8 = temp[id7];
-        temp7_8 += temp[id8];
-        temp6_7_8 = temp6_7;
-        temp6_7_8 += temp[id8];
-        temp9_10 = temp[id9];
-        temp9_10 += temp[id10];
-        temp9_11 = temp[id9];
-        temp9_11 += temp[id11];
-        temp10_11 = temp[id10];
-        temp10_11 += temp[id11];
-        temp9_10_11 = temp9_10;
-        temp9_10_11 += temp[id11];
-        temp12_13 = temp[id12];
-        temp12_13 += temp[id13];
-        temp12_14 = temp[id12];
-        temp12_14 += temp[id14];
-        temp13_14 = temp[id13];
-        temp13_14 += temp[id14];
-        temp12_13_14 = temp12_13;
-        temp12_13_14 += temp[id14];
-        eData[id0] += temp[id2];
-        eData[id0] += temp[id4];
-        eData[id0] += temp[id8];
-        eData[id0] += temp9_11;
-        eData[id0] += temp12_13;
-
-        eData[id1] += temp[id0];
-        eData[id1] += temp3_4;
-        eData[id1] += temp7_8;
-        eData[id1] += temp10_11;
-        eData[id1] += temp[id15];
-
-        eData[id2] += temp0_1;
-        eData[id2] += temp[id5];
-        eData[id2] += temp6_7_8;
-        eData[id2] += temp[id10];
-        eData[id2] += temp[id13];
-        eData[id2] += temp[id15];
-        eData[id3] = temp1_2;
-        eData[id3] += temp6_7_8;
-        eData[id3] += temp[id14];
-        eData[id4] += temp[id0];
-        eData[id4] += temp6_8;
-        eData[id4] += temp[id9];
-        eData[id4] += temp12_13;
-        eData[id4] += temp[id15];
-        eData[id5] += temp[id0];
-        eData[id5] += temp3_4;
-        eData[id5] += temp[id7];
-        eData[id5] += temp[id11];
-        eData[id5] += temp12_14;
-        eData[id5] += temp[id15];
-        eData[id6] += temp1_2;
-        eData[id6] += temp3_4_5;
-        eData[id6] += temp9_11;
-        eData[id6] += temp12_14;
-        eData[id7] = temp[id2];
-        eData[id7] += temp3_5;
-        eData[id7] += temp[id6];
-        eData[id7] += temp[id10];
-        eData[id7] += temp[id12];
-        eData[id8] += temp0_1;
-        eData[id8] += temp3_4_5;
-        eData[id8] += temp[id10];
-        eData[id8] += temp[id12];
-        eData[id9] += temp0_2;
-        eData[id9] += temp[id3];
-        eData[id9] += temp7_8;
-        eData[id9] += temp[id11];
-        eData[id9] += temp[id12];
-        eData[id9] += temp[id15];
-        eData[id10] += temp0_2;
-        eData[id10] += temp[id5];
-        eData[id10] += temp7_8;
-        eData[id10] += temp[id9];
-        eData[id10] += temp13_14;
-        eData[id10] += temp[id15];
-        eData[id11] = temp[id0];
-        eData[id11] += temp[id6];
-        eData[id11] += temp9_10;
-        eData[id11] += temp[id14];
-        eData[id11] += temp[id15];
-        eData[id12] += temp0_1;
-        eData[id12] += temp4_5;
-        eData[id12] += temp7_8;
-        eData[id12] += temp[id14];
-        eData[id13] += temp3_4;
-        eData[id13] += temp6_7_8;
-        eData[id13] += temp[id11];
-        eData[id13] += temp[id12];
-        eData[id13] += temp[id15];
-        eData[id14] += temp[id1];
-        eData[id14] += temp3_4;
-        eData[id14] += temp[id6];
-        eData[id14] += temp9_10_11;
-        eData[id14] += temp12_13;
-        eData[id15] = temp[id2];
-        eData[id15] += temp[id4];
-        eData[id15] += temp10_11;
-        eData[id15] += temp13_14;
-    }
-    temp = eData;
-    index = {0, 1, 2, 3, 16, 17, 18, 19, 32, 33, 34, 35, 48, 49, 50, 51};
-    for (int i = 0; i < 4; i++)
-    {
-        s = 4 * i;
-        id0 = index[0] + s, id1 = index[1] + s, id2 = index[2] + s, id3 = index[3] + s,
-        id4 = index[4] + s, id5 = index[5] + s, id6 = index[6] + s, id7 = index[7] + s,
-        id8 = index[8] + s, id9 = index[9] + s, id10 = index[10] + s, id11 = index[11] + s,
-        id12 = index[12] + s, id13 = index[13] + s, id14 = index[14] + s, id15 = index[15] + s;
-        temp0_1 = temp[id0];
-        temp0_1 += temp[id1];
-        temp0_2 = temp[id0];
-        temp0_2 += temp[id2];
-        temp1_2 = temp[id1];
-        temp1_2 += temp[id2];
-        temp0_1_2 = temp0_1;
-        temp0_1_2 += temp[id2];
-        temp3_4 = temp[id3];
-        temp3_4 += temp[id4];
-        temp3_5 = temp[id3];
-        temp3_5 += temp[id5];
-        temp4_5 = temp[id4];
-        temp4_5 += temp[id5];
-        temp3_4_5 = temp3_4;
-        temp3_4_5 += temp[id5];
-        temp6_7 = temp[id6];
-        temp6_7 += temp[id7];
-        temp6_8 = temp[id6];
-        temp6_8 += temp[id8];
-        temp7_8 = temp[id7];
-        temp7_8 += temp[id8];
-        temp6_7_8 = temp6_7;
-        temp6_7_8 += temp[id8];
-        temp9_10 = temp[id9];
-        temp9_10 += temp[id10];
-        temp9_11 = temp[id9];
-        temp9_11 += temp[id11];
-        temp10_11 = temp[id10];
-        temp10_11 += temp[id11];
-        temp9_10_11 = temp9_10;
-        temp9_10_11 += temp[id11];
-        temp12_13 = temp[id12];
-        temp12_13 += temp[id13];
-        temp12_14 = temp[id12];
-        temp12_14 += temp[id14];
-        temp13_14 = temp[id13];
-        temp13_14 += temp[id14];
-        temp12_13_14 = temp12_13;
-        temp12_13_14 += temp[id14];
-        eData[id0] += temp[id2];
-        eData[id0] += temp[id4];
-        eData[id0] += temp[id8];
-        eData[id0] += temp9_11;
-        eData[id0] += temp12_13;
-        eData[id1] += temp[id0];
-        eData[id1] += temp3_4;
-        eData[id1] += temp7_8;
-        eData[id1] += temp10_11;
-        eData[id1] += temp[id15];
-        eData[id2] += temp0_1;
-        eData[id2] += temp[id5];
-        eData[id2] += temp6_7_8;
-        eData[id2] += temp[id10];
-        eData[id2] += temp[id13];
-        eData[id2] += temp[id15];
-        eData[id3] = temp1_2;
-        eData[id3] += temp6_7_8;
-        eData[id3] += temp[id14];
-        eData[id4] += temp[id0];
-        eData[id4] += temp6_8;
-        eData[id4] += temp[id9];
-        eData[id4] += temp12_13;
-        eData[id4] += temp[id15];
-        eData[id5] += temp[id0];
-        eData[id5] += temp3_4;
-        eData[id5] += temp[id7];
-        eData[id5] += temp[id11];
-        eData[id5] += temp12_14;
-        eData[id5] += temp[id15];
-        eData[id6] += temp1_2;
-        eData[id6] += temp3_4_5;
-        eData[id6] += temp9_11;
-        eData[id6] += temp12_14;
-        eData[id7] = temp[id2];
-        eData[id7] += temp3_5;
-        eData[id7] += temp[id6];
-        eData[id7] += temp[id10];
-        eData[id7] += temp[id12];
-        eData[id8] += temp0_1;
-        eData[id8] += temp3_4_5;
-        eData[id8] += temp[id10];
-        eData[id8] += temp[id12];
-        eData[id9] += temp0_2;
-        eData[id9] += temp[id3];
-        eData[id9] += temp7_8;
-        eData[id9] += temp[id11];
-        eData[id9] += temp[id12];
-        eData[id9] += temp[id15];
-        eData[id10] += temp0_2;
-        eData[id10] += temp[id5];
-        eData[id10] += temp7_8;
-        eData[id10] += temp[id9];
-        eData[id10] += temp13_14;
-        eData[id10] += temp[id15];
-        eData[id11] = temp[id0];
-        eData[id11] += temp[id6];
-        eData[id11] += temp9_10;
-        eData[id11] += temp[id14];
-        eData[id11] += temp[id15];
-        eData[id12] += temp0_1;
-        eData[id12] += temp4_5;
-        eData[id12] += temp7_8;
-        eData[id12] += temp[id14];
-        eData[id13] += temp3_4;
-        eData[id13] += temp6_7_8;
-        eData[id13] += temp[id11];
-        eData[id13] += temp[id12];
-        eData[id13] += temp[id15];
-        eData[id14] += temp[id1];
-        eData[id14] += temp3_4;
-        eData[id14] += temp[id6];
-        eData[id14] += temp9_10_11;
-        eData[id14] += temp12_13;
-        eData[id15] = temp[id2];
-        eData[id15] += temp[id4];
-        eData[id15] += temp10_11;
-        eData[id15] += temp13_14;
-    }
+    eData[0] += temp0_1_3;
+    eData[0] += temp[15];
+    eData[0] += temp17_18;
+    eData[0] += temp[22];
+    eData[0] += temp24_27;
+    eData[1] += temp6_7;
+    eData[1] += temp[9];
+    eData[1] += temp[13];
+    eData[1] += temp20_21;
+    eData[1] += temp25_27;
+    eData[1] += temp[30];
+    eData[1] += temp[33];
+    eData[2] += temp8_10_11;
+    eData[2] += temp[20];
+    eData[2] += temp[32];
+    eData[3] += temp[12];
+    eData[3] += temp17_19;
+    eData[3] += temp25_26;
+    eData[3] += temp[31];
+    eData[3] += temp[35];
+    eData[4] += temp4_5_7;
+    eData[4] += temp[19];
+    eData[4] += temp21_22;
+    eData[4] += temp[26];
+    eData[4] += temp28_31;
+    eData[5] += temp[1];
+    eData[5] += temp10_11;
+    eData[5] += temp[13];
+    eData[5] += temp[17];
+    eData[5] += temp24_25;
+    eData[5] += temp29_31;
+    eData[5] += temp[34];
+    eData[6] += temp[0];
+    eData[6] += temp12_14_15;
+    eData[6] += temp[24];
+    eData[7] += temp[3];
+    eData[7] += temp[16];
+    eData[7] += temp21_23;
+    eData[7] += temp29_30;
+    eData[7] += temp[35];
+    eData[8] += temp8_9_11;
+    eData[8] += temp[23];
+    eData[8] += temp25_26;
+    eData[8] += temp[30];
+    eData[8] += temp32_35;
+    eData[9] += temp[2];
+    eData[9] += temp[5];
+    eData[9] += temp14_15;
+    eData[9] += temp[17];
+    eData[9] += temp[21];
+    eData[9] += temp28_29;
+    eData[9] += temp33_35;
+    eData[10] += temp[4];
+    eData[10] += temp16_18_19;
+    eData[10] += temp[28];
+    eData[11] += temp[3];
+    eData[11] += temp[7];
+    eData[11] += temp[20];
+    eData[11] += temp25_27;
+    eData[11] += temp33_34;
+    eData[12] += temp0_3;
+    eData[12] += temp12_13_15;
+    eData[12] += temp[27];
+    eData[12] += temp29_30;
+    eData[12] += temp[34];
+    eData[13] += temp1_3;
+    eData[13] += temp[6];
+    eData[13] += temp[9];
+    eData[13] += temp18_19;
+    eData[13] += temp[21];
+    eData[13] += temp[25];
+    eData[13] += temp32_33;
+    eData[14] += temp[8];
+    eData[14] += temp20_22_23;
+    eData[14] += temp[32];
+    eData[15] += temp1_2;
+    eData[15] += temp[7];
+    eData[15] += temp[11];
+    eData[15] += temp[24];
+    eData[15] += temp29_31;
+    eData[16] += temp[2];
+    eData[16] += temp4_7;
+    eData[16] += temp16_17_19;
+    eData[16] += temp[31];
+    eData[16] += temp33_34;
+    eData[17] += temp0_1;
+    eData[17] += temp5_7;
+    eData[17] += temp[10];
+    eData[17] += temp[13];
+    eData[17] += temp22_23;
+    eData[17] += temp[25];
+    eData[17] += temp[29];
+    eData[18] += temp[0];
+    eData[18] += temp[12];
+    eData[18] += temp24_26_27;
+    eData[19] += temp5_6;
+    eData[19] += temp[11];
+    eData[19] += temp[15];
+    eData[19] += temp[28];
+    eData[19] += temp33_35;
+    eData[20] += temp1_2;
+    eData[20] += temp[6];
+    eData[20] += temp8_11;
+    eData[20] += temp20_21_23;
+    eData[20] += temp[35];
+    eData[21] += temp4_5;
+    eData[21] += temp9_11;
+    eData[21] += temp[14];
+    eData[21] += temp[17];
+    eData[21] += temp26_27;
+    eData[21] += temp[29];
+    eData[21] += temp[33];
+    eData[22] += temp[4];
+    eData[22] += temp[16];
+    eData[22] += temp28_30_31;
+    eData[23] += temp1_3;
+    eData[23] += temp9_10;
+    eData[23] += temp[15];
+    eData[23] += temp[19];
+    eData[23] += temp[32];
+    eData[24] += temp[3];
+    eData[24] += temp5_6;
+    eData[24] += temp[10];
+    eData[24] += temp12_15;
+    eData[24] += temp24_25_27;
+    eData[25] += temp[1];
+    eData[25] += temp8_9;
+    eData[25] += temp13_15;
+    eData[25] += temp[18];
+    eData[25] += temp[21];
+    eData[25] += temp30_31;
+    eData[25] += temp[33];
+    eData[26] += temp[8];
+    eData[26] += temp[20];
+    eData[26] += temp32_34_35;
+    eData[27] += temp[0];
+    eData[27] += temp5_7;
+    eData[27] += temp13_14;
+    eData[27] += temp[19];
+    eData[27] += temp[23];
+    eData[28] += temp[7];
+    eData[28] += temp9_10;
+    eData[28] += temp[14];
+    eData[28] += temp16_19;
+    eData[28] += temp28_29_31;
+    eData[29] += temp[1];
+    eData[29] += temp[5];
+    eData[29] += temp12_13;
+    eData[29] += temp17_19;
+    eData[29] += temp[22];
+    eData[29] += temp[25];
+    eData[29] += temp34_35;
+    eData[30] += temp0_2_3;
+    eData[30] += temp[12];
+    eData[30] += temp[24];
+    eData[31] += temp[4];
+    eData[31] += temp9_11;
+    eData[31] += temp17_18;
+    eData[31] += temp[23];
+    eData[31] += temp[27];
+    eData[32] += temp[11];
+    eData[32] += temp13_14;
+    eData[32] += temp[18];
+    eData[32] += temp20_23;
+    eData[32] += temp32_33_35;
+    eData[33] += temp2_3;
+    eData[33] += temp[5];
+    eData[33] += temp[9];
+    eData[33] += temp16_17;
+    eData[33] += temp21_23;
+    eData[33] += temp[26];
+    eData[33] += temp[29];
+    eData[34] += temp4_6_7;
+    eData[34] += temp[16];
+    eData[34] += temp[28];
+    eData[35] += temp[8];
+    eData[35] += temp13_15;
+    eData[35] += temp21_22;
+    eData[35] += temp[27];
+    eData[35] += temp[31];
 }
 // Compute Sbox
 void HE_Sbox(vector<Ctxt> &eData)
@@ -783,22 +1108,19 @@ int main()
                 }
             }
             else if (r < Nr)
-            { // 常规轮
-                yusP.MC64_6(state);
-                yusP.MR64_6(state); // 线性变换
-                yusP.Sbox_6(state); // S盒
+            {                       // 常规轮
+                yusP.M36_7(state);  // 线性变换
+                yusP.Sbox_7(state); // S盒
                 for (unsigned i = 0; i < BlockByte; i++)
                 {
                     state[i] = (state[i] + RoundKey[i]) % PlainMod;
                 }
             }
             else
-            { // 最后一轮
-                yusP.MC64_6(state);
-                yusP.MR64_6(state); // 线性变换
-                yusP.Sbox_6(state); // S盒
-                yusP.MC64_6(state);
-                yusP.MR64_6(state); // 线性变换
+            {                       // 最后一轮
+                yusP.M36_7(state);  // 线性变换
+                yusP.Sbox_7(state); // S盒
+                yusP.M36_7(state);  // 线性变换
                 for (unsigned i = 0; i < BlockByte; i++)
                 {
                     state[i] = (state[i] + RoundKey[i]) % PlainMod;
@@ -892,17 +1214,19 @@ int main()
     auto end_keyEncryption = std::chrono::steady_clock::now();
     double keyEncryption = std::chrono::duration<double>(end_keyEncryption - start_keyEncryption).count();
     std::cout << "SymKey FHE time: " << keyEncryption << "s\n";
-    // return 0;
     //  解密验证
-    if (!verify_encryptSymKey(encryptedSymKey, SymKey, secretKey, ea))
+    if (symkeyflag)
     {
-        return 0;
+        if (!verify_encryptSymKey(encryptedSymKey, SymKey, secretKey, ea))
+        {
+            return 0;
+        }
+        std::cout << "Symmetric key encryption succeeded!" << std::endl;
     }
-    std::cout << "Symmetric key encryption succeeded!" << std::endl;
-
     // 离线客户端时间=KeyStream Generation time+PublicKey generation and SymKey FHE time
     double total_time_off = elapsed_seconds_keyStream.count() + elapsed_seconds_PubKey.count() + elapsed_seconds_PubKey.count() + keyEncryption;
     std::cout << "Encryption offline total time: " << total_time_off << "s\n";
+
     //=============服务端offline阶段================
     // 计算 encryptedRoundKeySet
     vector<Ctxt> encryptedRoundKeySet;
@@ -915,10 +1239,10 @@ int main()
     }
     vector<ZZX> encodedXset;
     auto m1 = std::chrono::steady_clock::now();
-    encodeTo64Ctxt(encodedXset, Xset, ea); // encode as HE plaintext
+    encodeTo36Ctxt(encodedXset, Xset, ea); // encode as HE plaintext
     auto m2 = std::chrono::steady_clock::now();
     double Encode_time = std::chrono::duration<double>(m2 - m1).count();
-    std::cout << "encodeTo64Ctxt time: " << std::chrono::duration<double>(m2 - m1).count() << "s\n";
+    std::cout << "encodeTo36Ctxt time: " << std::chrono::duration<double>(m2 - m1).count() << "s\n";
 
     auto start_RoundKeySet_FHE = std::chrono::steady_clock::now();
     if (Rkflag)
@@ -939,13 +1263,15 @@ int main()
     double RoundKey_time = std::chrono::duration<double>(end_RoundKeySet_FHE - start_RoundKeySet_FHE).count();
     std::cout << "RoundKeySet FHE succeeded! Time: " << RoundKey_time << "s\n";
     // // 使用 verifyDecryption 函数解密并验证 RoundKeySet
-    // if (!verifyDecryption64(encryptedRoundKeySet, RoundKeySet, secretKey, ea))
+    // if (deflag)
     // {
-    //     std::cerr << "Decryption verification failed for RoundKeySet." << std::endl;
-    //     return 0;
+    //     if (!verifyDecryption36(encryptedRoundKeySet, RoundKeySet, secretKey, ea))
+    //     {
+    //         std::cerr << "Decryption verification failed for RoundKeySet." << std::endl;
+    //         return 0;
+    //     }
+    //     std::cout << "Decryption verification succeeded for RoundKeySet." << std::endl;
     // }
-    // std::cout << "Decryption verification succeeded for RoundKeySet." << std::endl;
-
     // 生成 encryptedKeyStream
     // 定义Add_time、Sbox_time、Linear_time
     double Sbox_time = 0, Linear_time = 0, Add_time = 0;
@@ -962,11 +1288,12 @@ int main()
     // 对expanded进行simd编码，这样会返回nRoundKeys个多项式数组即encoded，nRoundKeys=encoded.length()
     vector<ZZX> encoded_expandedIV;
     auto m3 = std::chrono::steady_clock::now();
-    encodeTo64Ctxt(encoded_expandedIV, expandedIV, ea); // encode as HE plaintext
+    encodeTo36Ctxt(encoded_expandedIV, expandedIV, ea); // encode as HE plaintext
     auto m4 = std::chrono::steady_clock::now();
-    std::cout << "encodeTo64Ctxt time: " << std::chrono::duration<double>(m4 - m3).count() << "s\n";
+    std::cout << "encodeTo36Ctxt time: " << std::chrono::duration<double>(m4 - m3).count() << "s\n";
 
     std::cout << "whiteround start" << std::endl;
+    std::cout << "noise budget: " << encryptedKeyStream[0].bitCapacity() << std::endl;
     auto start_roundkey = std::chrono::high_resolution_clock::now();
     for (long i = 0; i < BlockByte; i++)
     { // encrypt the encoded key
@@ -976,6 +1303,27 @@ int main()
     Add_time += std::chrono::duration<double>(end_roundkey - start_roundkey).count();
     // 输出 Add_time
     std::cout << "whiteround time: " << Add_time << "s\n";
+    std::cout << "noise budget: " << encryptedKeyStream[0].bitCapacity() << std::endl;
+    // 测试
+    // vector<Ctxt> test1 = encryptedKeyStream;
+    // auto start_test1 = std::chrono::high_resolution_clock::now();
+    // for (int i = 0; i < 1000; i++)
+    // {
+    //     test1[i % 36] = encryptedKeyStream[i % 36];
+    // }
+    // auto end_test1 = std::chrono::high_resolution_clock::now();
+    // double test_time1 = std::chrono::duration<double>(end_test1 - start_test1).count();
+    // vector<Ctxt> test2 = encryptedKeyStream;
+    // auto start_test2 = std::chrono::high_resolution_clock::now();
+    // for (int i = 0; i < 1000; i++)
+    // {
+    //     test2[i % 36] += encryptedKeyStream[i % 36];
+    // }
+    // auto end_test2 = std::chrono::high_resolution_clock::now();
+    // double test_time2 = std::chrono::duration<double>(end_test2 - start_test2).count();
+    // std::cout << "test1 time: " << test_time1 << "s\n";
+    // std::cout << "test2 time: " << test_time2 << "s\n";
+
     // 明文密钥流
     vector<long> KeyStream2(PlainByte);
     if (deflag)
@@ -986,14 +1334,13 @@ int main()
             KeyStream2[i] = (expandedIV[i] + RoundKeySet[i]) % PlainMod;
         }
         // 使用 verifyDecryption 函数解密并验证 KeyStream
-        if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+        if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
         {
             std::cerr << "Decryption verification failed for KeyStream." << std::endl;
             return 0;
         }
         std::cout << "Decryption verification succeeded for whiteround." << std::endl;
     }
-
     auto start_sbox = std::chrono::high_resolution_clock::now();
     auto start_linear = std::chrono::high_resolution_clock::now();
     auto end_sbox = std::chrono::high_resolution_clock::now();
@@ -1003,9 +1350,8 @@ int main()
     {
         std::cout << "Round " << r << " start" << std::endl;
         start_linear = std::chrono::high_resolution_clock::now();
-        // #pragma omp parallel for
         // Linear Layer
-        HE_MC_MR(encryptedKeyStream);
+        HE_M(encryptedKeyStream);
         end_linear = std::chrono::high_resolution_clock::now();
         Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
         if (deflag)
@@ -1017,14 +1363,13 @@ int main()
                 {
                     tmp[j] = KeyStream2[i * BlockByte + j];
                 }
-                yusP.MC64_6(tmp);
-                yusP.MR64_6(tmp);
+                yusP.M36_7(tmp);
                 for (int j = 0; j < BlockByte; j++)
                 {
                     KeyStream2[i * BlockByte + j] = tmp[j];
                 }
             }
-            if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+            if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
             {
                 std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
                 return 0;
@@ -1038,15 +1383,16 @@ int main()
         Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
         if (deflag)
         {
-            yusP.Sbox_6(KeyStream2);
-            if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+            yusP.Sbox_7(KeyStream2);
+            if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
             {
-                std::cerr << "Decryption verification failed for KeyStream Sbox_3." << std::endl;
+                std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
                 return 0;
             }
-            std::cout << "Decryption verification succeeded for KeyStream Sbox_3." << std::endl;
+            std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
         }
         start_roundkey = std::chrono::high_resolution_clock::now();
+        // omp_set_num_threads(12); // 设置线程数为12
         // #pragma omp parallel for
         for (long j = 0; j < BlockByte; j++)
         {
@@ -1060,20 +1406,21 @@ int main()
             {
                 KeyStream2[i] = (KeyStream2[i] + RoundKeySet[r * PlainByte + i]) % PlainMod;
             }
-            if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+            if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
             {
                 std::cerr << "Decryption verification failed for KeyStream Round Key Addition." << std::endl;
                 return 0;
             }
             std::cout << "Decryption verification succeeded for KeyStream Round Key Addition." << std::endl;
         }
+        std::cout << "noise budget: " << encryptedKeyStream[0].bitCapacity() << std::endl;
     }
-
-    // 最后一轮
+// 最后一轮
+#if (1)
     std::cout << "Round " << Nr << " start" << std::endl;
     start_linear = std::chrono::high_resolution_clock::now();
     // Linear Layer
-    HE_MC_MR(encryptedKeyStream);
+    HE_M(encryptedKeyStream);
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
     if (deflag)
@@ -1085,14 +1432,13 @@ int main()
             {
                 tmp[j] = KeyStream2[i * BlockByte + j];
             }
-            yusP.MC64_6(tmp);
-            yusP.MR64_6(tmp);
+            yusP.M36_7(tmp);
             for (int j = 0; j < BlockByte; j++)
             {
                 KeyStream2[i * BlockByte + j] = tmp[j];
             }
         }
-        if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+        if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
         {
             std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
             return 0;
@@ -1106,17 +1452,17 @@ int main()
     Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
     if (deflag)
     {
-        yusP.Sbox_6(KeyStream2);
-        if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+        yusP.Sbox_7(KeyStream2);
+        if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
         {
-            std::cerr << "Decryption verification failed for KeyStream Sbox_3." << std::endl;
+            std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
             return 0;
         }
-        std::cout << "Decryption verification succeeded for KeyStream Sbox_3." << std::endl;
+        std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
     }
     start_linear = std::chrono::high_resolution_clock::now();
     // Linear Layer
-    HE_MC_MR(encryptedKeyStream);
+    HE_M(encryptedKeyStream);
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
     if (deflag)
@@ -1128,14 +1474,13 @@ int main()
             {
                 tmp[j] = KeyStream2[i * BlockByte + j];
             }
-            yusP.MC64_6(tmp);
-            yusP.MR64_6(tmp);
+            yusP.M36_7(tmp);
             for (int j = 0; j < BlockByte; j++)
             {
                 KeyStream2[i * BlockByte + j] = tmp[j];
             }
         }
-        if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+        if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
         {
             std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
             return 0;
@@ -1156,45 +1501,55 @@ int main()
         {
             KeyStream2[i] = (KeyStream2[i] + RoundKeySet[Nr * PlainByte + i]) % PlainMod;
         }
-        if (!verifyDecryption64(encryptedKeyStream, KeyStream2, secretKey, ea))
+        if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
         {
             std::cerr << "Decryption verification failed for KeyStream Round Key Addition." << std::endl;
             return 0;
         }
         std::cout << "Decryption verification succeeded for KeyStream Round Key Addition." << std::endl;
     }
+#endif
+    std::cout << "noise budget: " << encryptedKeyStream[0].bitCapacity() << std::endl;
+    if (encryptedKeyStream[0].bitCapacity() <= 0)
+    {
+        std::cerr << "noise budget is 0" << std::endl;
+        return 0;
+    }
     // 输出 Add_time、Sbox_time、Linear_time
     std::cout << "RoundKey time: " << Add_time << "s\n";
-    std::cout << "Sbox_3 time: " << Sbox_time << "s\n";
+    std::cout << "Sbox time: " << Sbox_time << "s\n";
     std::cout << "Linear Layer time: " << Linear_time << "s\n";
     // 计算总时间
     double total_time = Encode_time + RoundKey_time + Add_time + Sbox_time + Linear_time;
     std::cout << "Server offline total time: " << total_time << "s\n";
-    // 计算吞吐量,KB/min
+    // 计算吞吐量,KiB/min
     double throughput = (Plainbits * 60) / (pow(2, 13) * total_time);
     std::cout << "Throughput: " << throughput << "KiB/min\n";
 
-    for (int i = 0; i < encryptedKeyStream.size(); i++)
+    if (plainflag)
     {
-        encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
+        for (int i = 0; i < encryptedKeyStream.size(); i++)
+        {
+            encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
+        }
+        if (!verifyDecryption36(encryptedKeyStream, KeyStream, secretKey, ea))
+        {
+            std::cerr << "Decryption verification failed for KeyStream." << std::endl;
+            return 0;
+        }
+        std::cout << "Decryption verification succeeded for KeyStream." << std::endl;
     }
-    if (!verifyDecryption64(encryptedKeyStream, KeyStream, secretKey, ea))
-    {
-        std::cerr << "Decryption verification failed for KeyStream." << std::endl;
-        return 0;
-    }
-    std::cout << "Decryption verification succeeded for KeyStream." << std::endl;
     // 将total_time, throughput, Nr, p, nslots, bits, c, Add_time, Sbox_time, Linear_time, RoundKey_time写入文件test_Yus_p_C32_ClientAndServer2.txt,如果已存在则追加
     // 检查路径是否存在
     std::string dirPath = "../tests";
     std::string filePath;
     if (!fs::exists(dirPath))
     {
-        filePath = "test_Yus_p_C64_ClientAndServer6.txt";
+        filePath = "test_Yus_p_C36_ClientAndServer7.txt";
     }
     else
     {
-        filePath = "../tests/test_Yus_p_C64_ClientAndServer6.txt";
+        filePath = "../tests/test_Yus_p_C36_ClientAndServer7.txt";
     }
     std::ofstream outfile(filePath, std::ios::app);
     if (!outfile)
@@ -1219,6 +1574,6 @@ int main()
             << std::left << std::setw(10) << throughput
             << std::endl;
     outfile.close();
-    std::cout << "test_Yus_p_C64_ClientAndServer6.txt updated." << std::endl;
+    std::cout << "test_Yus_p_C36_ClientAndServer7.txt updated." << std::endl;
     return 0;
 }

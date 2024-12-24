@@ -35,6 +35,10 @@ public:
     void MC64_6(std::vector<long> &A);
     void MR64_6(std::vector<long> &A);
     void Sbox_6(std::vector<long> &A);
+    void M36_7(std::vector<long> &A);
+    void Sbox_7(std::vector<long> &A);
+    void M18_8(std::vector<long> &A);
+    void Sbox_8(std::vector<long> &A);
 
 private:
     long PlainMod;

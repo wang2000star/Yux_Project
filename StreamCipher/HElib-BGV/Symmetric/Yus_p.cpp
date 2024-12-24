@@ -547,13 +547,102 @@ void YusP::Sbox_6(vector<long> &A)
 
     for (int i = 0; i < A.size(); i += 4)
     {
-        long t01 = temp[i]*temp[i+1];
-        long t02 = temp[i]*temp[i+2];
-        long t03 = temp[i]*temp[i+3];
-        long t02_03_1 = t02 + t03 + temp[i+1];
+        long t01 = temp[i] * temp[i + 1];
+        long t02 = temp[i] * temp[i + 2];
+        long t03 = temp[i] * temp[i + 3];
+        long t02_03_1 = t02 + t03 + temp[i + 1];
 
-        A[i + 1] =(((t02_03_1-t01)%PlainMod)+PlainMod) % PlainMod;
-        A[i + 2] = (((t02_03_1-temp[i+2]) % PlainMod) + PlainMod) % PlainMod;
-        A[i + 3] = (((temp[i+3]-t01-temp[i+2]-t03) % PlainMod) + PlainMod) % PlainMod;
+        A[i + 1] = (((t02_03_1 - t01) % PlainMod) + PlainMod) % PlainMod;
+        A[i + 2] = (((t02_03_1 - temp[i + 2]) % PlainMod) + PlainMod) % PlainMod;
+        A[i + 3] = (((temp[i + 3] - t01 - temp[i + 2] - t03) % PlainMod) + PlainMod) % PlainMod;
+    }
+}
+void YusP::M36_7(vector<long> &A)
+{
+    std::vector<long> temp = A;
+    A[0] = (((2 * temp[0] + 2 * temp[1] + temp[2] + 2 * temp[3] + temp[4] + temp[5] + temp[8] + temp[9] + temp[10] + temp[11] + temp[14] + 2 * temp[15] + temp[16] + 2 * temp[17] + 2 * temp[18] + 2 * temp[22] + 2 * temp[24] + temp[26] + 2 * temp[27] + temp[28] + temp[29] + temp[30] + temp[31] + temp[33]) % PlainMod) + PlainMod) % PlainMod;
+    A[1] = (((temp[0] + temp[2] + temp[3] + temp[4] + 2 * temp[6] + 2 * temp[7] + 2 * temp[9] + temp[10] + temp[11] + 2 * temp[13] + temp[14] + temp[15] + temp[17] + 2 * temp[20] + 2 * temp[21] + temp[22] + temp[23] + temp[24] + 2 * temp[25] + temp[26] + 2 * temp[27] + temp[29] + 2 * temp[30] + temp[32] + 2 * temp[33] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[2] = (((temp[1] + temp[2] + temp[3] + temp[6] + 2 * temp[8] + 2 * temp[10] + 2 * temp[11] + temp[12] + temp[16] + temp[17] + 2 * temp[20] + temp[23] + temp[26] + temp[27] + temp[29] + temp[31] + 2 * temp[32]) % PlainMod) + PlainMod) % PlainMod;
+    A[3] = (((temp[1] + temp[5] + temp[6] + temp[7] + temp[9] + temp[10] + 2 * temp[12] + temp[14] + temp[15] + 2 * temp[17] + 2 * temp[19] + temp[20] + temp[21] + temp[23] + 2 * temp[25] + 2 * temp[26] + temp[28] + temp[29] + temp[30] + 2 * temp[31] + temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[4] = (((temp[1] + 2 * temp[4] + 2 * temp[5] + temp[6] + 2 * temp[7] + temp[8] + temp[9] + temp[12] + temp[13] + temp[14] + temp[15] + temp[18] + 2 * temp[19] + temp[20] + 2 * temp[21] + 2 * temp[22] + 2 * temp[26] + 2 * temp[28] + temp[30] + 2 * temp[31] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[5] = (((temp[0] + 2 * temp[1] + temp[3] + temp[4] + temp[6] + temp[7] + temp[8] + 2 * temp[10] + 2 * temp[11] + 2 * temp[13] + temp[14] + temp[15] + 2 * temp[17] + temp[18] + temp[19] + temp[21] + 2 * temp[24] + 2 * temp[25] + temp[26] + temp[27] + temp[28] + 2 * temp[29] + temp[30] + 2 * temp[31] + temp[33] + 2 * temp[34]) % PlainMod) + PlainMod) % PlainMod;
+    A[6] = (((2 * temp[0] + temp[5] + temp[6] + temp[7] + temp[10] + 2 * temp[12] + 2 * temp[14] + 2 * temp[15] + temp[16] + temp[20] + temp[21] + 2 * temp[24] + temp[27] + temp[30] + temp[31] + temp[33] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[7] = (((temp[2] + 2 * temp[3] + temp[5] + temp[9] + temp[10] + temp[11] + temp[13] + temp[14] + 2 * temp[16] + temp[18] + temp[19] + 2 * temp[21] + 2 * temp[23] + temp[24] + temp[25] + temp[27] + 2 * temp[29] + 2 * temp[30] + temp[32] + temp[33] + temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[8] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[5] + 2 * temp[8] + 2 * temp[9] + temp[10] + 2 * temp[11] + temp[12] + temp[13] + temp[16] + temp[17] + temp[18] + temp[19] + temp[22] + 2 * temp[23] + temp[24] + 2 * temp[25] + 2 * temp[26] + 2 * temp[30] + 2 * temp[32] + temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[9] = (((temp[1] + 2 * temp[2] + temp[4] + 2 * temp[5] + temp[7] + temp[8] + temp[10] + temp[11] + temp[12] + 2 * temp[14] + 2 * temp[15] + 2 * temp[17] + temp[18] + temp[19] + 2 * temp[21] + temp[22] + temp[23] + temp[25] + 2 * temp[28] + 2 * temp[29] + temp[30] + temp[31] + temp[32] + 2 * temp[33] + temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[10] = (((temp[1] + temp[3] + 2 * temp[4] + temp[9] + temp[10] + temp[11] + temp[14] + 2 * temp[16] + 2 * temp[18] + 2 * temp[19] + temp[20] + temp[24] + temp[25] + 2 * temp[28] + temp[31] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[11] = (((temp[0] + temp[1] + temp[2] + 2 * temp[3] + temp[6] + 2 * temp[7] + temp[9] + temp[13] + temp[14] + temp[15] + temp[17] + temp[18] + 2 * temp[20] + temp[22] + temp[23] + 2 * temp[25] + 2 * temp[27] + temp[28] + temp[29] + temp[31] + 2 * temp[33] + 2 * temp[34]) % PlainMod) + PlainMod) % PlainMod;
+    A[12] = (((2 * temp[0] + temp[2] + 2 * temp[3] + temp[4] + temp[5] + temp[6] + temp[7] + temp[9] + 2 * temp[12] + 2 * temp[13] + temp[14] + 2 * temp[15] + temp[16] + temp[17] + temp[20] + temp[21] + temp[22] + temp[23] + temp[26] + 2 * temp[27] + temp[28] + 2 * temp[29] + 2 * temp[30] + 2 * temp[34]) % PlainMod) + PlainMod) % PlainMod;
+    A[13] = (((temp[0] + 2 * temp[1] + temp[2] + 2 * temp[3] + temp[5] + 2 * temp[6] + temp[8] + 2 * temp[9] + temp[11] + temp[12] + temp[14] + temp[15] + temp[16] + 2 * temp[18] + 2 * temp[19] + 2 * temp[21] + temp[22] + temp[23] + 2 * temp[25] + temp[26] + temp[27] + temp[29] + 2 * temp[32] + 2 * temp[33] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[14] = (((temp[2] + temp[3] + temp[5] + temp[7] + 2 * temp[8] + temp[13] + temp[14] + temp[15] + temp[18] + 2 * temp[20] + 2 * temp[22] + 2 * temp[23] + temp[24] + temp[28] + temp[29] + 2 * temp[32] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[15] = (((2 * temp[1] + 2 * temp[2] + temp[4] + temp[5] + temp[6] + 2 * temp[7] + temp[10] + 2 * temp[11] + temp[13] + temp[17] + temp[18] + temp[19] + temp[21] + temp[22] + 2 * temp[24] + temp[26] + temp[27] + 2 * temp[29] + 2 * temp[31] + temp[32] + temp[33] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[16] = (((2 * temp[2] + 2 * temp[4] + temp[6] + 2 * temp[7] + temp[8] + temp[9] + temp[10] + temp[11] + temp[13] + 2 * temp[16] + 2 * temp[17] + temp[18] + 2 * temp[19] + temp[20] + temp[21] + temp[24] + temp[25] + temp[26] + temp[27] + temp[30] + 2 * temp[31] + temp[32] + 2 * temp[33] + 2 * temp[34]) % PlainMod) + PlainMod) % PlainMod;
+    A[17] = (((2 * temp[0] + 2 * temp[1] + temp[2] + temp[3] + temp[4] + 2 * temp[5] + temp[6] + 2 * temp[7] + temp[9] + 2 * temp[10] + temp[12] + 2 * temp[13] + temp[15] + temp[16] + temp[18] + temp[19] + temp[20] + 2 * temp[22] + 2 * temp[23] + 2 * temp[25] + temp[26] + temp[27] + 2 * temp[29] + temp[30] + temp[31] + temp[33]) % PlainMod) + PlainMod) % PlainMod;
+    A[18] = (((2 * temp[0] + temp[3] + temp[6] + temp[7] + temp[9] + temp[11] + 2 * temp[12] + temp[17] + temp[18] + temp[19] + temp[22] + 2 * temp[24] + 2 * temp[26] + 2 * temp[27] + temp[28] + temp[32] + temp[33]) % PlainMod) + PlainMod) % PlainMod;
+    A[19] = (((temp[0] + temp[1] + temp[3] + 2 * temp[5] + 2 * temp[6] + temp[8] + temp[9] + temp[10] + 2 * temp[11] + temp[14] + 2 * temp[15] + temp[17] + temp[21] + temp[22] + temp[23] + temp[25] + temp[26] + 2 * temp[28] + temp[30] + temp[31] + 2 * temp[33] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[20] = (((temp[0] + 2 * temp[1] + 2 * temp[2] + 2 * temp[6] + 2 * temp[8] + temp[10] + 2 * temp[11] + temp[12] + temp[13] + temp[14] + temp[15] + temp[17] + 2 * temp[20] + 2 * temp[21] + temp[22] + 2 * temp[23] + temp[24] + temp[25] + temp[28] + temp[29] + temp[30] + temp[31] + temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[21] = (((temp[1] + 2 * temp[4] + 2 * temp[5] + temp[6] + temp[7] + temp[8] + 2 * temp[9] + temp[10] + 2 * temp[11] + temp[13] + 2 * temp[14] + temp[16] + 2 * temp[17] + temp[19] + temp[20] + temp[22] + temp[23] + temp[24] + 2 * temp[26] + 2 * temp[27] + 2 * temp[29] + temp[30] + temp[31] + 2 * temp[33] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[22] = (((temp[0] + temp[1] + 2 * temp[4] + temp[7] + temp[10] + temp[11] + temp[13] + temp[15] + 2 * temp[16] + temp[21] + temp[22] + temp[23] + temp[26] + 2 * temp[28] + 2 * temp[30] + 2 * temp[31] + temp[32]) % PlainMod) + PlainMod) % PlainMod;
+    A[23] = (((2 * temp[1] + 2 * temp[3] + temp[4] + temp[5] + temp[7] + 2 * temp[9] + 2 * temp[10] + temp[12] + temp[13] + temp[14] + 2 * temp[15] + temp[18] + 2 * temp[19] + temp[21] + temp[25] + temp[26] + temp[27] + temp[29] + temp[30] + 2 * temp[32] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[24] = (((temp[2] + 2 * temp[3] + temp[4] + 2 * temp[5] + 2 * temp[6] + 2 * temp[10] + 2 * temp[12] + temp[14] + 2 * temp[15] + temp[16] + temp[17] + temp[18] + temp[19] + temp[21] + 2 * temp[24] + 2 * temp[25] + temp[26] + 2 * temp[27] + temp[28] + temp[29] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[25] = (((2 * temp[1] + temp[2] + temp[3] + temp[5] + 2 * temp[8] + 2 * temp[9] + temp[10] + temp[11] + temp[12] + 2 * temp[13] + temp[14] + 2 * temp[15] + temp[17] + 2 * temp[18] + temp[20] + 2 * temp[21] + temp[23] + temp[24] + temp[26] + temp[27] + temp[28] + 2 * temp[30] + 2 * temp[31] + 2 * temp[33] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[26] = (((temp[0] + temp[4] + temp[5] + 2 * temp[8] + temp[11] + temp[14] + temp[15] + temp[17] + temp[19] + 2 * temp[20] + temp[25] + temp[26] + temp[27] + temp[30] + 2 * temp[32] + 2 * temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[27] = (((2 * temp[0] + temp[2] + temp[3] + 2 * temp[5] + 2 * temp[7] + temp[8] + temp[9] + temp[11] + 2 * temp[13] + 2 * temp[14] + temp[16] + temp[17] + temp[18] + 2 * temp[19] + temp[22] + 2 * temp[23] + temp[25] + temp[29] + temp[30] + temp[31] + temp[33] + temp[34]) % PlainMod) + PlainMod) % PlainMod;
+    A[28] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[6] + 2 * temp[7] + temp[8] + 2 * temp[9] + 2 * temp[10] + 2 * temp[14] + 2 * temp[16] + temp[18] + 2 * temp[19] + temp[20] + temp[21] + temp[22] + temp[23] + temp[25] + 2 * temp[28] + 2 * temp[29] + temp[30] + 2 * temp[31] + temp[32] + temp[33]) % PlainMod) + PlainMod) % PlainMod;
+    A[29] = (((2 * temp[1] + temp[2] + temp[3] + 2 * temp[5] + temp[6] + temp[7] + temp[9] + 2 * temp[12] + 2 * temp[13] + temp[14] + temp[15] + temp[16] + 2 * temp[17] + temp[18] + 2 * temp[19] + temp[21] + 2 * temp[22] + temp[24] + 2 * temp[25] + temp[27] + temp[28] + temp[30] + temp[31] + temp[32] + 2 * temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[30] = (((2 * temp[0] + 2 * temp[2] + 2 * temp[3] + temp[4] + temp[8] + temp[9] + 2 * temp[12] + temp[15] + temp[18] + temp[19] + temp[21] + temp[23] + 2 * temp[24] + temp[29] + temp[30] + temp[31] + temp[34]) % PlainMod) + PlainMod) % PlainMod;
+    A[31] = (((temp[1] + temp[2] + 2 * temp[4] + temp[6] + temp[7] + 2 * temp[9] + 2 * temp[11] + temp[12] + temp[13] + temp[15] + 2 * temp[17] + 2 * temp[18] + temp[20] + temp[21] + temp[22] + 2 * temp[23] + temp[26] + 2 * temp[27] + temp[29] + temp[33] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[32] = (((temp[0] + temp[1] + temp[4] + temp[5] + temp[6] + temp[7] + temp[10] + 2 * temp[11] + temp[12] + 2 * temp[13] + 2 * temp[14] + 2 * temp[18] + 2 * temp[20] + temp[22] + 2 * temp[23] + temp[24] + temp[25] + temp[26] + temp[27] + temp[29] + 2 * temp[32] + 2 * temp[33] + temp[34] + 2 * temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[33] = (((temp[0] + 2 * temp[2] + 2 * temp[3] + 2 * temp[5] + temp[6] + temp[7] + 2 * temp[9] + temp[10] + temp[11] + temp[13] + 2 * temp[16] + 2 * temp[17] + temp[18] + temp[19] + temp[20] + 2 * temp[21] + temp[22] + 2 * temp[23] + temp[25] + 2 * temp[26] + temp[28] + 2 * temp[29] + temp[31] + temp[32] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[34] = (((temp[2] + 2 * temp[4] + 2 * temp[6] + 2 * temp[7] + temp[8] + temp[12] + temp[13] + 2 * temp[16] + temp[19] + temp[22] + temp[23] + temp[25] + temp[27] + 2 * temp[28] + temp[33] + temp[34] + temp[35]) % PlainMod) + PlainMod) % PlainMod;
+    A[35] = (((temp[1] + temp[2] + temp[3] + temp[5] + temp[6] + 2 * temp[8] + temp[10] + temp[11] + 2 * temp[13] + 2 * temp[15] + temp[16] + temp[17] + temp[19] + 2 * temp[21] + 2 * temp[22] + temp[24] + temp[25] + temp[26] + 2 * temp[27] + temp[30] + 2 * temp[31] + temp[33]) % PlainMod) + PlainMod) % PlainMod;
+}
+void YusP::Sbox_7(vector<long> &A)
+{
+    vector<long> temp = A;
+    // 一次迭代，(x0,x1,x2,x3)——> (x0, -x0*x1+x1+x0*x2+x0*x3, x1+x0*x2-x2+x0*x3, -x0*x1-x2-x0*x3+x3)
+
+    for (int i = 0; i < A.size(); i += 4)
+    {
+        long t01 = temp[i] * temp[i + 1];
+        long t02 = temp[i] * temp[i + 2];
+        long t03 = temp[i] * temp[i + 3];
+        long t02_03_1 = t02 + t03 + temp[i + 1];
+
+        A[i + 1] = (((t02_03_1 - t01) % PlainMod) + PlainMod) % PlainMod;
+        A[i + 2] = (((t02_03_1 - temp[i + 2]) % PlainMod) + PlainMod) % PlainMod;
+        A[i + 3] = (((temp[i + 3] - t01 - temp[i + 2] - t03) % PlainMod) + PlainMod) % PlainMod;
+    }
+}
+void YusP::M18_8(vector<long> &A)
+{
+    std::vector<long> temp = A;
+    A[0] = (((temp[2] + 2 * temp[3] + temp[4] + temp[5] + 2 * temp[6] + 2 * temp[8] + 2 * temp[9] + temp[11] + temp[13] + 2 * temp[14] + 2 * temp[15] + temp[16]) % PlainMod) + PlainMod) % PlainMod;
+    A[1] = (((2 * temp[1] + temp[2] + temp[3] + 2 * temp[5] + 2 * temp[6] + 2 * temp[7] + temp[9] + temp[10] + 2 * temp[11] + 2 * temp[12] + 2 * temp[13] + 2 * temp[14] + temp[15] + 2 * temp[16]) % PlainMod) + PlainMod) % PlainMod;
+    A[2] = (((2 * temp[0] + temp[1] + temp[2] + 2 * temp[4] + temp[5] + 2 * temp[6] + 2 * temp[7] + temp[8] + temp[9] + temp[11] + temp[12] + 2 * temp[13] + 2 * temp[15] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[3] = (((2 * temp[0] + temp[1] + temp[5] + 2 * temp[6] + temp[7] + temp[8] + 2 * temp[9] + 2 * temp[11] + 2 * temp[12] + temp[14] + temp[16] + 2 * temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[4] = (((temp[0] + 2 * temp[1] + 2 * temp[4] + temp[5] + temp[6] + 2 * temp[8] + 2 * temp[9] + 2 * temp[10] + temp[12] + temp[13] + 2 * temp[14] + 2 * temp[15] + 2 * temp[16] + 2 * temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[5] = (((2 * temp[0] + temp[2] + 2 * temp[3] + temp[4] + temp[5] + 2 * temp[7] + temp[8] + 2 * temp[9] + 2 * temp[10] + temp[11] + temp[12] + temp[14] + temp[15] + 2 * temp[16]) % PlainMod) + PlainMod) % PlainMod;
+    A[6] = (((temp[1] + 2 * temp[2] + 2 * temp[3] + temp[4] + temp[8] + 2 * temp[9] + temp[10] + temp[11] + 2 * temp[12] + 2 * temp[14] + 2 * temp[15] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[7] = (((2 * temp[0] + 2 * temp[1] + 2 * temp[2] + temp[3] + 2 * temp[4] + 2 * temp[7] + temp[8] + temp[9] + 2 * temp[11] + 2 * temp[12] + 2 * temp[13] + temp[15] + temp[16] + 2 * temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[8] = (((temp[0] + 2 * temp[1] + 2 * temp[3] + temp[5] + 2 * temp[6] + temp[7] + temp[8] + 2 * temp[10] + temp[11] + 2 * temp[12] + 2 * temp[13] + temp[14] + temp[15] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[9] = (((2 * temp[0] + temp[2] + temp[4] + 2 * temp[5] + 2 * temp[6] + temp[7] + temp[11] + 2 * temp[12] + temp[13] + temp[14] + 2 * temp[15] + 2 * temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[10] = (((temp[0] + temp[1] + 2 * temp[2] + 2 * temp[3] + 2 * temp[4] + 2 * temp[5] + temp[6] + 2 * temp[7] + 2 * temp[10] + temp[11] + temp[12] + 2 * temp[14] + 2 * temp[15] + 2 * temp[16]) % PlainMod) + PlainMod) % PlainMod;
+    A[11] = (((temp[0] + temp[2] + temp[3] + 2 * temp[4] + 2 * temp[6] + temp[8] + 2 * temp[9] + temp[10] + temp[11] + 2 * temp[13] + temp[14] + 2 * temp[15] + 2 * temp[16] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[12] = (((2 * temp[0] + 2 * temp[2] + 2 * temp[3] + temp[5] + temp[7] + 2 * temp[8] + 2 * temp[9] + temp[10] + temp[14] + 2 * temp[15] + temp[16] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[13] = (((2 * temp[0] + 2 * temp[1] + temp[3] + temp[4] + 2 * temp[5] + 2 * temp[6] + 2 * temp[7] + 2 * temp[8] + temp[9] + 2 * temp[10] + 2 * temp[13] + temp[14] + temp[15] + 2 * temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[14] = (((2 * temp[0] + 2 * temp[1] + temp[2] + temp[3] + temp[5] + temp[6] + 2 * temp[7] + 2 * temp[9] + temp[11] + 2 * temp[12] + temp[13] + temp[14] + 2 * temp[16] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[15] = (((2 * temp[0] + temp[1] + temp[2] + 2 * temp[3] + 2 * temp[5] + 2 * temp[6] + temp[8] + temp[10] + 2 * temp[11] + 2 * temp[12] + temp[13] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[16] = (((temp[0] + 2 * temp[2] + 2 * temp[3] + 2 * temp[4] + temp[6] + temp[7] + 2 * temp[8] + 2 * temp[9] + 2 * temp[10] + 2 * temp[11] + temp[12] + 2 * temp[13] + 2 * temp[16] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+    A[17] = (((2 * temp[1] + temp[2] + 2 * temp[3] + 2 * temp[4] + temp[5] + temp[6] + temp[8] + temp[9] + 2 * temp[10] + 2 * temp[12] + temp[14] + 2 * temp[15] + temp[16] + temp[17]) % PlainMod) + PlainMod) % PlainMod;
+}
+void YusP::Sbox_8(vector<long> &A)
+{
+    vector<long> temp = A;
+    // 一次迭代，(x0,x1,x2)——>(x0,x0*x2+x1,-x0*x1+x0*x2+x2)
+    for (int i = 0; i < A.size(); i += 3)
+    {
+        A[i + 1] = (temp[i] * temp[i + 2] + temp[i + 1]) % PlainMod;
+        A[i + 2] = (((-temp[i] * temp[i + 1] + temp[i] * temp[i + 2] + temp[i + 2]) % PlainMod) + PlainMod) % PlainMod;
     }
 }

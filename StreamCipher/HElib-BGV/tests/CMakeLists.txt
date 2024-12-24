@@ -75,51 +75,59 @@ include_directories("${CMAKE_SOURCE_DIR}/utils")
 add_executable(test_Yus_p_C36_ClientAndServer5 test_Yus_p_C36_ClientAndServer5.cpp)
 target_link_libraries(test_Yus_p_C36_ClientAndServer5 PUBLIC Symmetric Utils helib)
 
-# 定义参数数对
-set(param_pairs
-  "4 0"
-  "4 1"
-  "4 6"
-  "4 7"
-  "5 0"
-  "5 1"
-  "5 2"
-  "5 3"
-  "6 0"
-  "6 1"
-  "6 2"
-  "7 0"
-  "8 0"
-)
+add_executable(test_Yus_p_C36_ClientAndServer7 test_Yus_p_C36_ClientAndServer7.cpp)
+target_link_libraries(test_Yus_p_C36_ClientAndServer7 PUBLIC Symmetric Utils helib)
 
-# 创建子文件夹
-set(subdir "${CMAKE_SOURCE_DIR}/tests/generated")
-file(MAKE_DIRECTORY ${subdir})
+add_executable(test_Hera test_Hera.cpp)
+target_link_libraries(test_Hera PUBLIC Symmetric Utils helib)
 
-# 遍历所有参数数对
-foreach(pair ${param_pairs})
-  string(REPLACE " " ";" pair_list ${pair})
-  list(GET pair_list 0 Nr)
-  list(GET pair_list 1 idx)
+add_executable(test_Yus_p_C18_ClientAndServer8 test_Yus_p_C18_ClientAndServer8.cpp)
+target_link_libraries(test_Yus_p_C18_ClientAndServer8 PUBLIC Symmetric Utils helib)
+# # 定义参数数对
+# set(param_pairs
+#   "4 0"
+#   "4 1"
+#   "4 6"
+#   "4 7"
+#   "5 0"
+#   "5 1"
+#   "5 2"
+#   "5 3"
+#   "6 0"
+#   "6 1"
+#   "6 2"
+#   "7 0"
+#   "8 0"
+# )
 
-  # 设置源文件和可执行文件名称
-  set(temp_file "${subdir}/test_Yus_p_C64_ClientAndServer6_${Nr}_${idx}.cpp")
-  set(executable_name "test_Yus_p_C64_ClientAndServer6_${Nr}_${idx}")
+# # 创建子文件夹
+# set(subdir "${CMAKE_SOURCE_DIR}/tests/generated")
+# file(MAKE_DIRECTORY ${subdir})
 
-  # 读取原始源文件内容
-  file(READ "${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C64_ClientAndServer6.cpp" file_content)
+# # 遍历所有参数数对
+# foreach(pair ${param_pairs})
+#   string(REPLACE " " ";" pair_list ${pair})
+#   list(GET pair_list 0 Nr)
+#   list(GET pair_list 1 idx)
 
-  # 替换 Nr 和 idx 的值
-  string(REPLACE "constexpr unsigned Nr = 4" "constexpr unsigned Nr = ${Nr}" file_content "${file_content}")
-  string(REPLACE "constexpr long idx = 0" "constexpr long idx = ${idx}" file_content "${file_content}")
+#   # 设置源文件和可执行文件名称
+#   set(temp_file "${subdir}/test_Yus_p_C64_ClientAndServer6_${Nr}_${idx}.cpp")
+#   set(executable_name "test_Yus_p_C64_ClientAndServer6_${Nr}_${idx}")
 
-  # 写入修改后的内容到新的文件
-  file(WRITE "${temp_file}" "${file_content}")
+#   # 读取原始源文件内容
+#   file(READ "${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C64_ClientAndServer6.cpp" file_content)
 
-  # 添加可执行文件和链接库
-  add_executable(${executable_name} ${temp_file})
-  target_link_libraries(${executable_name} PUBLIC Symmetric Utils helib)
-endforeach()
+#   # 替换 Nr 和 idx 的值
+#   string(REPLACE "constexpr unsigned Nr = 4" "constexpr unsigned Nr = ${Nr}" file_content "${file_content}")
+#   string(REPLACE "constexpr long idx = 0" "constexpr long idx = ${idx}" file_content "${file_content}")
+
+#   # 写入修改后的内容到新的文件
+#   file(WRITE "${temp_file}" "${file_content}")
+
+#   # 添加可执行文件和链接库
+#   add_executable(${executable_name} ${temp_file})
+#   target_link_libraries(${executable_name} PUBLIC Symmetric Utils helib)
+# endforeach()
 
 # add_custom_command(TARGET test_Yus_p_C64_ClientAndServer4 POST_BUILD
 #    COMMAND ${CMAKE_COMMAND} -E copy

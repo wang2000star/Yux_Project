@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # 设置编译器
-set(CMAKE_CXX_COMPILER "usr/bin/g++")
+set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 project(Yux LANGUAGES CXX)
 
@@ -12,24 +12,42 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 ## Require full C++ standard
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-## if Debug 
-set(CMAKE_BUILD_TYPE "Debug")
+# 设置构建类型为 Release，启用优化
+set(CMAKE_BUILD_TYPE "Release")
 
-#set(CMAKE_CXX_)
-#add_compile_options("-ferror-limit=40")
+# 添加编译优化选项
+add_compile_options(
+    -O3                # 启用最大优化
+    -march=native      # 针对本机 CPU 架构优化
+)
 
-find_package(helib 2.3.0)
-if (helib_NOTFOUND)
-    message("helib have not found")
-else()
-    message("helib ${HELIB_VERSION} have found.)")
-endif()
+# # 启用 AVX2 优化选项
+# if(CMAKE_COMPILER_IS_GNUCXX)
+#     add_compile_options(
+#         -mavx2           # 启用 AVX2 支持
+#     )
+# endif()
+
+# # 启用 AVX-512 支持（如果支持）
+# if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+#     add_compile_options(
+#         -mavx512vl        # 启用 AVX-512 整数向量运算支持
+#     )
+# endif()
 
 
-# 添加 OpenMP 支持
+# 启用 OpenMP 支持
 find_package(OpenMP REQUIRED)
 if (OpenMP_CXX_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
+
+# 查找 HELIB 库
+find_package(helib 2.3.0)#or 2.2.0
+if (helib_NOTFOUND)
+    message("helib not found")
+else()
+    message("helib ${HELIB_VERSION} found.")
 endif()
 
 # add symmetric library

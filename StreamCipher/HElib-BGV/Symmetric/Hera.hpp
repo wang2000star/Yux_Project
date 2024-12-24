@@ -1,7 +1,7 @@
 #ifndef HERA_HPP
 #define HERA_HPP
 
-#include <cstdint> // 如果需要使用 uint64_t 类型
+#include <cstdint> 
 #include <iostream>
 #include <array>
 #include <vector>
@@ -19,4 +19,4 @@ private:
     long PlainMod;
 };
 
-#endif // YUS_P_HPP
+#endif // HERA_HPP
