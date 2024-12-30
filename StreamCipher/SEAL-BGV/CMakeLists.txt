@@ -29,13 +29,16 @@ if (OpenMP_CXX_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-# 查找 HELIB 库
-find_package(helib 2.3.0) # or 2.2.0
-if (helib_NOTFOUND)
-    message("helib not found")
+# 查找 SEAL 库
+find_package(SEAL 4.1.2 REQUIRED)
+if (SEAL_FOUND)
+    message("SEAL ${SEAL_VERSION} found.")
 else()
-    message("helib ${HELIB_VERSION} found.")
+    message(FATAL_ERROR "SEAL not found")
 endif()
+
+# Add include directories for SEAL
+include_directories(${SEAL_INCLUDE_DIRS})
 
 # add symmetric library
 aux_source_directory("${CMAKE_SOURCE_DIR}/Symmetric" SYMMETRIC_SRC_LIST)
@@ -49,19 +52,12 @@ add_library(Utils ${UTILS_SRC_LIST})
 # Output UTILS_SRC_LIST for debugging
 message(STATUS "UTILS_SRC_LIST: ${UTILS_SRC_LIST}")
 
-# add TRANSCIPHER library
-# aux_source_directory("${CMAKE_SOURCE_DIR}/transciphering" TRANSCIPHER_SRC_LIST)
-# add_library(Transcipher ${TRANSCIPHER_SRC_LIST})
-# add NTL and GMP include directories
-# target_include_directories(Transcipher PUBLIC "${CMAKE_SOURCE_DIR}/Symmetric" "${CMAKE_SOURCE_DIR}/utils" "/usr/local/include")
-# Output TRANSCIPHER_SRC_LIST for debugging
-# message(STATUS "TRANSCIPHER_SRC_LIST: ${TRANSCIPHER_SRC_LIST}")
 
-# 针对特定文件启用 AVX2 优化选项
-set_source_files_properties(
-    ${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C18_ClientAndServer8_2.cpp
-    PROPERTIES COMPILE_FLAGS "-mavx2"
-)
+# # 针对特定文件启用 AVX2 优化选项
+# set_source_files_properties(
+#     ${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C18_ClientAndServer8_2.cpp
+#     PROPERTIES COMPILE_FLAGS "-mavx2"
+# )
 
 add_subdirectory(tests)
 

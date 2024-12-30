@@ -13,12 +13,10 @@
 #include <cassert>
 
 #include <NTL/ZZX.h>
-// #include <NTL/GF2X.h>
+#include <NTL/GF2X.h>
 #include <helib/helib.h>
 #include <helib/ArgMap.h>
 #include <helib/DoubleCRT.h>
-
-#include <immintrin.h> // 包含 SIMD 指令集支持
 
 #include "random_bit.hpp"
 #include "Yus_p.hpp"
@@ -41,15 +39,15 @@ namespace fs = std::filesystem;
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 // 更一般的，应该有d|ord_p(m)，slots=\phi(m)/ord_p(m)
 //!!!!!!!!!!!!!!!!
-constexpr unsigned BlockByte = 36; // 分组字节长度
+constexpr long BlockByte = 36; // 分组字节长度
 // ===============模式设置================
 static bool Rkflag = 1;     // true/1表示乘法，false/0表示加法，指的是随机向量和密钥间的操作
 static bool deflag = 0;     // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
 static bool ompflag = 0;    // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
 static bool symkeyflag = 0; // true/1表示对称密钥同态解密验证加密，false/0表示不验证
-static bool plainflag = 1;  // true/1表示对称密文同态解密验证，false/0表示不验证
+static bool plainflag = 0;  // true/1表示对称密文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
-static constexpr unsigned Nr = 4; // 轮数
+static constexpr unsigned Nr = 5; // 轮数
 constexpr long idx = 0;
 constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
@@ -57,10 +55,10 @@ constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {// Nr = 4
      // {p, log2(m), bits, c}
-     {65537, 14, 216, 2},   // 0 *
-     {163841, 15, 240, 2},  // 1
-     {65537, 14, 220, 2},   // 2 *
-     {163841, 14, 230, 2},  // 3
+     {65537, 14, 230, 2},   // 0 *
+     {163841, 15, 230, 2},  // 1 *
+     {65537, 14, 210, 2},   // 2 *
+     {163841, 14, 220, 2},  // 3 *
      {65537, 15, 350, 2},   // 4
      {163841, 15, 350, 2},  // 5
      {65537, 15, 400, 2},   // 6
@@ -68,8 +66,8 @@ constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {
         // Nr = 5
         // {p, log2(m), bits, c}
-        {65537, 15, 280, 2},  // 0 *
-        {163841, 15, 280, 2}, // 1
+        {65537, 15, 240, 2},  // 0 *
+        {163841, 15, 280, 2}, // 1 *
         {65537, 16, 300, 2},  // 2
         {65537, 16, 350, 2},  // 3
         {0, 0, 0, 0},         // 填充空位
@@ -80,8 +78,8 @@ constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {
         // Nr = 6
         // {p, log2(m), bits, c}
-        {65537, 16, 340, 2}, // 0 *
-        {65537, 16, 360, 2}, //
+        {65537, 16, 360, 2}, // 0 *
+        {65537, 16, 360, 2}, // 1
         {65537, 16, 370, 2},
         {0, 0, 0, 0}, // 填充空位
         {0, 0, 0, 0}, // 填充空位
@@ -92,7 +90,7 @@ constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {
         // Nr = 7
         // {p, log2(m), bits, c}
-        {65537, 16, 380, 2}, // 0 *
+        {65537, 16, 390, 2}, // 0 *
         {0, 0, 0, 0},        // 填充空位
         {0, 0, 0, 0},        // 填充空位
         {0, 0, 0, 0},        // 填充空位
@@ -104,7 +102,7 @@ constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {
         // Nr = 8
         // {p, log2(m), bits, c}
-        {65537, 16, 430, 2},  // 0 *
+        {65537, 16, 450, 2},
         {786433, 17, 450, 2}, // slots太大，不建议使用
         {0, 0, 0, 0},         // 填充空位
         {0, 0, 0, 0},         // 填充空位
@@ -127,7 +125,7 @@ constexpr long Para_c = get<3>(paramMap[Nr - 4][idx]);    // columns in the key-
 
 //!!!!!!!!!!!!!!!
 constexpr unsigned PlainBlock = phi_m - 0; // 明文分组数,应该PlainBlock<=phi_m
-constexpr unsigned len3 = BlockByte / 3;
+
 // 计算 log2 的 constexpr 函数
 constexpr unsigned int log2_constexpr(unsigned long long n, unsigned int p = 0)
 {
@@ -135,12 +133,12 @@ constexpr unsigned int log2_constexpr(unsigned long long n, unsigned int p = 0)
 }
 constexpr long PlainMod = Para_p;                               // 明文模数
 constexpr unsigned Bytebits = log2_constexpr(PlainMod - 1) + 1; // 字节比特长度=ceil(log2(PlainMod-1))
-constexpr unsigned randbits = Bytebits - 1;
-constexpr unsigned BlockSize = Bytebits * BlockByte;   // 分组比特长度=BlockByte*Bytebits
-constexpr unsigned NrBlockByte = BlockByte * (Nr + 1); // Nr轮分组密钥字节长度
-static const long PlainByte = BlockByte * PlainBlock;  // 明文字节长度
-static const long Plainbits = Bytebits * PlainByte;    // 明文比特长度
-static const long PlainSize = BlockSize * PlainBlock;  // 明文比特长度
+
+constexpr unsigned BlockSize = Bytebits * BlockByte; // 分组比特长度=BlockByte*Bytebits
+
+static const long PlainByte = BlockByte * PlainBlock; // 明文字节长度
+static const long Plainbits = Bytebits * PlainByte;   // 明文比特长度
+static const long PlainSize = BlockSize * PlainBlock; // 明文比特长度
 
 static const unsigned NonceSize = 32;                           // Nonce比特长度
 static const long counter_begin = 0;                            // 计数器起始值
@@ -148,36 +146,6 @@ static const long counter_end = PlainBlock + counter_begin - 1; // 计数器结�
 
 YusP yusP(PlainMod); // 构建明文对称加密实例
 
-// 函数：对多项式的每个系数乘以整数 a 并取模 c
-zzX multiplyAndMod(const zzX &a, long b)
-{
-    zzX res;
-    res.SetLength(lsize(a));
-    int len = lsize(a);
-    for (long i = 0; i < len; ++i)
-    {
-        res[i] = (a[i] * b) % Para_p;
-    }
-    return res;
-}
-// void vector_addition_avx2(const long* __restrict a, const long* __restrict b, long* __restrict result, size_t size)
-// {
-//     // 检查size是否为8的倍数，确保可以正确处理AVX2的256位寄存器
-//     assert(size % 8 == 0);
-//     __m256i va, vb, vr;
-//     for (size_t i = 0; i < size; i += 8)
-//     {
-//         // 加载8个long整数到AVX寄存器
-//         va = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(a + i));
-//         vb = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(b + i));
-
-//         // 使用AVX2指令进行向量加法
-//         vr = _mm256_add_epi32(va, vb);
-
-//         // 存储结果回内存
-//         _mm256_storeu_si256(reinterpret_cast<__m256i*>(result + i), vr);
-//     }
-// }
 int min_noise_budget(vector<Ctxt> &eData)
 {
     int min_noise = 1000;
@@ -191,24 +159,7 @@ int min_noise_budget(vector<Ctxt> &eData)
     }
     return min_noise;
 }
-bool writeEncryptedSymKey(const vector<Ctxt> &encryptedSymKey, const std::string &filename)
-{
-    std::ofstream out(filename, std::ios::binary);
-    if (!out.is_open())
-    {
-        std::cerr << "Failed to open " << filename << " for writing" << std::endl;
-        return false;
-    }
 
-    for (const auto &ctxt : encryptedSymKey)
-    {
-        ctxt.writeTo(out);
-    }
-
-    out.close();
-
-    return true;
-}
 void encodeTo36Ctxt(vector<ZZX> &encData, const vector<long> &data, const EncryptedArray &ea)
 {
     long R = data.size() / PlainByte;
@@ -234,7 +185,6 @@ void encodeTo36Ctxt(vector<ZZX> &encData, const vector<long> &data, const Encryp
         }
     }
 }
-
 // encodeTo36Ctxt对应的解码
 void decodeTo36Ctxt(vector<long> &data, const vector<vector<long>> &encData,
                     const EncryptedArray &ea)
@@ -242,7 +192,7 @@ void decodeTo36Ctxt(vector<long> &data, const vector<vector<long>> &encData,
     long R = encData.size() / BlockByte;
     long data_size = R * PlainByte;
     data.resize(data_size);
-    omp_set_num_threads(16); // 设置线程数为16
+    omp_set_num_threads(12); // 设置线程数为12
 #pragma omp parallel for
     for (long j = 0; j < PlainBlock; j++)
     {
@@ -262,10 +212,10 @@ void decodeTo36Ctxt(vector<long> &data, const vector<vector<long>> &encData,
 bool verifyDecryption36(const std::vector<Ctxt> &encryptedVec, const vector<long> &originalVec, const SecKey &secretKey,
                         const EncryptedArray &ea)
 {
-    auto start_decrypt = std::chrono::high_resolution_clock::now();
+    auto start_decrypt = std::chrono::steady_clock::now();
     vector<long> decryptedVec;
     std::vector<std::vector<long>> decryptedPolys(encryptedVec.size());
-    omp_set_num_threads(16); // 设置线程数为16
+    omp_set_num_threads(12); // 设置线程数为12
 #pragma omp parallel for
     for (std::size_t i = 0; i < encryptedVec.size(); ++i)
     {
@@ -275,7 +225,7 @@ bool verifyDecryption36(const std::vector<Ctxt> &encryptedVec, const vector<long
     decodeTo36Ctxt(decryptedVec, decryptedPolys, ea);
     // 验证解密结果
     bool isDecryptedVecCorrect = std::equal(decryptedVec.begin(), decryptedVec.end(), originalVec.begin());
-    auto end_decrypt = std::chrono::high_resolution_clock::now();
+    auto end_decrypt = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds = end_decrypt - start_decrypt;
     std::cout << "Decryption and verification finished! Time: " << elapsed_seconds.count() << "s\n";
     // 如果解密结果不正确，输出第一个错误的位置
@@ -292,7 +242,7 @@ bool verifyDecryption36(const std::vector<Ctxt> &encryptedVec, const vector<long
     }
     return isDecryptedVecCorrect;
 }
-void encryptSymKey(vector<Ctxt> &encryptedSymKey, vector<Ctxt> &encryptedSymKey01, vector<Ctxt> &encryptedSymKey02, const vector<long> &SymKey, unique_ptr<PubKey> &pk, EncryptedArray &ea)
+void encryptSymKey(vector<Ctxt> &encryptedSymKey, const vector<long> &SymKey, unique_ptr<PubKey> &pk, EncryptedArray &ea)
 {
     long nslots = ea.size();
     // 加密
@@ -302,20 +252,10 @@ void encryptSymKey(vector<Ctxt> &encryptedSymKey, vector<Ctxt> &encryptedSymKey0
         vector<long> slotsData(nslots, SymKey[i]);
         ea.encrypt(encryptedSymKey[i], *pk, slotsData);
     }
-    encryptedSymKey01.resize(len3, Ctxt(*pk));
-    encryptedSymKey02.resize(len3, Ctxt(*pk));
-    for (long i = 0; i < BlockByte; i += 3)
-    { // encrypt the encoded key2
-        vector<long> slotsData01(nslots, (SymKey[i] * SymKey[i + 1]) % PlainMod);
-        vector<long> slotsData02(nslots, (SymKey[i] * SymKey[i + 2]) % PlainMod);
-        int num = i / 3;
-        ea.encrypt(encryptedSymKey01[num], *pk, slotsData01);
-        ea.encrypt(encryptedSymKey02[num], *pk, slotsData02);
-    }
 }
 bool verify_encryptSymKey(vector<Ctxt> &encryptedSymKey, const vector<long> &SymKey, const SecKey &secretKey, EncryptedArray &ea)
 {
-    auto start_decrypt = std::chrono::high_resolution_clock::now();
+    auto start_decrypt = std::chrono::steady_clock::now();
     vector<long> decryptedSymKey(BlockByte);
     omp_set_num_threads(12); // 设置线程数为12
 #pragma omp parallel for
@@ -326,10 +266,31 @@ bool verify_encryptSymKey(vector<Ctxt> &encryptedSymKey, const vector<long> &Sym
         decryptedSymKey[i] = slotsData[0];
     }
     bool isDecryptedSymKeyCorrect = std::equal(SymKey.begin(), SymKey.end(), decryptedSymKey.begin());
-    auto end_decrypt = std::chrono::high_resolution_clock::now();
+    auto end_decrypt = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds = end_decrypt - start_decrypt;
     std::cout << "Decryption and verification finished! Time: " << elapsed_seconds.count() << "s\n";
     return isDecryptedSymKeyCorrect;
+}
+void HE_M24(vector<Ctxt> &eData)
+{
+    vector<Ctxt> temp = eData;
+    for (int i=0;i<10;i++){
+    eData[0] += temp[i+1];
+    }
+}
+void HE_M23(vector<Ctxt> &eData)
+{
+    vector<Ctxt> temp = eData;
+    for (int i=0;i<5;i++){
+    eData[0] += temp[i+1];
+    //eData[0] += temp[i];
+    //eData[0] += temp[i];
+    }
+    Ctxt tt = temp[0];
+    for (int i=5;i<10;i++){
+    tt += temp[i+1];
+    }
+    eData[0] += tt;
 }
 // Linear transformation
 void HE_M2(vector<Ctxt> &eData)
@@ -899,8 +860,7 @@ void HE_M2(vector<Ctxt> &eData)
     eData[35] += temp[25];
     eData[35] += temp29_30_31;
     eData[35] += temp[33];
-
-    if (1)
+    for (int i = 1; i < 2; i++)
     {
         temp = eData;
         // 0,1,2,3
@@ -1475,9 +1435,9 @@ void HE_Sbox(vector<Ctxt> &eData)
     Ctxt c01 = eData[1];
     Ctxt c02 = eData[2];
     c01.multiplyBy(eData[0]);
-    // c01*=eData[0];
+    //c01*=eData[0];
     c02.multiplyBy(eData[0]);
-    // c02*=eData[0];
+    //c02*=eData[0];
 
     eData[1] += c02;
     eData[2] -= c01;
@@ -1499,7 +1459,6 @@ void HE_Sbox(vector<Ctxt> &eData)
     // c01.cleanUp();
     // c02.cleanUp();
 }
-
 int main()
 {
     std::cout << "Nr: " << Nr << std::endl;
@@ -1530,14 +1489,23 @@ int main()
     std::cout << "SymKey generated." << std::endl;
     //========
     // Generating symmetric key and key stream
-    auto start_keyStream = std::chrono::high_resolution_clock::now();
+    auto start_keyStream = std::chrono::steady_clock::now();
 
     std::vector<long> NonceSet(PlainBlock);
-    // std::vector<long> Xset(PlainByte * (Nr + 1));
+    std::vector<long> Xset(PlainByte * (Nr + 1));
     std::vector<long> RoundKeySet(PlainByte * (Nr + 1));
     std::vector<long> KeyStream(PlainByte);
-    RandomBit<BlockByte * randbits> randomBit(Nr);
+
+    long total_tasks = counter_end - counter_begin + 1;
+    std::atomic<long> completed_tasks(0);
+    // 定义进度打印的粒度，例如每完成 1% 的任务打印一次
+    long progress_step = total_tasks / 100;
+    if (progress_step == 0)
+        progress_step = 1; // 防止除零
+    RandomBit<BlockSize> randomBit(Nr);
     std::cout << "Generating KeyStream..." << std::endl;
+    omp_set_num_threads(12); // 设置线程数为12
+#pragma omp parallel for firstprivate(randomBit)
     for (long counter = counter_begin; counter <= counter_end; counter++)
     {
         long nonce = generate_secure_random_int(NonceSize);
@@ -1559,14 +1527,14 @@ int main()
             // 计算 X 和 RoundKey
             for (unsigned i = 0; i < BlockByte; ++i)
             {
-                bool bit_array[randbits];
-                for (unsigned j = 0; j < randbits; ++j)
+                bool bit_array[Bytebits];
+                for (unsigned j = 0; j < Bytebits; ++j)
                 {
-                    bit_array[j] = RanVecs[r][i * randbits + j];
+                    bit_array[j] = RanVecs[r][i * Bytebits + j];
                 }
-                BinStrToHex(bit_array, temp, randbits);
+                BinStrToHex(bit_array, temp, Bytebits);
                 // 强制转换为 long 类型
-                X[i] = static_cast<long>(temp);
+                X[i] = static_cast<long>(temp % PlainMod);
                 if (Rkflag)
                 {
                     RoundKey[i] = (SymKey[i] * X[i]) % PlainMod;
@@ -1576,8 +1544,9 @@ int main()
                     RoundKey[i] = (SymKey[i] + X[i]) % PlainMod;
                 }
             }
+
             // 将 X 和 RoundKey 复制到 Xset 和 RoundKeySet
-            // memcpy(&Xset[PlainByte * r + BlockByte * (counter - counter_begin)], X.data(), BlockByte * sizeof(long));
+            memcpy(&Xset[PlainByte * r + BlockByte * (counter - counter_begin)], X.data(), BlockByte * sizeof(long));
             memcpy(&RoundKeySet[PlainByte * r + BlockByte * (counter - counter_begin)], RoundKey.data(), BlockByte * sizeof(long));
             if (r == 0)
             { // 初始轮
@@ -1588,8 +1557,8 @@ int main()
             }
             else if (r < Nr)
             {                       // 常规轮
-                yusP.Sbox_5(state); // S盒
                 yusP.M36_5(state);  // 线性变换
+                yusP.Sbox_5(state); // S盒
                 for (unsigned i = 0; i < BlockByte; i++)
                 {
                     state[i] = (state[i] + RoundKey[i]) % PlainMod;
@@ -1607,8 +1576,22 @@ int main()
                 memcpy(&KeyStream[(counter - counter_begin) * BlockByte], state.data(), BlockByte * sizeof(long));
             }
         }
+
+        // 更新已完成的任务数
+        long local_completed = ++completed_tasks;
+
+        // 定期打印进度
+        if (local_completed % progress_step == 0 || local_completed == total_tasks)
+        {
+#pragma omp critical
+            {
+                std::cout << "Progress: " << (local_completed * 100) / total_tasks << "% completed.\r" << std::flush;
+            }
+        }
     }
-    auto end_keyStream = std::chrono::high_resolution_clock::now();
+    std::cout << std::endl; // 完成后换行
+
+    auto end_keyStream = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds_keyStream = end_keyStream - start_keyStream;
     std::cout << "KeyStream Generation time: " << elapsed_seconds_keyStream.count() << "s\n";
 
@@ -1625,7 +1608,7 @@ int main()
 
     if (!m)
         m = FindM(k, bits, c, p, d, s, 0);
-    auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::steady_clock::now();
 
     // Context context = ContextBuilder<BGV>()
     //                                 .m(m)
@@ -1641,19 +1624,16 @@ int main()
                                     .bits(bits)
                                     .c(c)
                                     .buildPtr());
-    auto end = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds_context = end - start;
     std::cout << "Context generation time: " << elapsed_seconds_context.count() << "s\n";
-    helib::EncryptedArray ea(context->getEA());
-    long nslots = ea.size();
-    auto start_PubKey = std::chrono::high_resolution_clock::now();
 
+    auto start_PubKey = std::chrono::steady_clock::now();
     SecKey secretKey(*context);
     secretKey.GenSecKey();
-    // Compute key-switching matrices that we need
-    // helib::addSome1DMatrices(secretKey);
     unique_ptr<PubKey> publicKey = std::make_unique<helib::PubKey>(secretKey);
-
+    helib::EncryptedArray ea(context->getEA());
+    long nslots = ea.size();
     // if (nslots > PlainBlock)
     // {
     //     std::cerr << "nslots > PlainBlock" << std::endl;
@@ -1664,7 +1644,7 @@ int main()
     std::cout << "nslots=" << nslots << std::endl;
     std::cout << "bits=" << bits << std::endl;
     std::cout << "c=" << c << std::endl;
-    auto end_PubKey = std::chrono::high_resolution_clock::now();
+    auto end_PubKey = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds_PubKey = end_PubKey - start_PubKey;
     std::cout << "PublicKey generation time: " << elapsed_seconds_PubKey.count() << "s\n";
     // return 0;
@@ -1673,13 +1653,13 @@ int main()
     std::cout << std::endl;
     long Qbits = context->bitSizeOfQ();
     double SecurityLevel = context->securityLevel();
+    // 输出 securityLevel
+    std::cout << "Security: " << context->securityLevel() << std::endl;
 
-    auto start_keyEncryption = std::chrono::high_resolution_clock::now();
+    auto start_keyEncryption = std::chrono::steady_clock::now();
     vector<Ctxt> encryptedSymKey;
-    vector<Ctxt> encryptedSymKey01;
-    vector<Ctxt> encryptedSymKey02;
-    encryptSymKey(encryptedSymKey, encryptedSymKey01, encryptedSymKey02, SymKey, publicKey, ea);
-    auto end_keyEncryption = std::chrono::high_resolution_clock::now();
+    encryptSymKey(encryptedSymKey, SymKey, publicKey, ea);
+    auto end_keyEncryption = std::chrono::steady_clock::now();
     double keyEncryption = std::chrono::duration<double>(end_keyEncryption - start_keyEncryption).count();
     std::cout << "SymKey FHE time: " << keyEncryption << "s\n";
     //  解密验证
@@ -1694,114 +1674,25 @@ int main()
     // 离线客户端时间=KeyStream Generation time+PublicKey generation and SymKey FHE time
     double total_time_off = elapsed_seconds_keyStream.count() + elapsed_seconds_PubKey.count() + elapsed_seconds_PubKey.count() + keyEncryption;
     std::cout << "Encryption offline total time: " << total_time_off << "s\n";
-    if (!writeEncryptedSymKey(encryptedSymKey, "Client_encryptedSymKey.bin"))
-    {
-        return false;
-    }
-    std::cout << "Client_encryptedSymKey.bin has been written to file." << std::endl;
 
     //=============服务端offline阶段================
-    std::cout << "Generating XOF stream..." << std::endl;
-    std::vector<std::vector<long>> Xset01(len3, std::vector<long>(PlainBlock));
-    std::vector<std::vector<long>> Xset02(len3, std::vector<long>(PlainBlock));
-    std::vector<std::vector<long>> Xset(NrBlockByte, std::vector<long>(PlainBlock));
-    // helib::Ptxt<helib::BGV> ptxt(*context);
-    // vector<helib::Ptxt<helib::BGV>> Xset(NrBlockByte,ptxt);
-    // vector<helib::Ptxt<helib::BGV>> Xset01(len3,ptxt);
-    // vector<helib::Ptxt<helib::BGV>> Xset02(len3,ptxt);
-    auto start_XOF = std::chrono::high_resolution_clock::now();
-    for (long counter = counter_begin; counter <= counter_end; counter++)
-    {
-        long nonce = NonceSet[counter - counter_begin];
-        randomBit.generate_Instance_all_new(nonce, counter);
-        auto &RanVecs = randomBit.roundconstants;
-        // 逐轮进行加密
-        for (unsigned r = 0; r <= Nr; r++)
-        {
-            std::vector<long> X(BlockByte);
-            uint64_t temp;
-            // 计算 X
-            for (unsigned i = 0; i < BlockByte; ++i)
-            {
-                bool bit_array[randbits];
-                for (unsigned j = 0; j < randbits; ++j)
-                {
-                    bit_array[j] = RanVecs[r][i * randbits + j];
-                }
-                BinStrToHex(bit_array, temp, randbits);
-                // 强制转换为 long 类型
-                X[i] = static_cast<long>(temp);
-                ;
-            }
-            // 将 X 复制到 Xset
-            for (int i = 0; i < BlockByte; i++)
-            {
-                Xset[r * BlockByte + i][counter - counter_begin] = X[i];
-            }
-            if (r == 0)
-            { // 初始轮
-                for (int i = 0; i < BlockByte; i += 3)
-                {
-                    int index = i / 3;
-                    Xset01[index][counter - counter_begin] = (X[i] * X[i + 1]) % PlainMod;
-                    Xset02[index][counter - counter_begin] = (X[i] * X[i + 2]) % PlainMod;
-                }
-            }
-        }
-    }
-    auto end_XOF = std::chrono::high_resolution_clock::now();
-    double XOF_time = std::chrono::duration<double>(end_XOF - start_XOF).count();
-    std::cout << "XOF stream Generation time: " << XOF_time << "s\n";
-
-    // vector<ZZX> encodedIV;
-    // vector<ZZX> encoded_Iv0Iv1;
-    // vector<ZZX> encoded_Iv0Iv2;
-    // auto start_IV = std::chrono::high_resolution_clock::now();
-    // for (int i = 0; i < BlockByte; i += 3)
-    // {
-    //     encodedIV.push_back(to_ZZX(IV[i]));
-    //     encodedIV.push_back(to_ZZX(IV[i + 1]));
-    //     encodedIV.push_back(to_ZZX(IV[i + 2]));
-    //     encoded_Iv0Iv1.push_back(to_ZZX((IV[i] * IV[i + 1]) % PlainMod));
-    //     encoded_Iv0Iv2.push_back(to_ZZX((IV[i] * IV[i + 2]) % PlainMod));
-    // }
-    // auto end_IV = std::chrono::high_resolution_clock::now();
-    // std::cout << "encodeIV time: " << std::chrono::duration<double>(end_IV - start_IV).count() << "s\n";
-
-    vector<zzX> encodedXset(NrBlockByte);
-    vector<zzX> encodedXset01(len3);
-    vector<zzX> encodedXset02(len3);
-
-    auto start_Xset = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < NrBlockByte; i++)
-    {
-        ea.encode(encodedXset[i], Xset[i]);
-    }
-    for (int i = 0; i < len3; i++)
-    {
-        ea.encode(encodedXset01[i], Xset01[i]);
-        ea.encode(encodedXset02[i], Xset02[i]);
-    }
-    auto end_Xset = std::chrono::high_resolution_clock::now();
-    double Encode_time = std::chrono::duration<double>(end_Xset - start_Xset).count();
-    std::cout << "encode time: " << Encode_time << "s\n";
-    std::cout << "encode time/slots:" << Encode_time/(NrBlockByte+2*len3) * pow(10,6) << "us\n";
-    Ctxt tmpCtxt(*publicKey);
-    int noise_budget = min_noise_budget(encryptedSymKey);
-    std::cout << "noise budget initially: " << noise_budget << std::endl;
-    if (noise_budget <= 0)
-    {
-        std::cerr << "noise budget is not enough!!!" << std::endl;
-        return 0;
-    }
     // 计算 encryptedRoundKeySet
+    vector<Ctxt> encryptedRoundKeySet;
+    Ctxt tmpCtxt(*publicKey);
     long eRk_len = BlockByte * (Nr + 1);
-    vector<Ctxt> encryptedRoundKeySet(eRk_len, tmpCtxt);
+    encryptedRoundKeySet.resize(eRk_len, tmpCtxt);
     for (int i = 0; i < eRk_len; i++)
     {
         encryptedRoundKeySet[i] = encryptedSymKey[i % BlockByte];
     }
-    auto start_RoundKeySet_FHE = std::chrono::high_resolution_clock::now();
+    vector<ZZX> encodedXset;
+    auto m1 = std::chrono::steady_clock::now();
+    encodeTo36Ctxt(encodedXset, Xset, ea); // encode as HE plaintext
+    auto m2 = std::chrono::steady_clock::now();
+    double Encode_time = std::chrono::duration<double>(m2 - m1).count();
+    std::cout << "encodeTo36Ctxt time: " << std::chrono::duration<double>(m2 - m1).count() << "s\n";
+
+    auto start_RoundKeySet_FHE = std::chrono::steady_clock::now();
     if (Rkflag)
     {
         for (int i = 0; i < eRk_len; i++)
@@ -1813,100 +1704,86 @@ int main()
     {
         for (int i = 0; i < eRk_len; i++)
         {
-                ZZX temp;
-                int len = lsize(encodedXset[i]);
-                for (long j = 0; j <= len; ++j) {
-                    SetCoeff(temp, j, encodedXset[i][j]);
-                }
-            encryptedRoundKeySet[i].addConstant(temp);
+            encryptedRoundKeySet[i].addConstant(encodedXset[i]);
         }
     }
-    auto end_RoundKeySet_FHE = std::chrono::high_resolution_clock::now();
+    auto end_RoundKeySet_FHE = std::chrono::steady_clock::now();
     double RoundKey_time = std::chrono::duration<double>(end_RoundKeySet_FHE - start_RoundKeySet_FHE).count();
     std::cout << "RoundKeySet FHE succeeded! Time: " << RoundKey_time << "s\n";
-    noise_budget = min_noise_budget(encryptedRoundKeySet);
-    std::cout << "noise budget after RoundKeySet FHE: " << noise_budget << std::endl;
-    if (noise_budget <= 0)
-    {
-        std::cerr << "noise budget is not enough!!!" << std::endl;
-        return 0;
-    }
     // 使用 verifyDecryption 函数解密并验证 RoundKeySet
-    // if (deflag)
-    // {
-    //     if (!verifyDecryption18(encryptedRoundKeySet, RoundKeySet, secretKey, ea))
-    //     {
-    //         std::cerr << "Decryption verification failed for RoundKeySet." << std::endl;
-    //         return 0;
-    //     }
-    //     std::cout << "Decryption verification succeeded for RoundKeySet." << std::endl;
-    // }
-
+    if (deflag)
+    {
+        if (!verifyDecryption36(encryptedRoundKeySet, RoundKeySet, secretKey, ea))
+        {
+            std::cerr << "Decryption verification failed for RoundKeySet." << std::endl;
+            return 0;
+        }
+        std::cout << "Decryption verification succeeded for RoundKeySet." << std::endl;
+    }
     // 生成 encryptedKeyStream
     // 定义Add_time、Sbox_time、Linear_time
     double Sbox_time = 0, Linear_time = 0, Add_time = 0;
-    auto start_sbox = std::chrono::high_resolution_clock::now();
-    auto end_sbox = std::chrono::high_resolution_clock::now();
-    auto start_linear = std::chrono::high_resolution_clock::now();
-    auto end_linear = std::chrono::high_resolution_clock::now();
-    auto start_roundkey = std::chrono::high_resolution_clock::now();
-    auto end_roundkey = std::chrono::high_resolution_clock::now();
 
-    vector<Ctxt> encryptedKeyStream(encryptedRoundKeySet.begin(), encryptedRoundKeySet.begin() + BlockByte);
-    std::cout << "whiteround + sbox start" << std::endl;
-    ZZX encoded_Iv0R1;
-    ZZX encoded_Iv1R0;
-    ZZX encoded_Iv0R2;
-    ZZX encoded_Iv2R0;
-    Ctxt K0Iv1R0(encryptedSymKey[0]);
-    Ctxt K1Iv0R1(encryptedSymKey[0]);
-    Ctxt K0Iv2R0(encryptedSymKey[0]);
-    Ctxt K2Iv0R2(encryptedSymKey[0]);
-    vector<Ctxt> tmp01 = encryptedSymKey01;
-    vector<Ctxt> tmp02 = encryptedSymKey02;
-    start_sbox = std::chrono::high_resolution_clock::now();
-    for (long i = 0; i < BlockByte; i += 3) // BlockByte
+    vector<Ctxt> encryptedKeyStream;
+    encryptedKeyStream.resize(BlockByte, tmpCtxt);
+    std::copy(encryptedRoundKeySet.begin(), encryptedRoundKeySet.begin() + BlockByte, encryptedKeyStream.begin());
+
+    vector<long> expandedIV(BlockByte * PlainBlock);
+    for (long j = 0; j < PlainBlock; j++)
     {
-        int index = i / 3;
-        K1Iv0R1 = encryptedSymKey[i + 1];
-        K1Iv0R1.multByConstant(multiplyAndMod(encodedXset[i + 1], IV[i]));
-        K0Iv1R0 = encryptedSymKey[i + 0];
-        K0Iv1R0.multByConstant(multiplyAndMod(encodedXset[i], IV[i + 1]));
-        K2Iv0R2 = encryptedSymKey[i + 2];
-        K2Iv0R2.multByConstant(multiplyAndMod(encodedXset[i + 2], IV[i]));
-        K0Iv2R0 = encryptedSymKey[i + 0];
-        K0Iv2R0.multByConstant(multiplyAndMod(encodedXset[i], IV[i + 2]));
-
-        // 计算Sbox 0
-        encryptedKeyStream[i].addConstant(IV[i]);
-
-        // 计算Sbox 1
-        tmp02[index].multByConstant(encodedXset02[index]);
-        tmp02[index] += K2Iv0R2;
-        tmp02[index] += K0Iv2R0;
-        tmp02[index].addConstant((IV[i] * IV[i + 2]) % PlainMod);
-        encryptedKeyStream[i + 1].addConstant(IV[i + 1]);
-        encryptedKeyStream[i + 1] += tmp02[index];
-
-        // 计算Sbox 2
-        tmp01[index].multByConstant(encodedXset01[index]);
-        tmp01[index] += K1Iv0R1;
-        tmp01[index] += K0Iv1R0;
-        tmp01[index].addConstant((IV[i] * IV[i + 1] - IV[i + 2]) % PlainMod);
-        encryptedKeyStream[i + 2] -= tmp01[index];
-        encryptedKeyStream[i + 2] += tmp02[index];
+        memcpy(&expandedIV[BlockByte * j], IV.data(), BlockByte * sizeof(long));
     }
-    end_sbox = std::chrono::high_resolution_clock::now();
-    Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
-    // 输出 Sbox_time
-    std::cout << "SboxAndWhiteround time: " << Sbox_time << "s\n";
-    noise_budget = min_noise_budget(encryptedKeyStream);
-    std::cout << "noise budget after SboxAndWhiteround: " << noise_budget << std::endl;
+    // 对expanded进行simd编码，这样会返回nRoundKeys个多项式数组即encoded，nRoundKeys=encoded.length()
+    vector<ZZX> encoded_expandedIV;
+    auto m3 = std::chrono::steady_clock::now();
+    encodeTo36Ctxt(encoded_expandedIV, expandedIV, ea); // encode as HE plaintext
+    auto m4 = std::chrono::steady_clock::now();
+    std::cout << "encodeTo36Ctxt time: " << std::chrono::duration<double>(m4 - m3).count() << "s\n";
+    int noise_budget = min_noise_budget(encryptedKeyStream);
+    std::cout << "noise budget initially: " << noise_budget << std::endl;
     if (noise_budget <= 0)
     {
         std::cerr << "noise budget is not enough!!!" << std::endl;
         return 0;
     }
+    std::cout << "whiteround start" << std::endl;
+
+    auto start_roundkey = std::chrono::high_resolution_clock::now();
+    for (long i = 0; i < BlockByte; i++)
+    { // encrypt the encoded key
+       encryptedKeyStream[i].addConstant(encoded_expandedIV[i]);
+    }
+    auto end_roundkey = std::chrono::high_resolution_clock::now();
+    Add_time += std::chrono::duration<double>(end_roundkey - start_roundkey).count();
+    // 输出 Add_time
+    std::cout << "whiteround time: " << Add_time << "s\n";
+    noise_budget = min_noise_budget(encryptedKeyStream);
+    std::cout << "noise budget after whiteround: " << noise_budget << std::endl;
+    if (noise_budget <= 0)
+    {
+        std::cerr << "noise budget is not enough!!!" << std::endl;
+        return 0;
+    }
+    // 测试
+    // vector<Ctxt> test1 = encryptedKeyStream;
+    // auto start_test1 = std::chrono::high_resolution_clock::now();
+    // for (int i = 0; i < 1000; i++)
+    // {
+    //     test1[i % 36] = encryptedKeyStream[i % 36];
+    // }
+    // auto end_test1 = std::chrono::high_resolution_clock::now();
+    // double test_time1 = std::chrono::duration<double>(end_test1 - start_test1).count();
+    // vector<Ctxt> test2 = encryptedKeyStream;
+    // auto start_test2 = std::chrono::high_resolution_clock::now();
+    // for (int i = 0; i < 1000; i++)
+    // {
+    //     test2[i % 36] += encryptedKeyStream[i % 36];
+    // }
+    // auto end_test2 = std::chrono::high_resolution_clock::now();
+    // double test_time2 = std::chrono::duration<double>(end_test2 - start_test2).count();
+    // std::cout << "test1 time: " << test_time1 << "s\n";
+    // std::cout << "test2 time: " << test_time2 << "s\n";
+
     // 明文密钥流
     vector<long> KeyStream2(PlainByte);
     if (deflag)
@@ -1914,10 +1791,8 @@ int main()
         // 对IV和RoundKeySet进行异或
         for (long i = 0; i < PlainByte; i++)
         {
-            KeyStream2[i] = (IV[i % BlockByte] + RoundKeySet[i]) % PlainMod;
+            KeyStream2[i] = (expandedIV[i] + RoundKeySet[i]) % PlainMod;
         }
-        // sbox
-        yusP.Sbox_5(KeyStream2);
         // 使用 verifyDecryption 函数解密并验证 KeyStream
         if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
         {
@@ -1926,42 +1801,21 @@ int main()
         }
         std::cout << "Decryption verification succeeded for whiteround." << std::endl;
     }
+    auto start_sbox = std::chrono::high_resolution_clock::now();
+    auto start_linear = std::chrono::high_resolution_clock::now();
+    auto end_sbox = std::chrono::high_resolution_clock::now();
+    auto end_linear = std::chrono::high_resolution_clock::now();
 
     for (long r = 1; r < Nr; r++)
     {
         std::cout << "Round " << r << " start" << std::endl;
-        if (r > 1)
-        {
-            start_sbox = std::chrono::high_resolution_clock::now();
-            // S Layer
-            HE_Sbox(encryptedKeyStream);
-            end_sbox = std::chrono::high_resolution_clock::now();
-            Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
-            noise_budget = min_noise_budget(encryptedKeyStream);
-            std::cout << "noise budget after sbox: " << noise_budget << std::endl;
-            if (noise_budget <= 0)
-            {
-                std::cerr << "noise budget is not enough!!!" << std::endl;
-                return 0;
-            }
-            if (deflag)
-            {
-                yusP.Sbox_5(KeyStream2);
-                if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
-                {
-                    std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
-                    return 0;
-                }
-                std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
-            }
-        }
         start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
         HE_M2(encryptedKeyStream);
         end_linear = std::chrono::high_resolution_clock::now();
         Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
         noise_budget = min_noise_budget(encryptedKeyStream);
-        std::cout << "noise budget after linear: " << noise_budget << std::endl;
+        std::cout << "noise budget after Linear: " << noise_budget << std::endl;
         if (noise_budget <= 0)
         {
             std::cerr << "noise budget is not enough!!!" << std::endl;
@@ -1989,7 +1843,28 @@ int main()
             }
             std::cout << "Decryption verification succeeded for KeyStream Linear Layer." << std::endl;
         }
-        // Round Key Addition
+        start_sbox = std::chrono::high_resolution_clock::now();
+        // S Layer
+        HE_Sbox(encryptedKeyStream);
+        end_sbox = std::chrono::high_resolution_clock::now();
+        Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
+        noise_budget = min_noise_budget(encryptedKeyStream);
+        std::cout << "noise budget after Sbox: " << noise_budget << std::endl;
+        if (noise_budget <= 0)
+        {
+            std::cerr << "noise budget is not enough!!!" << std::endl;
+            return 0;
+        }
+        if (deflag)
+        {
+            yusP.Sbox_5(KeyStream2);
+            if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
+            {
+                std::cerr << "Decryption verification failed for KeyStream Sbox_3." << std::endl;
+                return 0;
+            }
+            std::cout << "Decryption verification succeeded for KeyStream Sbox_3." << std::endl;
+        }
         start_roundkey = std::chrono::high_resolution_clock::now();
         // omp_set_num_threads(12); // 设置线程数为12
         // #pragma omp parallel for
@@ -2029,7 +1904,7 @@ int main()
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
     noise_budget = min_noise_budget(encryptedKeyStream);
-    std::cout << "noise budget after linear: " << noise_budget << std::endl;
+    std::cout << "noise budget after Linear: " << noise_budget << std::endl;
     if (noise_budget <= 0)
     {
         std::cerr << "noise budget is not enough!!!" << std::endl;
@@ -2063,7 +1938,7 @@ int main()
     end_sbox = std::chrono::high_resolution_clock::now();
     Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
     noise_budget = min_noise_budget(encryptedKeyStream);
-    std::cout << "noise budget after sbox: " << noise_budget << std::endl;
+    std::cout << "noise budget after Sbox: " << noise_budget << std::endl;
     if (noise_budget <= 0)
     {
         std::cerr << "noise budget is not enough!!!" << std::endl;
@@ -2074,10 +1949,10 @@ int main()
         yusP.Sbox_5(KeyStream2);
         if (!verifyDecryption36(encryptedKeyStream, KeyStream2, secretKey, ea))
         {
-            std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
+            std::cerr << "Decryption verification failed for KeyStream Sbox_3." << std::endl;
             return 0;
         }
-        std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
+        std::cout << "Decryption verification succeeded for KeyStream Sbox_3." << std::endl;
     }
     start_linear = std::chrono::high_resolution_clock::now();
     // Linear Layer
@@ -2085,7 +1960,7 @@ int main()
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
     noise_budget = min_noise_budget(encryptedKeyStream);
-    std::cout << "noise budget after linear: " << noise_budget << std::endl;
+    std::cout << "noise budget after Linear: " << noise_budget << std::endl;
     if (noise_budget <= 0)
     {
         std::cerr << "noise budget is not enough!!!" << std::endl;
@@ -2142,15 +2017,12 @@ int main()
         std::cout << "Decryption verification succeeded for KeyStream Round Key Addition." << std::endl;
     }
 #endif
-
-    // 输出 XOF_time,Encode_time,Add_time、Sbox_time、Linear_time
-    std::cout << "XOF time: " << XOF_time << "s\n";
-    std::cout << "Encode time: " << Encode_time << "s\n";
-    std::cout << "Add time: " << Add_time << "s\n";
+    // 输出 Add_time、Sbox_time、Linear_time
+    std::cout << "RoundKey time: " << Add_time << "s\n";
     std::cout << "Sbox time: " << Sbox_time << "s\n";
-    std::cout << "Linear time: " << Linear_time << "s\n";
+    std::cout << "Linear Layer time: " << Linear_time << "s\n";
     // 计算总时间
-    double total_time = XOF_time + Encode_time + RoundKey_time + Add_time + Sbox_time + Linear_time;
+    double total_time = Encode_time + RoundKey_time + Add_time + Sbox_time + Linear_time;
     std::cout << "Server offline total time: " << total_time << "s\n";
     // 计算吞吐量,KiB/min
     double throughput = (Plainbits * 60) / (pow(2, 13) * total_time);
@@ -2160,7 +2032,7 @@ int main()
     {
         for (int i = 0; i < encryptedKeyStream.size(); i++)
         {
-           encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
+            encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
         }
         if (!verifyDecryption36(encryptedKeyStream, KeyStream, secretKey, ea))
         {
@@ -2169,15 +2041,17 @@ int main()
         }
         std::cout << "Decryption verification succeeded for KeyStream." << std::endl;
     }
+    // 将total_time, throughput, Nr, p, nslots, bits, c, Add_time, Sbox_time, Linear_time, RoundKey_time写入文件test_Yus_p_C32_ClientAndServer2.txt,如果已存在则追加
+    // 检查路径是否存在
     std::string dirPath = "../tests";
     std::string filePath;
     if (!fs::exists(dirPath))
     {
-        filePath = "test_Yus_p_C36_ClientAndServer5_2.txt";
+        filePath = "test_Yus_p_C36_ClientAndServer5.txt";
     }
     else
     {
-        filePath = "../tests/test_Yus_p_C36_ClientAndServer5_2.txt";
+        filePath = "../tests/test_Yus_p_C36_ClientAndServer5.txt";
     }
     std::ofstream outfile(filePath, std::ios::app);
     if (!outfile)
@@ -2193,17 +2067,15 @@ int main()
             << std::left << std::setw(6) << Qbits
             << std::fixed << std::setprecision(3)
             << std::left << std::setw(14) << SecurityLevel
-            << std::left << std::setw(7) << XOF_time
             << std::left << std::setw(10) << Encode_time
             << std::left << std::setw(12) << RoundKey_time
             << std::left << std::setw(7) << Add_time
             << std::left << std::setw(8) << Sbox_time
             << std::left << std::setw(10) << Linear_time
             << std::left << std::setw(9) << total_time
-            << std::left << std::setw(20) << throughput
-            << std::left << std::setw(10) << noise_budget
+            << std::left << std::setw(10) << throughput
             << std::endl;
     outfile.close();
-    std::cout << "test_Yus_p_C36_ClientAndServer5_2.txt updated." << std::endl;
+    std::cout << "test_Yus_p_C36_ClientAndServer5.txt updated." << std::endl;
     return 0;
 }
