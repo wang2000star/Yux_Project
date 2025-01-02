@@ -60,7 +60,7 @@ constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 constexpr tuple<uint64_t, uint64_t, uint64_t, uint64_t> paramMap[5][8] = {
     {// Nr = 4
      // {p, log2(m), bits, c}
-     {65537, 14, 216, 2},   // 0 *
+     {65537, 16, 216, 2},   // 0 *
      {163841, 15, 240, 2},  // 1
      {65537, 14, 220, 2},   // 2 *
      {163841, 14, 230, 2},  // 3
@@ -71,7 +71,7 @@ constexpr tuple<uint64_t, uint64_t, uint64_t, uint64_t> paramMap[5][8] = {
     {
         // Nr = 5
         // {p, log2(m), bits, c}
-        {65537, 15, 280, 2},  // 0 *
+        {65537, 16, 280, 2},  // 0 *
         {163841, 15, 280, 2}, // 1
         {65537, 16, 300, 2},  // 2
         {65537, 16, 350, 2},  // 3
@@ -154,8 +154,9 @@ YusP yusP(PlainMod); // 构建明文对称加密实例
 // 函数：对多项式的每个系数乘以整数 a 并取模 c
 Plaintext multiplyAndMod(const Plaintext &a, uint64_t b)
 {
-    Plaintext res;
-    for (uint64_t i = 0; i < PlainBlock; ++i)
+    int len = a.coeff_count();
+    Plaintext res = a;
+    for (uint64_t i = 0; i < len; ++i)
     {
         res[i] = (a[i] * b) % Para_p;
     }
@@ -401,7 +402,7 @@ bool verify_encryptSymKey(vector<Ciphertext> &encryptedSymKey, const vector<vect
     return isDecryptedSymKeyCorrect;
 }
 // Linear transformation
-void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
+void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator,RelinKeys &relin_keys)
 {
     vector<Ciphertext> temp = eData;
     // 0,1,2,3
@@ -621,6 +622,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[0], temp25_26_27);
     evaluator.add_inplace(eData[0], temp29_30);
     evaluator.add_inplace(eData[0], temp33_35);
+    //evaluator.relinearize_inplace(eData[0], relin_keys);
 
     evaluator.add_inplace(eData[1], temp[3]);
     evaluator.add_inplace(eData[1], temp4_6_7);
@@ -631,6 +633,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[1], temp24_27);
     evaluator.add_inplace(eData[1], temp[31]);
     evaluator.add_inplace(eData[1], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[1], relin_keys);
 
     eData[2] = temp0_3;
     evaluator.add_inplace(eData[2], temp[7]);
@@ -641,6 +644,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[2], temp[26]);
     evaluator.add_inplace(eData[2], temp[28]);
     evaluator.add_inplace(eData[2], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[2], relin_keys);
 
     eData[3] = temp0_2;
     evaluator.add_inplace(eData[3], temp4_5_6_7);
@@ -651,6 +655,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[3], temp[25]);
     evaluator.add_inplace(eData[3], temp28_29_30);
     evaluator.add_inplace(eData[3], temp32_33);
+    //evaluator.relinearize_inplace(eData[3], relin_keys);
 
     evaluator.add_inplace(eData[4], temp0_1_2);
     evaluator.add_inplace(eData[4], temp6_7);
@@ -660,6 +665,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[4], temp24_25_27);
     evaluator.add_inplace(eData[4], temp[30]);
     evaluator.add_inplace(eData[4], temp[34]);
+    //evaluator.relinearize_inplace(eData[4], relin_keys);
 
     eData[5] = temp0_1_3;
     evaluator.add_inplace(eData[5], temp[6]);
@@ -670,6 +676,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[5], temp24_25_26);
     evaluator.add_inplace(eData[5], temp29_31);
     evaluator.add_inplace(eData[5], temp[35]);
+    //evaluator.relinearize_inplace(eData[5], relin_keys);
 
     eData[6] = temp0_3;
     evaluator.add_inplace(eData[6], temp5_7);
@@ -680,6 +687,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[6], temp25_26);
     evaluator.add_inplace(eData[6], temp28_31);
     evaluator.add_inplace(eData[6], temp32_33_35);
+    //evaluator.relinearize_inplace(eData[6], relin_keys);
 
     evaluator.add_inplace(eData[7], temp1_3);
     evaluator.add_inplace(eData[7], temp4_5);
@@ -690,6 +698,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[7], temp24_25_27);
     evaluator.add_inplace(eData[7], temp28_30);
     evaluator.add_inplace(eData[7], temp[33]);
+    //evaluator.relinearize_inplace(eData[7], relin_keys);
 
     eData[8] = temp2_3;
     evaluator.add_inplace(eData[8], temp4_6);
@@ -700,6 +709,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[8], temp24_27);
     evaluator.add_inplace(eData[8], temp28_29);
     evaluator.add_inplace(eData[8], temp32_34);
+    //evaluator.relinearize_inplace(eData[8], relin_keys);
 
     eData[9] = temp0_2_3;
     evaluator.add_inplace(eData[9], temp[6]);
@@ -710,6 +720,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[9], temp25_26);
     evaluator.add_inplace(eData[9], temp28_29_31);
     evaluator.add_inplace(eData[9], temp34_35);
+    //evaluator.relinearize_inplace(eData[9], relin_keys);
 
     evaluator.add_inplace(eData[10], temp[0]);
     evaluator.add_inplace(eData[10], temp4_6_7);
@@ -720,6 +731,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[10], temp26_27);
     evaluator.add_inplace(eData[10], temp28_30_31);
     evaluator.add_inplace(eData[10], temp[33]);
+    //evaluator.relinearize_inplace(eData[10], relin_keys);
 
     eData[11] = temp[1];
     evaluator.add_inplace(eData[11], temp5_6_7);
@@ -730,6 +742,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[11], temp24_26_27);
     evaluator.add_inplace(eData[11], temp30_31);
     evaluator.add_inplace(eData[11], temp32_35);
+    //evaluator.relinearize_inplace(eData[11], relin_keys);
 
     eData[12] = temp1_2_3;
     evaluator.add_inplace(eData[12], temp5_6);
@@ -740,6 +753,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[12], temp[25]);
     evaluator.add_inplace(eData[12], temp28_29_31);
     evaluator.add_inplace(eData[12], temp32_34);
+    //evaluator.relinearize_inplace(eData[12], relin_keys);
 
     evaluator.add_inplace(eData[13], temp0_3);
     evaluator.add_inplace(eData[13], temp[7]);
@@ -750,6 +764,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[13], temp[24]);
     evaluator.add_inplace(eData[13], temp29_30_31);
     evaluator.add_inplace(eData[13], temp33_34);
+    //evaluator.relinearize_inplace(eData[13], relin_keys);
 
     eData[14] = temp[2];
     evaluator.add_inplace(eData[14], temp[4]);
@@ -760,6 +775,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[14], temp25_26_27);
     evaluator.add_inplace(eData[14], temp29_30);
     evaluator.add_inplace(eData[14], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[14], relin_keys);
 
     eData[15] = temp[1];
     evaluator.add_inplace(eData[15], temp4_5_6);
@@ -770,6 +786,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[15], temp24_26);
     evaluator.add_inplace(eData[15], temp28_31);
     evaluator.add_inplace(eData[15], temp32_34_35);
+    //evaluator.relinearize_inplace(eData[15], relin_keys);
 
     evaluator.add_inplace(eData[16], temp0_1_3);
     evaluator.add_inplace(eData[16], temp[6]);
@@ -779,6 +796,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[16], temp21_22_23);
     evaluator.add_inplace(eData[16], temp24_25_27);
     evaluator.add_inplace(eData[16], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[16], relin_keys);
 
     eData[17] = temp0_1_2;
     evaluator.add_inplace(eData[17], temp5_7);
@@ -789,6 +807,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[17], temp24_25_26);
     evaluator.add_inplace(eData[17], temp28_29_30);
     evaluator.add_inplace(eData[17], temp32_33);
+    //evaluator.relinearize_inplace(eData[17], relin_keys);
 
     eData[18] = temp1_2;
     evaluator.add_inplace(eData[18], temp4_7);
@@ -799,6 +818,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[18], temp24_25_27);
     evaluator.add_inplace(eData[18], temp29_31);
     evaluator.add_inplace(eData[18], temp34_35);
+    //evaluator.relinearize_inplace(eData[18], relin_keys);
 
     evaluator.add_inplace(eData[19], temp0_1_3);
     evaluator.add_inplace(eData[19], temp4_6);
@@ -809,6 +829,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[19], temp24_25_26_27);
     evaluator.add_inplace(eData[19], temp28_30);
     evaluator.add_inplace(eData[19], temp[35]);
+    //evaluator.relinearize_inplace(eData[19], relin_keys);
 
     eData[20] = temp0_3;
     evaluator.add_inplace(eData[20], temp4_5);
@@ -819,6 +840,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[20], temp25_27);
     evaluator.add_inplace(eData[20], temp28_29_31);
     evaluator.add_inplace(eData[20], temp32_33_35);
+    //evaluator.relinearize_inplace(eData[20], relin_keys);
 
     eData[21] = temp1_2;
     evaluator.add_inplace(eData[21], temp4_5_7);
@@ -829,6 +851,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[21], temp24_25_26_27);
     evaluator.add_inplace(eData[21], temp28_30);
     evaluator.add_inplace(eData[21], temp32_34);
+    //evaluator.relinearize_inplace(eData[21], relin_keys);
 
     evaluator.add_inplace(eData[22], temp2_3);
     evaluator.add_inplace(eData[22], temp4_6_7);
@@ -839,6 +862,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[22], temp24_25_27);
     evaluator.add_inplace(eData[22], temp28_29_30_31);
     evaluator.add_inplace(eData[22], temp[33]);
+    //evaluator.relinearize_inplace(eData[22], relin_keys);
 
     eData[23] = temp0_2_3;
     evaluator.add_inplace(eData[23], temp6_7);
@@ -849,6 +873,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[23], temp[24]);
     evaluator.add_inplace(eData[23], temp28_30_31);
     evaluator.add_inplace(eData[23], temp32_34_35);
+    //evaluator.relinearize_inplace(eData[23], relin_keys);
 
     eData[24] = temp[1];
     evaluator.add_inplace(eData[24], temp4_5_7);
@@ -859,6 +884,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[24], temp25_26_27);
     evaluator.add_inplace(eData[24], temp28_29_30_31);
     evaluator.add_inplace(eData[24], temp33_35);
+    //evaluator.relinearize_inplace(eData[24], relin_keys);
 
     evaluator.add_inplace(eData[25], temp[0]);
     evaluator.add_inplace(eData[25], temp5_6_7);
@@ -869,6 +895,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[25], temp[27]);
     evaluator.add_inplace(eData[25], temp28_30_31);
     evaluator.add_inplace(eData[25], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[25], relin_keys);
 
     eData[26] = temp1_2_3;
     evaluator.add_inplace(eData[26], temp5_6);
@@ -879,6 +906,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[26], temp24_27);
     evaluator.add_inplace(eData[26], temp[31]);
     evaluator.add_inplace(eData[26], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[26], relin_keys);
 
     eData[27] = temp0_2;
     evaluator.add_inplace(eData[27], temp4_7);
@@ -889,6 +917,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[27], temp24_26);
     evaluator.add_inplace(eData[27], temp28_29_30_31);
     evaluator.add_inplace(eData[27], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[27], relin_keys);
 
     evaluator.add_inplace(eData[28], temp0_1_3);
     evaluator.add_inplace(eData[28], temp8_9_10);
@@ -898,6 +927,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[28], temp24_25_26);
     evaluator.add_inplace(eData[28], temp30_31);
     evaluator.add_inplace(eData[28], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[28], relin_keys);
 
     eData[29] = temp0_1_2;
     evaluator.add_inplace(eData[29], temp4_5_6);
@@ -908,6 +938,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[29], temp24_25_27);
     evaluator.add_inplace(eData[29], temp[30]);
     evaluator.add_inplace(eData[29], temp[34]);
+    //evaluator.relinearize_inplace(eData[29], relin_keys);
 
     eData[30] = temp0_1_3;
     evaluator.add_inplace(eData[30], temp5_7);
@@ -918,6 +949,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[30], temp24_27);
     evaluator.add_inplace(eData[30], temp29_31);
     evaluator.add_inplace(eData[30], temp32_33_34_35);
+    //evaluator.relinearize_inplace(eData[30], relin_keys);
 
     evaluator.add_inplace(eData[31], temp0_1_2_3);
     evaluator.add_inplace(eData[31], temp4_6);
@@ -928,6 +960,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[31], temp25_27);
     evaluator.add_inplace(eData[31], temp28_29);
     evaluator.add_inplace(eData[31], temp33_34);
+    //evaluator.relinearize_inplace(eData[31], relin_keys);
 
     eData[32] = temp1_3;
     evaluator.add_inplace(eData[32], temp4_5_7);
@@ -938,6 +971,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[32], temp26_27);
     evaluator.add_inplace(eData[32], temp28_30);
     evaluator.add_inplace(eData[32], temp[33]);
+    //evaluator.relinearize_inplace(eData[32], relin_keys);
 
     eData[33] = temp0_1_2_3;
     evaluator.add_inplace(eData[33], temp4_6);
@@ -948,6 +982,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[33], temp24_26_27);
     evaluator.add_inplace(eData[33], temp[30]);
     evaluator.add_inplace(eData[33], temp32_34_35);
+    //evaluator.relinearize_inplace(eData[33], relin_keys);
 
     evaluator.add_inplace(eData[34], temp0_1_3);
     evaluator.add_inplace(eData[34], temp4_5_6_7);
@@ -958,6 +993,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[34], temp[24]);
     evaluator.add_inplace(eData[34], temp28_30_31);
     evaluator.add_inplace(eData[34], temp[32]);
+    //evaluator.relinearize_inplace(eData[34], relin_keys);
 
     eData[35] = temp[0];
     evaluator.add_inplace(eData[35], temp4_6_7);
@@ -968,6 +1004,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[35], temp[25]);
     evaluator.add_inplace(eData[35], temp29_30_31);
     evaluator.add_inplace(eData[35], temp[33]);
+    //evaluator.relinearize_inplace(eData[35], relin_keys);
 
     if (1)
     {
@@ -1180,7 +1217,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     temp32_33_34_35 = temp32_33_34;
     evaluator.add_inplace(temp32_33_34_35, temp[35]);
 
-    eData[0] = temp1_2_3;
+        eData[0] = temp1_2_3;
     evaluator.add_inplace(eData[0], temp4_5_6_7);
     evaluator.add_inplace(eData[0], temp9_11);
     evaluator.add_inplace(eData[0], temp[13]);
@@ -1189,6 +1226,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[0], temp25_26_27);
     evaluator.add_inplace(eData[0], temp29_30);
     evaluator.add_inplace(eData[0], temp33_35);
+    //evaluator.relinearize_inplace(eData[0], relin_keys);
 
     evaluator.add_inplace(eData[1], temp[3]);
     evaluator.add_inplace(eData[1], temp4_6_7);
@@ -1199,6 +1237,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[1], temp24_27);
     evaluator.add_inplace(eData[1], temp[31]);
     evaluator.add_inplace(eData[1], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[1], relin_keys);
 
     eData[2] = temp0_3;
     evaluator.add_inplace(eData[2], temp[7]);
@@ -1209,6 +1248,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[2], temp[26]);
     evaluator.add_inplace(eData[2], temp[28]);
     evaluator.add_inplace(eData[2], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[2], relin_keys);
 
     eData[3] = temp0_2;
     evaluator.add_inplace(eData[3], temp4_5_6_7);
@@ -1219,6 +1259,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[3], temp[25]);
     evaluator.add_inplace(eData[3], temp28_29_30);
     evaluator.add_inplace(eData[3], temp32_33);
+    //evaluator.relinearize_inplace(eData[3], relin_keys);
 
     evaluator.add_inplace(eData[4], temp0_1_2);
     evaluator.add_inplace(eData[4], temp6_7);
@@ -1228,6 +1269,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[4], temp24_25_27);
     evaluator.add_inplace(eData[4], temp[30]);
     evaluator.add_inplace(eData[4], temp[34]);
+    //evaluator.relinearize_inplace(eData[4], relin_keys);
 
     eData[5] = temp0_1_3;
     evaluator.add_inplace(eData[5], temp[6]);
@@ -1238,6 +1280,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[5], temp24_25_26);
     evaluator.add_inplace(eData[5], temp29_31);
     evaluator.add_inplace(eData[5], temp[35]);
+    //evaluator.relinearize_inplace(eData[5], relin_keys);
 
     eData[6] = temp0_3;
     evaluator.add_inplace(eData[6], temp5_7);
@@ -1248,6 +1291,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[6], temp25_26);
     evaluator.add_inplace(eData[6], temp28_31);
     evaluator.add_inplace(eData[6], temp32_33_35);
+    //evaluator.relinearize_inplace(eData[6], relin_keys);
 
     evaluator.add_inplace(eData[7], temp1_3);
     evaluator.add_inplace(eData[7], temp4_5);
@@ -1258,6 +1302,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[7], temp24_25_27);
     evaluator.add_inplace(eData[7], temp28_30);
     evaluator.add_inplace(eData[7], temp[33]);
+    //evaluator.relinearize_inplace(eData[7], relin_keys);
 
     eData[8] = temp2_3;
     evaluator.add_inplace(eData[8], temp4_6);
@@ -1268,6 +1313,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[8], temp24_27);
     evaluator.add_inplace(eData[8], temp28_29);
     evaluator.add_inplace(eData[8], temp32_34);
+    //evaluator.relinearize_inplace(eData[8], relin_keys);
 
     eData[9] = temp0_2_3;
     evaluator.add_inplace(eData[9], temp[6]);
@@ -1278,6 +1324,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[9], temp25_26);
     evaluator.add_inplace(eData[9], temp28_29_31);
     evaluator.add_inplace(eData[9], temp34_35);
+    //evaluator.relinearize_inplace(eData[9], relin_keys);
 
     evaluator.add_inplace(eData[10], temp[0]);
     evaluator.add_inplace(eData[10], temp4_6_7);
@@ -1288,6 +1335,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[10], temp26_27);
     evaluator.add_inplace(eData[10], temp28_30_31);
     evaluator.add_inplace(eData[10], temp[33]);
+    //evaluator.relinearize_inplace(eData[10], relin_keys);
 
     eData[11] = temp[1];
     evaluator.add_inplace(eData[11], temp5_6_7);
@@ -1298,6 +1346,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[11], temp24_26_27);
     evaluator.add_inplace(eData[11], temp30_31);
     evaluator.add_inplace(eData[11], temp32_35);
+    //evaluator.relinearize_inplace(eData[11], relin_keys);
 
     eData[12] = temp1_2_3;
     evaluator.add_inplace(eData[12], temp5_6);
@@ -1308,6 +1357,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[12], temp[25]);
     evaluator.add_inplace(eData[12], temp28_29_31);
     evaluator.add_inplace(eData[12], temp32_34);
+    //evaluator.relinearize_inplace(eData[12], relin_keys);
 
     evaluator.add_inplace(eData[13], temp0_3);
     evaluator.add_inplace(eData[13], temp[7]);
@@ -1318,6 +1368,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[13], temp[24]);
     evaluator.add_inplace(eData[13], temp29_30_31);
     evaluator.add_inplace(eData[13], temp33_34);
+    //evaluator.relinearize_inplace(eData[13], relin_keys);
 
     eData[14] = temp[2];
     evaluator.add_inplace(eData[14], temp[4]);
@@ -1328,6 +1379,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[14], temp25_26_27);
     evaluator.add_inplace(eData[14], temp29_30);
     evaluator.add_inplace(eData[14], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[14], relin_keys);
 
     eData[15] = temp[1];
     evaluator.add_inplace(eData[15], temp4_5_6);
@@ -1338,6 +1390,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[15], temp24_26);
     evaluator.add_inplace(eData[15], temp28_31);
     evaluator.add_inplace(eData[15], temp32_34_35);
+    //evaluator.relinearize_inplace(eData[15], relin_keys);
 
     evaluator.add_inplace(eData[16], temp0_1_3);
     evaluator.add_inplace(eData[16], temp[6]);
@@ -1347,6 +1400,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[16], temp21_22_23);
     evaluator.add_inplace(eData[16], temp24_25_27);
     evaluator.add_inplace(eData[16], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[16], relin_keys);
 
     eData[17] = temp0_1_2;
     evaluator.add_inplace(eData[17], temp5_7);
@@ -1357,6 +1411,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[17], temp24_25_26);
     evaluator.add_inplace(eData[17], temp28_29_30);
     evaluator.add_inplace(eData[17], temp32_33);
+    //evaluator.relinearize_inplace(eData[17], relin_keys);
 
     eData[18] = temp1_2;
     evaluator.add_inplace(eData[18], temp4_7);
@@ -1367,6 +1422,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[18], temp24_25_27);
     evaluator.add_inplace(eData[18], temp29_31);
     evaluator.add_inplace(eData[18], temp34_35);
+    //evaluator.relinearize_inplace(eData[18], relin_keys);
 
     evaluator.add_inplace(eData[19], temp0_1_3);
     evaluator.add_inplace(eData[19], temp4_6);
@@ -1377,6 +1433,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[19], temp24_25_26_27);
     evaluator.add_inplace(eData[19], temp28_30);
     evaluator.add_inplace(eData[19], temp[35]);
+    //evaluator.relinearize_inplace(eData[19], relin_keys);
 
     eData[20] = temp0_3;
     evaluator.add_inplace(eData[20], temp4_5);
@@ -1387,6 +1444,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[20], temp25_27);
     evaluator.add_inplace(eData[20], temp28_29_31);
     evaluator.add_inplace(eData[20], temp32_33_35);
+    //evaluator.relinearize_inplace(eData[20], relin_keys);
 
     eData[21] = temp1_2;
     evaluator.add_inplace(eData[21], temp4_5_7);
@@ -1397,6 +1455,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[21], temp24_25_26_27);
     evaluator.add_inplace(eData[21], temp28_30);
     evaluator.add_inplace(eData[21], temp32_34);
+    //evaluator.relinearize_inplace(eData[21], relin_keys);
 
     evaluator.add_inplace(eData[22], temp2_3);
     evaluator.add_inplace(eData[22], temp4_6_7);
@@ -1407,6 +1466,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[22], temp24_25_27);
     evaluator.add_inplace(eData[22], temp28_29_30_31);
     evaluator.add_inplace(eData[22], temp[33]);
+    //evaluator.relinearize_inplace(eData[22], relin_keys);
 
     eData[23] = temp0_2_3;
     evaluator.add_inplace(eData[23], temp6_7);
@@ -1417,6 +1477,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[23], temp[24]);
     evaluator.add_inplace(eData[23], temp28_30_31);
     evaluator.add_inplace(eData[23], temp32_34_35);
+    //evaluator.relinearize_inplace(eData[23], relin_keys);
 
     eData[24] = temp[1];
     evaluator.add_inplace(eData[24], temp4_5_7);
@@ -1427,6 +1488,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[24], temp25_26_27);
     evaluator.add_inplace(eData[24], temp28_29_30_31);
     evaluator.add_inplace(eData[24], temp33_35);
+    //evaluator.relinearize_inplace(eData[24], relin_keys);
 
     evaluator.add_inplace(eData[25], temp[0]);
     evaluator.add_inplace(eData[25], temp5_6_7);
@@ -1437,6 +1499,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[25], temp[27]);
     evaluator.add_inplace(eData[25], temp28_30_31);
     evaluator.add_inplace(eData[25], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[25], relin_keys);
 
     eData[26] = temp1_2_3;
     evaluator.add_inplace(eData[26], temp5_6);
@@ -1447,6 +1510,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[26], temp24_27);
     evaluator.add_inplace(eData[26], temp[31]);
     evaluator.add_inplace(eData[26], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[26], relin_keys);
 
     eData[27] = temp0_2;
     evaluator.add_inplace(eData[27], temp4_7);
@@ -1457,6 +1521,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[27], temp24_26);
     evaluator.add_inplace(eData[27], temp28_29_30_31);
     evaluator.add_inplace(eData[27], temp32_33_34);
+    //evaluator.relinearize_inplace(eData[27], relin_keys);
 
     evaluator.add_inplace(eData[28], temp0_1_3);
     evaluator.add_inplace(eData[28], temp8_9_10);
@@ -1466,6 +1531,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[28], temp24_25_26);
     evaluator.add_inplace(eData[28], temp30_31);
     evaluator.add_inplace(eData[28], temp33_34_35);
+    //evaluator.relinearize_inplace(eData[28], relin_keys);
 
     eData[29] = temp0_1_2;
     evaluator.add_inplace(eData[29], temp4_5_6);
@@ -1476,6 +1542,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[29], temp24_25_27);
     evaluator.add_inplace(eData[29], temp[30]);
     evaluator.add_inplace(eData[29], temp[34]);
+    //evaluator.relinearize_inplace(eData[29], relin_keys);
 
     eData[30] = temp0_1_3;
     evaluator.add_inplace(eData[30], temp5_7);
@@ -1486,6 +1553,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[30], temp24_27);
     evaluator.add_inplace(eData[30], temp29_31);
     evaluator.add_inplace(eData[30], temp32_33_34_35);
+    //evaluator.relinearize_inplace(eData[30], relin_keys);
 
     evaluator.add_inplace(eData[31], temp0_1_2_3);
     evaluator.add_inplace(eData[31], temp4_6);
@@ -1496,6 +1564,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[31], temp25_27);
     evaluator.add_inplace(eData[31], temp28_29);
     evaluator.add_inplace(eData[31], temp33_34);
+    //evaluator.relinearize_inplace(eData[31], relin_keys);
 
     eData[32] = temp1_3;
     evaluator.add_inplace(eData[32], temp4_5_7);
@@ -1506,6 +1575,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[32], temp26_27);
     evaluator.add_inplace(eData[32], temp28_30);
     evaluator.add_inplace(eData[32], temp[33]);
+    //evaluator.relinearize_inplace(eData[32], relin_keys);
 
     eData[33] = temp0_1_2_3;
     evaluator.add_inplace(eData[33], temp4_6);
@@ -1516,6 +1586,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[33], temp24_26_27);
     evaluator.add_inplace(eData[33], temp[30]);
     evaluator.add_inplace(eData[33], temp32_34_35);
+    //evaluator.relinearize_inplace(eData[33], relin_keys);
 
     evaluator.add_inplace(eData[34], temp0_1_3);
     evaluator.add_inplace(eData[34], temp4_5_6_7);
@@ -1526,6 +1597,7 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[34], temp[24]);
     evaluator.add_inplace(eData[34], temp28_30_31);
     evaluator.add_inplace(eData[34], temp[32]);
+    //evaluator.relinearize_inplace(eData[34], relin_keys);
 
     eData[35] = temp[0];
     evaluator.add_inplace(eData[35], temp4_6_7);
@@ -1536,27 +1608,33 @@ void HE_M2(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[35], temp[25]);
     evaluator.add_inplace(eData[35], temp29_30_31);
     evaluator.add_inplace(eData[35], temp[33]);
+    //evaluator.relinearize_inplace(eData[35], relin_keys);
     }
 }
 // Compute the constants for Sbox,(x0,x1,x2)——>(x0,x0*x2+x1,-x0*x1+x0*x2+x2)
-void HE_Sbox(vector<Ciphertext> &eData,Evaluator &evaluator)
+void HE_Sbox(vector<Ciphertext> &eData, Evaluator &evaluator,RelinKeys &relin_keys)
 {
     // (x0,x1,x2)——> (x0,x0*x2+x1,-x0*x1+x0*x2+x2)
     Ciphertext c01 = eData[1];
     Ciphertext c02 = eData[2];
     //c01.multiplyBy(eData[0]);
     evaluator.multiply_inplace(c01, eData[0]);
+    //evaluator.relinearize_inplace(c01, relin_keys);
     // c01*=eData[0];
     //c02.multiplyBy(eData[0]);
     evaluator.multiply_inplace(c02, eData[0]);
+    //evaluator.relinearize_inplace(c02, relin_keys);
     // c02*=eData[0];
 
     //eData[1] += c02;
     //eData[2] -= c01;
     //eData[2] += c02;
     evaluator.add_inplace(eData[1], c02);
+    //evaluator.relinearize_inplace(eData[1], relin_keys);
     evaluator.sub_inplace(eData[2], c01);
+    //evaluator.relinearize_inplace(eData[2], relin_keys);
     evaluator.add_inplace(eData[2], c02);
+    //evaluator.relinearize_inplace(eData[2], relin_keys);
     // omp_set_num_threads(12); // 设置线程数为12
     // #pragma omp parallel for
     for (uint64_t j = 3; j < BlockByte; j += 3)
@@ -1564,17 +1642,29 @@ void HE_Sbox(vector<Ciphertext> &eData,Evaluator &evaluator)
         c01 = eData[j + 1];
         //c01.multiplyBy(eData[j]);
         evaluator.multiply_inplace(c01, eData[j]);
+        // std::cout << "relin_keys.size(): " << relin_keys.size() << std::endl;
+        // std::cout << "c01.size(): " << c01.size() << std::endl;
+        if(relin_keys.size()<c01.size()-2){
+            
+            std::cerr << "Error: Not enough relinearization keys." << std::endl;
+            return;
+        }
+        //evaluator.relinearize_inplace(c01, relin_keys);
 
         c02 = eData[j + 2];
         //c02.multiplyBy(eData[j]);
         evaluator.multiply_inplace(c02, eData[j]);
-
+        //evaluator.relinearize_inplace(c02, relin_keys);
         //eData[j + 1] += c02;
         evaluator.add_inplace(eData[j + 1], c02);
+        //evaluator.relinearize_inplace(eData[j + 1], relin_keys);
+
         //eData[j + 2] -= c01;
         evaluator.sub_inplace(eData[j + 2], c01);
+        //evaluator.relinearize_inplace(eData[j + 2], relin_keys);
         //eData[j + 2] += c02;
         evaluator.add_inplace(eData[j + 2], c02);
+        //evaluator.relinearize_inplace(eData[j + 2], relin_keys);
     }
     // c01.cleanUp();
     // c02.cleanUp();
@@ -1588,13 +1678,13 @@ int main()
     vector<vector<uint64_t>> IV(BlockByte,vector<uint64_t>(PlainBlock));
     for (unsigned i = 0; i < BlockByte; i++)
     {
-        int t = (i+1)%PlainMod;
+        uint64_t t = (i+1)%PlainMod;
         for(unsigned j = 0; j < PlainBlock; j++)
         {
             IV[i][j] = t;
         }
     }
-
+    std::cout<<"IV generated."<<std::endl;
     // Generating Public Key and encrypting the symmetric key
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -1627,6 +1717,8 @@ int main()
     EncryptionParameters parms(scheme_type::bgv);
     size_t poly_modulus_degree = Para_m/2;
     parms.set_poly_modulus_degree(poly_modulus_degree);
+    //  vector<int> bit_sizes = {40, 40,40, 40 ,30, 30, 50,50,40,40}; // 你可以根据需要调整比特大小
+    // parms.set_coeff_modulus(CoeffModulus::Create(poly_modulus_degree, bit_sizes));
     parms.set_coeff_modulus(CoeffModulus::BFVDefault(poly_modulus_degree));
     parms.set_plain_modulus(PlainMod);
     SEALContext context(parms);
@@ -1936,12 +2028,13 @@ int main()
     Ciphertext K2Iv0R2;
     vector<Ciphertext> tmp01 = encryptedSymKey01;
     vector<Ciphertext> tmp02 = encryptedSymKey02;
+    Plaintext tmp;
     start_sbox = std::chrono::high_resolution_clock::now();
     for (uint64_t i = 0; i < BlockByte; i += 3) // BlockByte
     {
         int index = i / 3;
         K1Iv0R1 = encryptedSymKey[i + 1];
-        std::cout<<"rrr"<<std::endl;
+        //tmp = encodedIV[i] + encodedXset[i + 1];
         evaluator.multiply_plain_inplace(K1Iv0R1, multiplyAndMod(encodedXset[i + 1], IV[i][0]));
         K0Iv1R0 = encryptedSymKey[i + 0];
         evaluator.multiply_plain_inplace(K0Iv1R0, multiplyAndMod(encodedXset[i], IV[i + 1][0]));
@@ -1949,24 +2042,20 @@ int main()
         evaluator.multiply_plain_inplace(K2Iv0R2, multiplyAndMod(encodedXset[i + 2], IV[i][0]));
         K0Iv2R0 = encryptedSymKey[i + 0];
         evaluator.multiply_plain_inplace(K0Iv2R0, multiplyAndMod(encodedXset[i], IV[i + 2][0]));
-        std::cout<<"sss"<<std::endl;
         // 计算Sbox 0
-
         evaluator.add_plain_inplace(tmp01[index], encodedIV[i]);
-
         // 计算Sbox 1
         evaluator.multiply_plain_inplace(tmp02[index], encodedXset02[index]);
         evaluator.add_inplace(tmp02[index], K2Iv0R2);
         evaluator.add_inplace(tmp02[index], K0Iv2R0);
-        evaluator.add_plain_inplace(tmp02[index], encoded_Iv0Iv2[i]);
+        evaluator.add_plain_inplace(tmp02[index], encoded_Iv0Iv2[index]);
         evaluator.add_plain_inplace(encryptedKeyStream[i + 1], encodedIV[i + 1]);
         evaluator.add_inplace(encryptedKeyStream[i + 1], tmp02[index]);
-        std::cout<<"bbb"<<std::endl;
         // 计算Sbox 2
         evaluator.multiply_plain_inplace(tmp01[index], encodedXset01[index]);
         evaluator.add_inplace(tmp01[index], K1Iv0R1);
         evaluator.add_inplace(tmp01[index], K0Iv1R0);
-        evaluator.add_plain_inplace(tmp01[index], encoded_Iv0Iv1subIv2[i]);
+        evaluator.add_plain_inplace(tmp01[index], encoded_Iv0Iv1subIv2[index]);
         evaluator.add_inplace(encryptedKeyStream[i + 2], tmp02[index]);
         evaluator.sub_inplace(encryptedKeyStream[i + 2], tmp01[index]);
     }
@@ -2008,16 +2097,19 @@ int main()
         {
             start_sbox = std::chrono::high_resolution_clock::now();
             // S Layer
-            HE_Sbox(encryptedKeyStream,evaluator);
+            for(int j=0;j<BlockByte;j++){
+                evaluator.relinearize_inplace(encryptedKeyStream[j],relin_keys);
+            }
+            HE_Sbox(encryptedKeyStream,evaluator,relin_keys);
             end_sbox = std::chrono::high_resolution_clock::now();
             Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
-            noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
-            std::cout << "noise budget after sbox: " << noise_budget << std::endl;
-            if (noise_budget <= 0)
-            {
-                std::cerr << "noise budget is not enough!!!" << std::endl;
-                return 0;
-            }
+            // noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
+            // std::cout << "noise budget after sbox: " << noise_budget << std::endl;
+            // if (noise_budget <= 0)
+            // {
+            //     std::cerr << "noise budget is not enough!!!" << std::endl;
+            //     return 0;
+            // }
             if (deflag)
             {
                 yusP.Sbox_5(KeyStream2);
@@ -2031,16 +2123,16 @@ int main()
         }
         start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
-        HE_M2(encryptedKeyStream,evaluator);
+        HE_M2(encryptedKeyStream,evaluator,relin_keys);
         end_linear = std::chrono::high_resolution_clock::now();
         Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
-        noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
-        std::cout << "noise budget after linear: " << noise_budget << std::endl;
-        if (noise_budget <= 0)
-        {
-            std::cerr << "noise budget is not enough!!!" << std::endl;
-            return 0;
-        }
+        // noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
+        // std::cout << "noise budget after linear: " << noise_budget << std::endl;
+        // if (noise_budget <= 0)
+        // {
+        //     std::cerr << "noise budget is not enough!!!" << std::endl;
+        //     return 0;
+        // }
         if (deflag)
         {
             for (int i = 0; i < PlainBlock; i++)
@@ -2074,13 +2166,13 @@ int main()
         }
         end_roundkey = std::chrono::high_resolution_clock::now();
         Add_time += std::chrono::duration<double>(end_roundkey - start_roundkey).count();
-        noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
-        std::cout << "noise budget after Add: " << noise_budget << std::endl;
-        if (noise_budget <= 0)
-        {
-            std::cerr << "noise budget is not enough!!!" << std::endl;
-            return 0;
-        }
+        // noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
+        // std::cout << "noise budget after Add: " << noise_budget << std::endl;
+        // if (noise_budget <= 0)
+        // {
+        //     std::cerr << "noise budget is not enough!!!" << std::endl;
+        //     return 0;
+        // }
         if (deflag)
         {
             for (uint64_t i = 0; i < PlainByte; i++)
@@ -2100,16 +2192,16 @@ int main()
     std::cout << "Round " << Nr << " start" << std::endl;
     start_linear = std::chrono::high_resolution_clock::now();
     // Linear Layer
-    HE_M2(encryptedKeyStream,evaluator);
+    HE_M2(encryptedKeyStream,evaluator,relin_keys);
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
-    noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
-    std::cout << "noise budget after linear: " << noise_budget << std::endl;
-    if (noise_budget <= 0)
-    {
-        std::cerr << "noise budget is not enough!!!" << std::endl;
-        return 0;
-    }
+    // noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
+    // std::cout << "noise budget after linear: " << noise_budget << std::endl;
+    // if (noise_budget <= 0)
+    // {
+    //     std::cerr << "noise budget is not enough!!!" << std::endl;
+    //     return 0;
+    // }
     if (deflag)
     {
         for (int i = 0; i < PlainBlock; i++)
@@ -2134,16 +2226,16 @@ int main()
     }
     start_sbox = std::chrono::high_resolution_clock::now();
     // S Layer
-    HE_Sbox(encryptedKeyStream,evaluator);
+    HE_Sbox(encryptedKeyStream,evaluator,relin_keys);
     end_sbox = std::chrono::high_resolution_clock::now();
     Sbox_time += std::chrono::duration<double>(end_sbox - start_sbox).count();
-    noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
-    std::cout << "noise budget after sbox: " << noise_budget << std::endl;
-    if (noise_budget <= 0)
-    {
-        std::cerr << "noise budget is not enough!!!" << std::endl;
-        return 0;
-    }
+    // noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
+    // std::cout << "noise budget after sbox: " << noise_budget << std::endl;
+    // if (noise_budget <= 0)
+    // {
+    //     std::cerr << "noise budget is not enough!!!" << std::endl;
+    //     return 0;
+    // }
     if (deflag)
     {
         yusP.Sbox_5(KeyStream2);
@@ -2156,16 +2248,16 @@ int main()
     }
     start_linear = std::chrono::high_resolution_clock::now();
     // Linear Layer
-    HE_M2(encryptedKeyStream,evaluator);
+    HE_M2(encryptedKeyStream,evaluator,relin_keys);
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
-    noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
-    std::cout << "noise budget after linear: " << noise_budget << std::endl;
-    if (noise_budget <= 0)
-    {
-        std::cerr << "noise budget is not enough!!!" << std::endl;
-        return 0;
-    }
+    // noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
+    // std::cout << "noise budget after linear: " << noise_budget << std::endl;
+    // if (noise_budget <= 0)
+    // {
+    //     std::cerr << "noise budget is not enough!!!" << std::endl;
+    //     return 0;
+    // }
     if (deflag)
     {
         for (int i = 0; i < PlainBlock; i++)
@@ -2198,12 +2290,12 @@ int main()
     end_roundkey = std::chrono::high_resolution_clock::now();
     Add_time += std::chrono::duration<double>(end_roundkey - start_roundkey).count();
     noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
-    std::cout << "noise budget after Add: " << noise_budget << std::endl;
-    if (noise_budget <= 0)
-    {
-        std::cerr << "noise budget is not enough!!!" << std::endl;
-        return 0;
-    }
+    // std::cout << "noise budget after Add: " << noise_budget << std::endl;
+    // if (noise_budget <= 0)
+    // {
+    //     std::cerr << "noise budget is not enough!!!" << std::endl;
+    //     return 0;
+    // }
     if (deflag)
     {
         for (uint64_t i = 0; i < PlainByte; i++)
@@ -2231,7 +2323,13 @@ int main()
     // 计算吞吐量,KiB/min
     double throughput = (Plainbits * 60) / (pow(2, 13) * total_time);
     std::cout << "Throughput: " << throughput << "KiB/min\n";
-
+    noise_budget = min_noise_budget(encryptedKeyStream,decryptor);
+    std::cout << "noise budget finally: " << noise_budget << std::endl;
+    if (noise_budget <= 0)
+    {
+        std::cerr << "noise budget is not enough!!!" << std::endl;
+        return 0;
+    }
     if (plainflag)
     {
         // for (int i = 0; i < encryptedKeyStream.size(); i++)

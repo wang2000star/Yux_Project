@@ -49,7 +49,7 @@ static bool ompflag = 0;    // true/1表示使用OpenMP并行编码，false/0表
 static bool symkeyflag = 0; // true/1表示对称密钥同态解密验证加密，false/0表示不验证
 static bool plainflag = 1;  // true/1表示对称密文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
-static constexpr unsigned Nr = 5; // 轮数
+static constexpr unsigned Nr = 4; // 轮数
 constexpr long idx = 0;
 constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
@@ -57,7 +57,7 @@ constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 constexpr tuple<long, long, long, long> paramMap[5][8] = {
     {// Nr = 4
      // {p, log2(m), bits, c}
-     {65537, 14, 240, 3},   // 0 *
+     {65537, 16, 600, 2},   // 0 *
      {163841, 15, 240, 2},  // 1
      {65537, 14, 220, 2},   // 2 *
      {163841, 14, 230, 2},  // 3

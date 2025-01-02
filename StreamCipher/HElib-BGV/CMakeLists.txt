@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE "Release")
 
 # 启用编译优化选项
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -mavx2 -mavx512vl")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -mavx2")
 
 # # 启用 AVX-512 支持（如果支持）
 # if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
@@ -59,7 +59,7 @@ message(STATUS "UTILS_SRC_LIST: ${UTILS_SRC_LIST}")
 
 # 针对特定文件启用 AVX2 优化选项
 set_source_files_properties(
-    ${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C18_ClientAndServer8_2.cpp
+    ${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C36_ClientAndServer5_2.cpp
     PROPERTIES COMPILE_FLAGS "-mavx2"
 )
 

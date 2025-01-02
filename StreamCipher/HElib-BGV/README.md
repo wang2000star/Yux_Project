@@ -6,12 +6,11 @@
 
 * Ubuntu-22.04
 * 依赖项
-  
+
   ```bash
   sudo apt update
   sudo apt install build-essential
   ```
-
 * GNU make >=3.82
 
   版本查看：
@@ -19,7 +18,6 @@
   ```bash
   make --version
   ```
-
 * **Pthreads**
 
   什么是Pthreads？[Pthreads概述](https://www.cnblogs.com/blueclue/archive/2010/07/16/1779006.html)版本查看
@@ -27,7 +25,6 @@
   ```bash
   getconf GNU_LIBPTHREAD_VERSION
   ```
-
 * git >= 1.83
 
   版本查看：
@@ -60,7 +57,6 @@ git --version
   ```bash
   g++ --version
   ```
-  
 * cmake >= 3.30
 
   版本查看：
@@ -189,6 +185,8 @@ cd build
 cmake -DGMP_DIR=/usr/local -DNTL_DIR=/usr/local -DENABLE_TEST=ON ..
 （不带测试的构建）
 cmake -DGMP_DIR=/usr/local -DNTL_DIR=/usr/local ..
+(开启avx2)
+cmake -DGMP_DIR=/usr/local -DNTL_DIR=/usr/local -DCMAKE_CXX_FLAGS="-mavx2" ..
 
 make -j$(nproc)
 ctest #如果带测试构建了，可以选择这一步进行测试，就是较慢，
