@@ -1,0 +1,2 @@
+Nr p         nslots    bits c   Qbits SecurityLevel XOF(s) Encode(s) RoundKey(s) Add(s) Sbox(s) Linear(s) SerOff(s) SerOn(s)  SerAll(s) throughput(KiB/min) noise_budget          
+4  65537     32768     380  2   580   195.408       0.426  0.075     0.297       0.330  13.207  1.502     15.837    0.258     16.096    4055.777            18        

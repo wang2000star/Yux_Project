@@ -1,10 +1,10 @@
 
 
-#include "Hera.hpp"
+#include "HERA.hpp"
 
 using namespace std;
 
-void Hera::MC(vector<long> &A)
+void HERA::MC(vector<long> &A)
 {
     vector<long> temp = A;
     array<int, 8> index = {0, 1, 2, 3};
@@ -18,7 +18,7 @@ void Hera::MC(vector<long> &A)
     }
 }
 
-void Hera::MR(vector<long> &A)
+void HERA::MR(vector<long> &A)
 {
     vector<long> temp = A;
     array<int, 8> index = {0, 4, 8, 12};
@@ -32,7 +32,7 @@ void Hera::MR(vector<long> &A)
     }
 }
 
-void Hera::Sbox(vector<long> &A)
+void HERA::Sbox(vector<long> &A)
 {
     for (int i = 0; i < A.size(); i++)
     {

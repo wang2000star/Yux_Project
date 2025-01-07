@@ -7,9 +7,9 @@
 #include <vector>
 #include <cmath>
 
-class Hera {
+class HERA {
 public:
-    explicit Hera(long plainMod) : PlainMod(plainMod) {}
+    explicit HERA(long plainMod) : PlainMod(plainMod) {}
 
     void MC(std::vector<long> &A);
     void MR(std::vector<long> &A);

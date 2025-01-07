@@ -37,6 +37,14 @@ else()
     message("helib ${HELIB_VERSION} found.")
 endif()
 
+# 添加包含目录
+include_directories(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak)
+include_directories(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak/avx2)
+include_directories(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak/opt64)
+
+# 添加 keccak 子目录
+add_subdirectory(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak)
+
 # add symmetric library
 aux_source_directory("${CMAKE_SOURCE_DIR}/Symmetric" SYMMETRIC_SRC_LIST)
 add_library(Symmetric ${SYMMETRIC_SRC_LIST})
@@ -48,6 +56,8 @@ aux_source_directory("${CMAKE_SOURCE_DIR}/utils" UTILS_SRC_LIST)
 add_library(Utils ${UTILS_SRC_LIST})
 # Output UTILS_SRC_LIST for debugging
 message(STATUS "UTILS_SRC_LIST: ${UTILS_SRC_LIST}")
+
+
 
 # add TRANSCIPHER library
 # aux_source_directory("${CMAKE_SOURCE_DIR}/transciphering" TRANSCIPHER_SRC_LIST)

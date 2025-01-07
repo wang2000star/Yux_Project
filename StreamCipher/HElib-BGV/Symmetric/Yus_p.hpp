@@ -16,29 +16,30 @@ public:
     // MC64和MR64是我对老师第一个版本的扩展
     // 第一个版本和第二个版本的s盒都是Sbox,我对第一个版本拓展也是
 
-    void MC32(std::vector<long> &A);
-    void MR32(std::vector<long> &A);
-    void MC_MR(std::vector<long> &A);
-    void MC32_2(std::vector<long> &A);
-    void MR32_2(std::vector<long> &A);
-    void MC64(std::vector<long> &A);
-    void MR64(std::vector<long> &A);
-    void Sbox(std::vector<long> &A);
-    void MC48_3(std::vector<long> &A);
-    void MR48_3(std::vector<long> &A);
-    void Sbox_3(std::vector<long> &A);
-    void MC64_4(std::vector<long> &A);
-    void MR64_4(std::vector<long> &A);
-    void Sbox_4(std::vector<long> &A);
-    void M36_5(std::vector<long> &A);
-    void Sbox_5(std::vector<long> &A);
-    void MC64_6(std::vector<long> &A);
-    void MR64_6(std::vector<long> &A);
-    void Sbox_6(std::vector<long> &A);
-    void M36_7(std::vector<long> &A);
-    void Sbox_7(std::vector<long> &A);
-    void M18_8(std::vector<long> &A);
-    void Sbox_8(std::vector<long> &A);
+    void MC32(std::vector<long> &data);
+    void MR32(std::vector<long> &data);
+    void MC_MR(std::vector<long> &data);
+    void MC32_2(std::vector<long> &data);
+    void MR32_2(std::vector<long> &data);
+    void MC64(std::vector<long> &data);
+    void MR64(std::vector<long> &data);
+    void Sbox(std::vector<long> &data);
+    void MC48_3(std::vector<long> &data);
+    void MR48_3(std::vector<long> &data);
+    void Sbox_3(std::vector<long> &data);
+    void MC64_4(std::vector<long> &data);
+    void MR64_4(std::vector<long> &data);
+    void Sbox_4(std::vector<long> &data);
+    void M36_5(std::vector<long> &data);
+    void Sbox_5(std::vector<long> &data);
+    void Sbox_5_last(std::vector<long> &data);
+    void MC64_6(std::vector<long> &data);
+    void MR64_6(std::vector<long> &data);
+    void Sbox_6(std::vector<long> &data);
+    void M36_7(std::vector<long> &data);
+    void Sbox_7(std::vector<long> &data);
+    void M18_8(std::vector<long> &data);
+    void Sbox_8(std::vector<long> &data);
 
 private:
     long PlainMod;

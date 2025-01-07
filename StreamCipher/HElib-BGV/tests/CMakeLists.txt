@@ -75,13 +75,17 @@ include_directories("${CMAKE_SOURCE_DIR}/utils")
 add_executable(test_Yus_p_C36_ClientAndServer5 test_Yus_p_C36_ClientAndServer5.cpp)
 target_link_libraries(test_Yus_p_C36_ClientAndServer5 PUBLIC Symmetric Utils helib ${OpenMP_CXX_LIBRARIES})
 
-add_executable(test_Yus_p_C36_ClientAndServer5_2 test_Yus_p_C36_ClientAndServer5_2.cpp)
-target_link_libraries(test_Yus_p_C36_ClientAndServer5_2 PUBLIC Symmetric Utils helib ${OpenMP_CXX_LIBRARIES})
+# add_executable(test_Yus_p_C36_ClientAndServer5_2 test_Yus_p_C36_ClientAndServer5_2.cpp)
+# target_link_libraries(test_Yus_p_C36_ClientAndServer5_2 PUBLIC Symmetric Utils helib ${OpenMP_CXX_LIBRARIES})
 # add_executable(test_Yus_p_C36_ClientAndServer7 test_Yus_p_C36_ClientAndServer7.cpp)
 # target_link_libraries(test_Yus_p_C36_ClientAndServer7 PUBLIC Symmetric Utils helib)
 
-add_executable(test_Hera test_Hera.cpp)
-target_link_libraries(test_Hera PUBLIC Symmetric Utils helib)
+add_executable(test_HERA test_HERA.cpp)
+target_link_libraries(test_HERA PUBLIC Symmetric Utils helib)
+
+add_executable(test_pasta2_3 test_pasta2_3.cpp)
+target_link_libraries(test_pasta2_3 PUBLIC Symmetric Utils keccak helib)
+
 
 # add_executable(test_Yus_p_C18_ClientAndServer8 test_Yus_p_C18_ClientAndServer8.cpp)
 # target_link_libraries(test_Yus_p_C18_ClientAndServer8 PUBLIC Symmetric Utils helib)
