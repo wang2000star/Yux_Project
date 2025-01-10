@@ -23,7 +23,7 @@ public:
     void MR32_2(std::vector<long> &data);
     void MC64(std::vector<long> &data);
     void MR64(std::vector<long> &data);
-    void Sbox(std::vector<long> &data);
+    void Sbox_feistel(std::vector<long> &data);
     void MC48_3(std::vector<long> &data);
     void MR48_3(std::vector<long> &data);
     void Sbox_3(std::vector<long> &data);
@@ -40,6 +40,9 @@ public:
     void Sbox_7(std::vector<long> &data);
     void M18_8(std::vector<long> &data);
     void Sbox_8(std::vector<long> &data);
+
+    void M36(std::vector<long> &data);
+    void Sbox(std::vector<long> &data);
 
 private:
     long PlainMod;

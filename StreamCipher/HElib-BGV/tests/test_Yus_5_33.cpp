@@ -22,10 +22,9 @@
 #include "helib/powerful.h"
 #include <immintrin.h> // 包含 SIMD 指令集支持
 
-#include "random_bit.hpp"
-#include "Yus_p.hpp"
-#include "HERA.hpp"
-#include "tool.hpp"
+#include "../utils/random_bit.hpp"
+#include "../Symmetric/Yus_p.hpp"
+#include "../utils/tool.hpp"
 
 using namespace std;
 using namespace helib;
@@ -45,95 +44,49 @@ namespace fs = std::filesystem;
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 // 更一般的，应该有d|ord_p(m)，slots=\phi(m)/ord_p(m)
 //!!!!!!!!!!!!!!!!
-constexpr unsigned BlockWords = 16; // 分组字节长度
-constexpr unsigned TruncWords = 16; // 截断字节长度
-constexpr double TruncRate = TruncWords / (double)BlockWords;
+constexpr unsigned BlockWords = 36;      // 分组密钥字长度=KeyWords
+constexpr unsigned BlockPlainWords = 24; // 明文分组字长度
+constexpr double TruncRate = BlockPlainWords / (double)BlockWords;
 // ===============模式设置================
 constexpr bool Rkflag = 1;     // true/1表示乘法，false/0表示加法，指的是随机向量和密钥间的操作
 constexpr bool deflag = 0;     // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
 constexpr bool ompflag = 0;    // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
 constexpr bool symkeyflag = 0; // true/1表示对称密钥同态解密验证加密，false/0表示不验证
-constexpr bool plainflag = 1;  // true/1表示对称密文同态解密验证，false/0表示不验证
+constexpr bool KeyStreamflag = 0;  // true/1表示密钥流同态解密验证，false/0表示不验证
+constexpr bool plainflag = 0;      // true/1表示明文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
-constexpr unsigned Nr = 4; // 轮数
+constexpr unsigned Nr = 5; // 轮数
 constexpr long idx = 0;
 constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
 // 硬编码参数值
-constexpr tuple<long, long, long, long> paramMap[5][8] = {
+constexpr tuple<long, long, long, long> paramMap[1][8] = {
     {// Nr = 4
      // {p, log2(m), bits, c}
-     {65537, 16, 380, 2},   // 0 *
+     {4298506241, 15, 360, 4},   // 0 *
      {163841, 15, 240, 2},  // 1
      {65537, 14, 220, 2},   // 2 *
      {163841, 14, 230, 2},  // 3
      {65537, 15, 350, 2},   // 4
      {163841, 15, 350, 2},  // 5
      {65537, 15, 400, 2},   // 6
-     {163841, 15, 400, 2}}, // 7
-    {
-        // Nr = 5
-        // {p, log2(m), bits, c}
-        {65537, 15, 236, 2},  // 0 *
-        {163841, 15, 280, 2}, // 1
-        {65537, 16, 300, 2},  // 2
-        {65537, 16, 350, 2},  // 3
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0}          // 填充空位
-    },
-    {
-        // Nr = 6
-        // {p, log2(m), bits, c}
-        {65537, 16, 280, 2}, // 0 *
-        {65537, 16, 360, 2}, //
-        {65537, 16, 370, 2},
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}, // 填充空位
-        {0, 0, 0, 0}  // 填充空位
-    },
-    {
-        // Nr = 7
-        // {p, log2(m), bits, c}
-        {65537, 16, 550, 2}, // 0 *
-        {0, 0, 0, 0},        // 填充空位
-        {0, 0, 0, 0},        // 填充空位
-        {0, 0, 0, 0},        // 填充空位
-        {0, 0, 0, 0},        // 填充空位
-        {0, 0, 0, 0},        // 填充空位
-        {0, 0, 0, 0},        // 填充空位
-        {0, 0, 0, 0}         // 填充空位
-    },
-    {
-        // Nr = 8
-        // {p, log2(m), bits, c}
-        {65537, 16, 430, 2},  // 0 *
-        {786433, 17, 450, 2}, // slots太大，不建议使用
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0},         // 填充空位
-        {0, 0, 0, 0}          // 填充空位
-    }};
+     {163841, 15, 400, 2}} // 7
+    };
 // p=k*m+1
 //  2^10=1024,2^11=2048,2^12=4096,2^13=8192,2^14=16384,2^15=32768,2^16=65536,
 // 当电脑内存有限时，log2Para_m太大，会导致内存不足，出现terminate called recursively错误，从而终止程序.
 // 此外，即使正常运行，由于内存一直临界，会导致程序运行速度变慢，时间测量不准确。
 
-constexpr long log2Para_m = get<1>(paramMap[Nr - 4][idx]) - 0;
-constexpr long Para_p = get<0>(paramMap[Nr - 4][idx]);    // plaintext prime
+constexpr long log2Para_m = get<1>(paramMap[0][idx]) - 0;
+constexpr long Para_p = get<0>(paramMap[0][idx]);    // plaintext prime
 constexpr long Para_m = 1 << log2Para_m;                  // cyclotomic polynomial
 constexpr long phi_m = Para_m >> 1;                       // phi(m)
-constexpr long Para_bits = get<2>(paramMap[Nr - 4][idx]); // bits in the ciphertext modulus chain
-constexpr long Para_c = get<3>(paramMap[Nr - 4][idx]);    // columns in the key-switching matrix
+constexpr long Para_bits = get<2>(paramMap[0][idx]); // bits in the ciphertext modulus chain
+constexpr long Para_c = get<3>(paramMap[0][idx]);    // columns in the key-switching matrix
 constexpr long Para_r = 1;                                // Lifting [defualt = 1]
 //!!!!!!!!!!!!!!!
 constexpr long nslots = phi_m;             // 槽数
-constexpr unsigned PlainBlock = phi_m - 0; // 明文分组数,应该PlainBlock<=phi_m
+constexpr unsigned PlainBlock = nslots - 0; // 明文分组数,应该PlainBlock<=nslots
 constexpr unsigned len3 = BlockWords / 3;
 // 计算 log2 的 constexpr 函数
 constexpr unsigned int log2_constexpr(unsigned long long n, unsigned int p = 0)
@@ -145,130 +98,619 @@ constexpr unsigned Wordbits = log2_constexpr(PlainMod - 1) + 1; // 字节比特�
 constexpr unsigned randbits = Wordbits - 1;
 constexpr unsigned BlockSize = Wordbits * BlockWords;    // 分组比特长度=BlockWords*Wordbits
 constexpr unsigned NrBlockWords = BlockWords * (Nr + 1);  // Nr轮分组密钥字节长度
-constexpr long PlainWords = BlockWords * PlainBlock;      // 明文字节长度
-constexpr long TruncPlainWords = TruncWords * PlainBlock; // 截断后的明文字节长度
+
+constexpr long KeyStreamWords = BlockWords * PlainBlock; // 密钥流字节长度
+constexpr long PlainWords = BlockPlainWords * PlainBlock;      // 明文字节长度
+
 constexpr long Plainbits = Wordbits * PlainWords;        // 明文比特长度
+
+constexpr long max_prime_size = (1ULL << (Wordbits-1)) - 1;
 
 constexpr unsigned NonceSize = 32;                           // Nonce比特长度
 constexpr long counter_begin = 0;                            // 计数器起始值
 constexpr long counter_end = PlainBlock + counter_begin - 1; // 计数器结束值
 
-HERA hera(PlainMod); // 构建明文对称加密实例
+YusP yusP(PlainMod); // 构建明文对称加密实例
 
-void HE_MC(vector<Ctxt> &eData)
+// Linear transformation
+void HE_M(vector<Ctxt> &eData)
 {
     vector<Ctxt> temp = eData;
-    array<int, 8> index = {0, 1, 2, 3};
-    Ctxt T2(eData[0]);
-    Ctxt T3(eData[0]);
-    for (int i = 0; i < 4; i++)
-    {
-        int s = 4 * i;
-        T2 = temp[index[0] + s];
-        T2 += temp[index[0] + s];
-        T3 = temp[index[1] + s];
-        T3 += temp[index[1] + s];
-        T3 += temp[index[1] + s];
-        eData[index[0] + s] = T2;
-        eData[index[0] + s] += T3;
-        eData[index[0] + s] += temp[index[2] + s];
-        eData[index[0] + s] += temp[index[3] + s];
+    Ctxt temp0_1 = temp[0];
+temp0_1 += temp[1];
+Ctxt temp0_2 = temp[0];
+temp0_2 += temp[2];
+Ctxt temp0_3 = temp[0];
+temp0_3 += temp[3];
+Ctxt temp1_2 = temp[1];
+temp1_2 += temp[2];
+Ctxt temp1_3 = temp[1];
+temp1_3 += temp[3];
+Ctxt temp2_3 = temp[2];
+temp2_3 += temp[3];
+Ctxt temp0_1_2 = temp0_1;
+temp0_1_2 += temp[2];
+Ctxt temp0_1_3 = temp0_1;
+temp0_1_3 += temp[3];
+Ctxt temp0_2_3 = temp0_2;
+temp0_2_3 += temp[3];
+Ctxt temp1_2_3 = temp1_2;
+temp1_2_3 += temp[3];
+Ctxt temp0_1_2_3 = temp0_1_2;
+temp0_1_2_3 += temp[3];
+Ctxt temp4_5 = temp[4];
+temp4_5 += temp[5];
+Ctxt temp4_6 = temp[4];
+temp4_6 += temp[6];
+Ctxt temp4_7 = temp[4];
+temp4_7 += temp[7];
+Ctxt temp5_6 = temp[5];
+temp5_6 += temp[6];
+Ctxt temp5_7 = temp[5];
+temp5_7 += temp[7];
+Ctxt temp6_7 = temp[6];
+temp6_7 += temp[7];
+Ctxt temp4_5_6 = temp4_5;
+temp4_5_6 += temp[6];
+Ctxt temp4_5_7 = temp4_5;
+temp4_5_7 += temp[7];
+Ctxt temp4_6_7 = temp4_6;
+temp4_6_7 += temp[7];
+Ctxt temp5_6_7 = temp5_6;
+temp5_6_7 += temp[7];
+Ctxt temp4_5_6_7 = temp4_5_6;
+temp4_5_6_7 += temp[7];
+Ctxt temp8_9 = temp[8];
+temp8_9 += temp[9];
+Ctxt temp8_10 = temp[8];
+temp8_10 += temp[10];
+Ctxt temp8_11 = temp[8];
+temp8_11 += temp[11];
+Ctxt temp9_10 = temp[9];
+temp9_10 += temp[10];
+Ctxt temp9_11 = temp[9];
+temp9_11 += temp[11];
+Ctxt temp10_11 = temp[10];
+temp10_11 += temp[11];
+Ctxt temp8_9_10 = temp8_9;
+temp8_9_10 += temp[10];
+Ctxt temp8_9_11 = temp8_9;
+temp8_9_11 += temp[11];
+Ctxt temp8_10_11 = temp8_10;
+temp8_10_11 += temp[11];
+Ctxt temp9_10_11 = temp9_10;
+temp9_10_11 += temp[11];
+Ctxt temp8_9_10_11 = temp8_9_10;
+temp8_9_10_11 += temp[11];
+Ctxt temp12_13 = temp[12];
+temp12_13 += temp[13];
+Ctxt temp12_14 = temp[12];
+temp12_14 += temp[14];
+Ctxt temp12_15 = temp[12];
+temp12_15 += temp[15];
+Ctxt temp13_14 = temp[13];
+temp13_14 += temp[14];
+Ctxt temp13_15 = temp[13];
+temp13_15 += temp[15];
+Ctxt temp14_15 = temp[14];
+temp14_15 += temp[15];
+Ctxt temp12_13_14 = temp12_13;
+temp12_13_14 += temp[14];
+Ctxt temp12_13_15 = temp12_13;
+temp12_13_15 += temp[15];
+Ctxt temp12_14_15 = temp12_14;
+temp12_14_15 += temp[15];
+Ctxt temp13_14_15 = temp13_14;
+temp13_14_15 += temp[15];
+Ctxt temp12_13_14_15 = temp12_13_14;
+temp12_13_14_15 += temp[15];
+Ctxt temp16_17 = temp[16];
+temp16_17 += temp[17];
+Ctxt temp16_18 = temp[16];
+temp16_18 += temp[18];
+Ctxt temp16_19 = temp[16];
+temp16_19 += temp[19];
+Ctxt temp17_18 = temp[17];
+temp17_18 += temp[18];
+Ctxt temp17_19 = temp[17];
+temp17_19 += temp[19];
+Ctxt temp18_19 = temp[18];
+temp18_19 += temp[19];
+Ctxt temp16_17_18 = temp16_17;
+temp16_17_18 += temp[18];
+Ctxt temp16_17_19 = temp16_17;
+temp16_17_19 += temp[19];
+Ctxt temp16_18_19 = temp16_18;
+temp16_18_19 += temp[19];
+Ctxt temp17_18_19 = temp17_18;
+temp17_18_19 += temp[19];
+Ctxt temp16_17_18_19 = temp16_17_18;
+temp16_17_18_19 += temp[19];
+Ctxt temp20_21 = temp[20];
+temp20_21 += temp[21];
+Ctxt temp20_22 = temp[20];
+temp20_22 += temp[22];
+Ctxt temp20_23 = temp[20];
+temp20_23 += temp[23];
+Ctxt temp21_22 = temp[21];
+temp21_22 += temp[22];
+Ctxt temp21_23 = temp[21];
+temp21_23 += temp[23];
+Ctxt temp22_23 = temp[22];
+temp22_23 += temp[23];
+Ctxt temp20_21_22 = temp20_21;
+temp20_21_22 += temp[22];
+Ctxt temp20_21_23 = temp20_21;
+temp20_21_23 += temp[23];
+Ctxt temp20_22_23 = temp20_22;
+temp20_22_23 += temp[23];
+Ctxt temp21_22_23 = temp21_22;
+temp21_22_23 += temp[23];
+Ctxt temp20_21_22_23 = temp20_21_22;
+temp20_21_22_23 += temp[23];
+Ctxt temp24_25 = temp[24];
+temp24_25 += temp[25];
+Ctxt temp24_26 = temp[24];
+temp24_26 += temp[26];
+Ctxt temp24_27 = temp[24];
+temp24_27 += temp[27];
+Ctxt temp25_26 = temp[25];
+temp25_26 += temp[26];
+Ctxt temp25_27 = temp[25];
+temp25_27 += temp[27];
+Ctxt temp26_27 = temp[26];
+temp26_27 += temp[27];
+Ctxt temp24_25_26 = temp24_25;
+temp24_25_26 += temp[26];
+Ctxt temp24_25_27 = temp24_25;
+temp24_25_27 += temp[27];
+Ctxt temp24_26_27 = temp24_26;
+temp24_26_27 += temp[27];
+Ctxt temp25_26_27 = temp25_26;
+temp25_26_27 += temp[27];
+Ctxt temp24_25_26_27 = temp24_25_26;
+temp24_25_26_27 += temp[27];
+Ctxt temp28_29 = temp[28];
+temp28_29 += temp[29];
+Ctxt temp28_30 = temp[28];
+temp28_30 += temp[30];
+Ctxt temp28_31 = temp[28];
+temp28_31 += temp[31];
+Ctxt temp29_30 = temp[29];
+temp29_30 += temp[30];
+Ctxt temp29_31 = temp[29];
+temp29_31 += temp[31];
+Ctxt temp30_31 = temp[30];
+temp30_31 += temp[31];
+Ctxt temp28_29_30 = temp28_29;
+temp28_29_30 += temp[30];
+Ctxt temp28_29_31 = temp28_29;
+temp28_29_31 += temp[31];
+Ctxt temp28_30_31 = temp28_30;
+temp28_30_31 += temp[31];
+Ctxt temp29_30_31 = temp29_30;
+temp29_30_31 += temp[31];
+Ctxt temp28_29_30_31 = temp28_29_30;
+temp28_29_30_31 += temp[31];
+Ctxt temp32_33 = temp[32];
+temp32_33 += temp[33];
+Ctxt temp32_34 = temp[32];
+temp32_34 += temp[34];
+Ctxt temp32_35 = temp[32];
+temp32_35 += temp[35];
+Ctxt temp33_34 = temp[33];
+temp33_34 += temp[34];
+Ctxt temp33_35 = temp[33];
+temp33_35 += temp[35];
+Ctxt temp34_35 = temp[34];
+temp34_35 += temp[35];
+Ctxt temp32_33_34 = temp32_33;
+temp32_33_34 += temp[34];
+Ctxt temp32_33_35 = temp32_33;
+temp32_33_35 += temp[35];
+Ctxt temp32_34_35 = temp32_34;
+temp32_34_35 += temp[35];
+Ctxt temp33_34_35 = temp33_34;
+temp33_34_35 += temp[35];
+Ctxt temp32_33_34_35 = temp32_33_34;
+temp32_33_34_35 += temp[35];
 
-        T2 = temp[index[1] + s];
-        T2 += temp[index[1] + s];
-        T3 = temp[index[2] + s];
-        T3 += temp[index[2] + s];
-        T3 += temp[index[2] + s];
-        eData[index[1] + s] = T2;
-        eData[index[1] + s] += T3;
-        eData[index[1] + s] += temp[index[3] + s];
-        eData[index[1] + s] += temp[index[0] + s];
 
-        T2 = temp[index[2] + s];
-        T2 += temp[index[2] + s];
-        T3 = temp[index[3] + s];
-        T3 += temp[index[3] + s];
-        T3 += temp[index[3] + s];
-        eData[index[2] + s] = T2;
-        eData[index[2] + s] += T3;
-        eData[index[2] + s] += temp[index[0] + s];
-        eData[index[2] + s] += temp[index[1] + s];
-
-        T2 = temp[index[3] + s];
-        T2 += temp[index[3] + s];
-        T3 = temp[index[0] + s];
-        T3 += temp[index[0] + s];
-        T3 += temp[index[0] + s];
-        eData[index[3] + s] = T2;
-        eData[index[3] + s] += T3;
-        eData[index[3] + s] += temp[index[1] + s];
-        eData[index[3] + s] += temp[index[2] + s];
-    }
+eData[0] += temp1_3;
+eData[0] += temp4_5_6_7;
+eData[0] += temp8_11;
+eData[0] += temp14_15;
+eData[0] += temp16_17_19;
+eData[0] += temp20_21_22;
+eData[0] += temp24_25;
+eData[0] += temp29_30_31;
+eData[0] += temp33_34_35;
+eData[1] += temp0_2_3;
+eData[1] += temp4_6;
+eData[1] += temp8_10;
+eData[1] += temp12_13_15;
+eData[1] += temp17_18;
+eData[1] += temp20_21_22_23;
+eData[1] += temp24_25_26;
+eData[1] += temp28_31;
+eData[1] += temp32_33_34;
+eData[2] = temp[1];
+eData[2] += temp4_5_7;
+eData[2] += temp8_9_10;
+eData[2] += temp12_14;
+eData[2] += temp16_17_18_19;
+eData[2] += temp20_21_23;
+eData[2] += temp25_26_27;
+eData[2] += temp28_29_30_31;
+eData[2] += temp32_33_35;
+eData[3] += temp0_1_2;
+eData[3] += temp4_6_7;
+eData[3] += temp8_9_10_11;
+eData[3] += temp[14];
+eData[3] += temp17_18_19;
+eData[3] += temp20_22_23;
+eData[3] += temp24_25_27;
+eData[3] += temp[28];
+eData[3] += temp32_33_34;
+eData[4] += temp0_1_3;
+eData[4] += temp5_6_7;
+eData[4] += temp9_11;
+eData[4] += temp13_15;
+eData[4] += temp16_18;
+eData[4] += temp20_21_23;
+eData[4] += temp24_25_26_27;
+eData[4] += temp28_29_31;
+eData[4] += temp34_35;
+eData[5] = temp0_2;
+eData[5] += temp4_7;
+eData[5] += temp8_10_11;
+eData[5] += temp12_13_15;
+eData[5] += temp17_19;
+eData[5] += temp20_21_22_23;
+eData[5] += temp24_26;
+eData[5] += temp28_29_30_31;
+eData[5] += temp32_33_34_35;
+eData[6] += temp0_1_3;
+eData[6] += temp4_5_7;
+eData[6] += temp9_10_11;
+eData[6] += temp12_13_14;
+eData[6] += temp[17];
+eData[6] += temp20_21_22_23;
+eData[6] += temp25_26_27;
+eData[6] += temp28_30_31;
+eData[6] += temp[35];
+eData[7] += temp1_2_3;
+eData[7] += temp4_6;
+eData[7] += temp8_9_10;
+eData[7] += temp12_14;
+eData[7] += temp16_18_19;
+eData[7] += temp21_23;
+eData[7] += temp24_26_27;
+eData[7] += temp28_29_30_31;
+eData[7] += temp32_34;
+eData[8] = temp0_1_2_3;
+eData[8] += temp5_7;
+eData[8] += temp10_11;
+eData[8] += temp13_14_15;
+eData[8] += temp16_18;
+eData[8] += temp20_22_23;
+eData[8] += temp24_25_26_27;
+eData[8] += temp29_31;
+eData[8] += temp32_33_34_35;
+eData[9] += temp2_3;
+eData[9] += temp4_6_7;
+eData[9] += temp8_10;
+eData[9] += temp12_13_14_15;
+eData[9] += temp16_17;
+eData[9] += temp20_23;
+eData[9] += temp24_25_26;
+eData[9] += temp28_29_30_31;
+eData[9] += temp33_34;
+eData[10] += temp[1];
+eData[10] += temp4_5_6_7;
+eData[10] += temp9_11;
+eData[10] += temp12_13_15;
+eData[10] += temp17_19;
+eData[10] += temp21_22;
+eData[10] += temp24_26_27;
+eData[10] += temp29_30_31;
+eData[10] += temp32_33_34_35;
+eData[11] = temp0_1_2_3;
+eData[11] += temp4_5_6;
+eData[11] += temp8_10;
+eData[11] += temp13_14;
+eData[11] += temp16_17_18_19;
+eData[11] += temp21_23;
+eData[11] += temp25_26_27;
+eData[11] += temp28_29_30;
+eData[11] += temp32_34_35;
+eData[12] += temp0_1;
+eData[12] += temp5_6_7;
+eData[12] += temp9_10_11;
+eData[12] += temp13_15;
+eData[12] += temp16_17_18_19;
+eData[12] += temp20_23;
+eData[12] += temp26_27;
+eData[12] += temp28_29_31;
+eData[12] += temp32_33_34;
+eData[13] += temp0_1_2;
+eData[13] += temp4_7;
+eData[13] += temp8_9_10;
+eData[13] += temp12_14_15;
+eData[13] += temp16_18;
+eData[13] += temp20_22;
+eData[13] += temp24_25_27;
+eData[13] += temp29_30;
+eData[13] += temp32_33_34_35;
+eData[14] = temp1_2_3;
+eData[14] += temp4_5_6_7;
+eData[14] += temp8_9_11;
+eData[14] += temp[13];
+eData[14] += temp16_17_19;
+eData[14] += temp20_21_22;
+eData[14] += temp24_26;
+eData[14] += temp28_29_30_31;
+eData[14] += temp32_33_35;
+eData[15] += temp0_1_3;
+eData[15] += temp[4];
+eData[15] += temp8_9_10;
+eData[15] += temp12_13_14;
+eData[15] += temp16_18_19;
+eData[15] += temp20_21_22_23;
+eData[15] += temp[26];
+eData[15] += temp29_30_31;
+eData[15] += temp32_34_35;
+eData[16] += temp0_1_2_3;
+eData[16] += temp4_5_7;
+eData[16] += temp10_11;
+eData[16] += temp12_13_15;
+eData[16] += temp17_18_19;
+eData[16] += temp21_23;
+eData[16] += temp25_27;
+eData[16] += temp28_30;
+eData[16] += temp32_33_35;
+eData[17] = temp0_2;
+eData[17] += temp4_5_6_7;
+eData[17] += temp8_9_10_11;
+eData[17] += temp12_14;
+eData[17] += temp16_19;
+eData[17] += temp20_22_23;
+eData[17] += temp24_25_27;
+eData[17] += temp29_31;
+eData[17] += temp32_33_34_35;
+eData[18] += temp1_2_3;
+eData[18] += temp4_6_7;
+eData[18] += temp[11];
+eData[18] += temp12_13_15;
+eData[18] += temp16_17_19;
+eData[18] += temp21_22_23;
+eData[18] += temp24_25_26;
+eData[18] += temp[29];
+eData[18] += temp32_33_34_35;
+eData[19] += temp0_2_3;
+eData[19] += temp4_5_6_7;
+eData[19] += temp8_10;
+eData[19] += temp13_14_15;
+eData[19] += temp16_18;
+eData[19] += temp20_21_22;
+eData[19] += temp24_26;
+eData[19] += temp28_30_31;
+eData[19] += temp33_35;
+eData[20] = temp0_1_2_3;
+eData[20] += temp5_7;
+eData[20] += temp8_9_10_11;
+eData[20] += temp12_13_14_15;
+eData[20] += temp17_19;
+eData[20] += temp22_23;
+eData[20] += temp25_26_27;
+eData[20] += temp28_30;
+eData[20] += temp32_34_35;
+eData[21] += temp0_1_2;
+eData[21] += temp4_5_6_7;
+eData[21] += temp9_10;
+eData[21] += temp14_15;
+eData[21] += temp16_18_19;
+eData[21] += temp20_22;
+eData[21] += temp24_25_26_27;
+eData[21] += temp28_29;
+eData[21] += temp32_35;
+eData[22] += temp0_2_3;
+eData[22] += temp5_6_7;
+eData[22] += temp8_9_10_11;
+eData[22] += temp[13];
+eData[22] += temp16_17_18_19;
+eData[22] += temp21_23;
+eData[22] += temp24_25_27;
+eData[22] += temp29_31;
+eData[22] += temp33_34;
+eData[23] = temp1_2_3;
+eData[23] += temp4_5_6;
+eData[23] += temp8_10_11;
+eData[23] += temp12_13_14_15;
+eData[23] += temp16_17_18;
+eData[23] += temp20_22;
+eData[23] += temp25_26;
+eData[23] += temp28_29_30_31;
+eData[23] += temp33_35;
+eData[24] += temp2_3;
+eData[24] += temp4_5_7;
+eData[24] += temp8_9_10;
+eData[24] += temp12_13;
+eData[24] += temp17_18_19;
+eData[24] += temp21_22_23;
+eData[24] += temp25_27;
+eData[24] += temp28_29_30_31;
+eData[24] += temp32_35;
+eData[25] += temp0_1_3;
+eData[25] += temp5_6;
+eData[25] += temp8_9_10_11;
+eData[25] += temp12_13_14;
+eData[25] += temp16_19;
+eData[25] += temp20_21_22;
+eData[25] += temp24_26_27;
+eData[25] += temp28_30;
+eData[25] += temp32_34;
+eData[26] = temp0_2;
+eData[26] += temp4_5_6_7;
+eData[26] += temp8_9_11;
+eData[26] += temp13_14_15;
+eData[26] += temp16_17_18_19;
+eData[26] += temp20_21_23;
+eData[26] += temp[25];
+eData[26] += temp28_29_31;
+eData[26] += temp32_33_34;
+eData[27] += temp[2];
+eData[27] += temp5_6_7;
+eData[27] += temp8_10_11;
+eData[27] += temp12_13_15;
+eData[27] += temp[16];
+eData[27] += temp20_21_22;
+eData[27] += temp24_25_26;
+eData[27] += temp28_30_31;
+eData[27] += temp32_33_34_35;
+eData[28] += temp1_3;
+eData[28] += temp4_6;
+eData[28] += temp8_9_11;
+eData[28] += temp12_13_14_15;
+eData[28] += temp16_17_19;
+eData[28] += temp22_23;
+eData[28] += temp24_25_27;
+eData[28] += temp29_30_31;
+eData[28] += temp33_35;
+eData[29] = temp0_1_3;
+eData[29] += temp5_7;
+eData[29] += temp8_9_10_11;
+eData[29] += temp12_14;
+eData[29] += temp16_17_18_19;
+eData[29] += temp20_21_22_23;
+eData[29] += temp24_26;
+eData[29] += temp28_31;
+eData[29] += temp32_34_35;
+eData[30] += temp0_1_2;
+eData[30] += temp[5];
+eData[30] += temp8_9_10_11;
+eData[30] += temp13_14_15;
+eData[30] += temp16_18_19;
+eData[30] += temp[23];
+eData[30] += temp24_25_27;
+eData[30] += temp28_29_31;
+eData[30] += temp33_34_35;
+eData[31] += temp0_2;
+eData[31] += temp4_6_7;
+eData[31] += temp9_11;
+eData[31] += temp12_14_15;
+eData[31] += temp16_17_18_19;
+eData[31] += temp20_22;
+eData[31] += temp25_26_27;
+eData[31] += temp28_30;
+eData[31] += temp32_33_34;
+eData[32] = temp1_2_3;
+eData[32] += temp4_6;
+eData[32] += temp8_10_11;
+eData[32] += temp12_13_14_15;
+eData[32] += temp17_19;
+eData[32] += temp20_21_22_23;
+eData[32] += temp24_25_26_27;
+eData[32] += temp29_31;
+eData[32] += temp34_35;
+eData[33] += temp0_1_2_3;
+eData[33] += temp4_5;
+eData[33] += temp8_11;
+eData[33] += temp12_13_14;
+eData[33] += temp16_17_18_19;
+eData[33] += temp21_22;
+eData[33] += temp26_27;
+eData[33] += temp28_30_31;
+eData[33] += temp32_34;
+eData[34] += temp0_1_3;
+eData[34] += temp5_7;
+eData[34] += temp9_10;
+eData[34] += temp12_14_15;
+eData[34] += temp17_18_19;
+eData[34] += temp20_21_22_23;
+eData[34] += temp[25];
+eData[34] += temp28_29_30_31;
+eData[34] += temp33_35;
+eData[35] = temp1_2;
+eData[35] += temp4_5_6_7;
+eData[35] += temp9_11;
+eData[35] += temp13_14_15;
+eData[35] += temp16_17_18;
+eData[35] += temp20_22_23;
+eData[35] += temp24_25_26_27;
+eData[35] += temp28_29_30;
+eData[35] += temp32_34;
 }
-void HE_MR(vector<Ctxt> &eData)
-{
-    vector<Ctxt> temp = eData;
-    vector<int> index = {0, 4, 8, 12};
-    Ctxt T2(eData[0]);
-    Ctxt T3(eData[0]);
-    for (int i = 0; i < 4; i++)
-    {
-        int s = i;
-        T2 = temp[index[0] + s];
-        T2 += temp[index[0] + s];
-        T3 = temp[index[1] + s];
-        T3 += temp[index[1] + s];
-        T3 += temp[index[1] + s];
-        eData[index[0] + s] = T2;
-        eData[index[0] + s] += T3;
-        eData[index[0] + s] += temp[index[2] + s];
-        eData[index[0] + s] += temp[index[3] + s];
-
-        T2 = temp[index[1] + s];
-        T2 += temp[index[1] + s];
-        T3 = temp[index[2] + s];
-        T3 += temp[index[2] + s];
-        T3 += temp[index[2] + s];
-        eData[index[1] + s] = T2;
-        eData[index[1] + s] += T3;
-        eData[index[1] + s] += temp[index[3] + s];
-        eData[index[1] + s] += temp[index[0] + s];
-
-        T2 = temp[index[2] + s];
-        T2 += temp[index[2] + s];
-        T3 = temp[index[3] + s];
-        T3 += temp[index[3] + s];
-        T3 += temp[index[3] + s];
-        eData[index[2] + s] = T2;
-        eData[index[2] + s] += T3;
-        eData[index[2] + s] += temp[index[0] + s];
-        eData[index[2] + s] += temp[index[1] + s];
-
-        T2 = temp[index[3] + s];
-        T2 += temp[index[3] + s];
-        T3 = temp[index[0] + s];
-        T3 += temp[index[0] + s];
-        T3 += temp[index[0] + s];
-        eData[index[3] + s] = T2;
-        eData[index[3] + s] += T3;
-        eData[index[3] + s] += temp[index[1] + s];
-        eData[index[3] + s] += temp[index[2] + s];
-    }
-}
-// Compute the constants for Sbox
+// Compute the constants for Sbox,(x0,x1,x2)——>(x0,x0*x2+x1,-x0*x1+x0*x2+x2)
 void HE_Sbox(vector<Ctxt> &eData)
 {
+    // (x0,x1,x2)——> (x0,x0*x2+x1,-x0*x1+x0*x2+x2)
+    Ctxt c01 = eData[1];
+    Ctxt c02 = eData[2];
+    c01.multiplyBy(eData[0]);
+    // c01*=eData[0];
+    c02.multiplyBy(eData[0]);
+    // c02*=eData[0];
+
+    eData[1] += c02;
+    eData[2] -= c01;
+    eData[2] += c02;
+    // omp_set_num_threads(12); // 设置线程数为12
     // #pragma omp parallel for
-    for (long j = 0; j < BlockWords; j++)
+    for (long j = 3; j < BlockWords; j += 3)
     {
+        c01 = eData[j + 1];
+        c01.multiplyBy(eData[j]);
+
+        c02 = eData[j + 2];
+        c02.multiplyBy(eData[j]);
+
+        eData[j + 1] += c02;
+        eData[j + 2] -= c01;
+        eData[j + 2] += c02;
+    }
+    // c01.cleanUp();
+    // c02.cleanUp();
+}
+// Compute the constants for the last Sbox,(x0,x1,x2)——>(x0^3,x0*x2+x1,-x0*x1+x0*x2+x2)
+void HE_Last_Sbox(vector<Ctxt> &eData)
+{
+    // (x0,x1,x2)——> (x0^3,x0*x2+x1,-x0*x1+x0*x2+x2)
+    Ctxt c01 = eData[1];
+    Ctxt c02 = eData[2];
+    c01.multiplyBy(eData[0]);
+    // c01*=eData[0];
+    c02.multiplyBy(eData[0]);
+    // c02*=eData[0];
+
+    eData[1] += c02;
+    eData[2] -= c01;
+    eData[2] += c02;
+    eData[0].cube();
+    // omp_set_num_threads(12); // 设置线程数为12
+    // #pragma omp parallel for
+    for (long j = 3; j < BlockWords; j += 3)
+    {
+        c01 = eData[j + 1];
+        c01.multiplyBy(eData[j]);
+
+        c02 = eData[j + 2];
+        c02.multiplyBy(eData[j]);
+
+        eData[j + 1] += c02;
+        eData[j + 2] -= c01;
+        eData[j + 2] += c02;
         eData[j].cube();
     }
+    // c01.cleanUp();
+    // c02.cleanUp();
 }
 
 int main()
 {
     std::cout << "Nr: " << Nr << std::endl;
     std::cout << "BlockWord: " << BlockWords << std::endl;
+    std::cout << "BlockPlainWord: " << BlockPlainWords << std::endl;
     std::cout << "PlainMod: " << PlainMod << std::endl;
     std::cout << "PlainBlock: " << PlainBlock << std::endl;
     std::cout << "nslots: " << nslots << std::endl;
@@ -331,7 +773,7 @@ int main()
     // 创建PAlgebra对象
     const helib::PAlgebra &zMStar = context->getZMStar();
     // long minv = -4;
-    long root; // m-th root of unity modulo p
+    long root = 3; // m-th root of unity modulo p
     if (Para_m == 65536)
     {
         root = 3;
@@ -373,7 +815,7 @@ int main()
     auto start_keyStream = std::chrono::high_resolution_clock::now();
 
     std::vector<long> NonceSet(PlainBlock);
-    std::vector<long> RoundKeySet(PlainWords * (Nr + 1));
+    std::vector<long> RoundKeySet(KeyStreamWords * (Nr + 1));
     std::vector<long> KeyStream(PlainWords);
     RandomBit<BlockWords * randbits> randomBit(Nr);
     long X;
@@ -383,42 +825,30 @@ int main()
     long block_num;
     long ir;
     std::vector<long> state(BlockWords); // 初始化 state
+    Keccak_HashInstance shake128_2;
     std::cout << "Generating KeyStream..." << std::endl;
     uint64_t start_cycle = rdtsc();
     for (long counter = counter_begin; counter <= counter_end; counter++)
     {
         nonce = generate_secure_random_int(NonceSize);
-        randomBit.generate_Instance_all_new(nonce, counter);
-        auto &RanVecs = randomBit.roundconstants;
+        //randomBit.generate_Instance_all_new(nonce, counter);
+        //auto &RanVecs = randomBit.roundconstants;
+        random_init_shake(nonce, counter, shake128_2);
         block_num = counter - counter_begin;
         NonceSet[block_num] = nonce;
         // 逐轮进行加密
         for (unsigned r = 0; r <= Nr; r++)
         {
-            // 计算 Xc 和 RoundKey
+            // 计算RoundKey
             for (unsigned i = 0; i < BlockWords; ++i)
             {
-                ir = i * randbits;
-                for (unsigned j = 0; j < randbits; ++j)
-                {
-                    bit_array[j] = RanVecs[r][ir + j];
-                }
-                BinStrToHex(bit_array, X, randbits);
-                // 强制转换为 long 类型
-                // Xc[i] = static_cast<long>(temp);
-                // if (Rkflag)
-                // {
-                //     RoundKey[i] = (SymKey[i] * Xc[i]) % PlainMod;
-                // }
-                // else
-                // {
-                //     RoundKey[i] = (SymKey[i] + Xc[i]) % PlainMod;
-                // }
-                RoundKey[i] = (SymKey[i] * X) % PlainMod;
+                RoundKey[i] = (SymKey[i] * generate_random_field_element(shake128_2, false,max_prime_size, PlainMod))% PlainMod;
             }
             // 将RoundKey 复制到RoundKeySet
             // 测试使用
-            memcpy(&RoundKeySet[PlainWords * r + BlockWords * (block_num)], RoundKey.data(), BlockWords * sizeof(long));
+            if (deflag){
+            memcpy(&RoundKeySet[KeyStreamWords * r + BlockWords * (block_num)], RoundKey.data(), BlockWords * sizeof(long));
+            }
             if (r == 0)
             { // 初始轮
                 for (unsigned i = 0; i < BlockWords; i++)
@@ -428,30 +858,25 @@ int main()
             }
             else if (r < Nr)
             { // 常规轮
-                // yusP.M36_5(state);  // 线性变换
-                hera.MC(state);
-                hera.MR(state);
-                hera.Sbox(state); // S盒
+
+                yusP.M36(state);  // 线性变换
+                yusP.Sbox(state); // S盒
                 for (unsigned i = 0; i < BlockWords; i++)
                 {
                     state[i] = (state[i] + RoundKey[i]) % PlainMod;
                 }
             }
             else
-            { // 最后一轮
-              // yusP.M36_5(state); // 线性变换
-                hera.MC(state);
-                hera.MR(state);
-                // hera.Sbox_last(state); // S盒
-                hera.Sbox(state); // S盒
-                                  // yusP.M36_5(state);  // 线性变换
-                hera.MC(state);
-                hera.MR(state);
+            {                      // 最后一轮
+                yusP.M36(state); // 线性变换
+                // yusP.Sbox_last(state); // S盒
+                yusP.Sbox(state); // S盒
                 for (unsigned i = 0; i < BlockWords; i++)
                 {
                     state[i] = (state[i] + RoundKey[i]) % PlainMod;
                 }
-                memcpy(&KeyStream[(block_num)*BlockWords], state.data(), BlockWords * sizeof(long));
+                yusP.M36(state); // 线性变换
+                memcpy(&KeyStream[(block_num)*BlockPlainWords], state.data(), BlockPlainWords * sizeof(long));
             }
         }
     }
@@ -469,40 +894,47 @@ int main()
     // std::cout << "Client_encryptedSymKey.bin has been written to file." << std::endl;
 
     //=============服务端offline阶段================
+        for (int test = 0; test < 3; test++)
+    {
     std::cout << "Generating XOF stream..." << std::endl;
     std::vector<vec_long> Xset(NrBlockWords);
     for (int i = 0; i < NrBlockWords; i++)
     {
-        Xset[i].SetLength(PlainBlock);
+        Xset[i].SetLength(nslots);
+        for (int j = 0; j < nslots; j++)
+        {
+            Xset[i][j] = 0;
+        }
     }
     long rB;
-    vec_long Xc;
-    Xc.SetLength(BlockWords);
+    // vec_long Xc;
+    // Xc.SetLength(BlockWords);
+    Keccak_HashInstance shake128_3;
     auto start_XOF = std::chrono::high_resolution_clock::now();
     for (long counter = counter_begin; counter <= counter_end; counter++)
     {
         block_num = counter - counter_begin;
         nonce = NonceSet[block_num];
-        randomBit.generate_Instance_all_new(nonce, counter);
-        auto &RanVecs = randomBit.roundconstants;
+        //randomBit.generate_Instance_all_new(nonce, counter);
+        //auto &RanVecs = randomBit.roundconstants;
+        random_init_shake(nonce, counter, shake128_3);
         // 逐轮进行加密
         for (unsigned r = 0; r <= Nr; r++)
         {
+                        rB = r * BlockWords;
             // 计算 Xc
             for (unsigned i = 0; i < BlockWords; ++i)
             {
-                ir = i * randbits;
-                for (unsigned j = 0; j < randbits; ++j)
-                {
-                    bit_array[j] = RanVecs[r][ir + j];
-                }
-                BinStrToHex(bit_array, Xc[i], randbits);
+                Xset[rB + i][block_num] = generate_random_field_element(shake128_3, false,max_prime_size, PlainMod);
             }
-            // 将 Xc 复制到 Xset
-            rB = r * BlockWords;
-            for (int i = 0; i < BlockWords; i++)
+        }
+    }
+    if (PlainBlock == 1){
+        for (int i = 0; i < NrBlockWords; i++)
+        {
+            for (int j = 1; j < nslots; j++)
             {
-                Xset[rB + i][block_num] = Xc[i];
+                Xset[i][j] = Xset[i][0];
             }
         }
     }
@@ -512,11 +944,24 @@ int main()
 
     vector<zzX> encodedXset(NrBlockWords);
     zz_pX encodedtemp;
+
     auto start_Xset = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < NrBlockWords; i++)
+    if (PlainBlock == 1){
+        vec_long tt;
+        tt.SetLength(1);
+        for (int i = 0; i < NrBlockWords; i++)
+        {
+            tt[0] = Xset[i][0];
+            encodedXset[i] = conv<zzX>(tt);
+        }
+    }
+    else
     {
-        cmodulus.iFFT(encodedtemp, Xset[i]);
-        convert(encodedXset[i], encodedtemp);
+        for (int i = 0; i < NrBlockWords; i++)
+        {
+            cmodulus.iFFT(encodedtemp, Xset[i]);
+            convert(encodedXset[i], encodedtemp);
+        }
     }
     auto end_Xset = std::chrono::high_resolution_clock::now();
     double Encode_time = std::chrono::duration<double>(end_Xset - start_Xset).count();
@@ -582,7 +1027,7 @@ int main()
     // 使用 verifyDecryption 函数解密并验证 RoundKeySet
     // if (deflag)
     // {
-    //     if (!verifyDecryption18(encryptedRoundKeySet, RoundKeySet, secretKey, cmodulus,BlockWords))
+    //     if (!verifyDecryption(encryptedRoundKeySet, RoundKeySet, secretKey, cmodulus,BlockWords,PlainBlock,nlsots))
     //     {
     //         std::cerr << "Decryption verification failed for RoundKeySet." << std::endl;
     //         return 0;
@@ -620,18 +1065,18 @@ int main()
         return 0;
     }
     // 明文密钥流
-    vector<long> KeyStream2(PlainWords);
+    vector<long> KeyStream2(KeyStreamWords);
     if (deflag)
     {
         // 对IV和RoundKeySet进行异或
-        for (long i = 0; i < PlainWords; i++)
+        for (long i = 0; i < KeyStreamWords; i++)
         {
             KeyStream2[i] = (IV[i % BlockWords] + RoundKeySet[i]) % PlainMod;
         }
-        // 使用 verifyDecryption 函数解密并验证 KeyStream
+        // 使用 verifyDecryption 函数解密并验证 KeyStream2
         if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
         {
-            std::cerr << "Decryption verification failed for KeyStream." << std::endl;
+            std::cerr << "Decryption verification failed for KeyStream2." << std::endl;
             return 0;
         }
         std::cout << "Decryption verification succeeded for whiteround." << std::endl;
@@ -641,8 +1086,7 @@ int main()
         std::cout << "Round " << r << " start" << std::endl;
         start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
-        HE_MC(encryptedKeyStream);
-        HE_MR(encryptedKeyStream);
+        HE_M(encryptedKeyStream);
         end_linear = std::chrono::high_resolution_clock::now();
         Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
         linear_set[r - 1] = std::chrono::duration<double>(end_linear - start_linear).count();
@@ -662,9 +1106,7 @@ int main()
                 {
                     tmp[j] = KeyStream2[i * BlockWords + j];
                 }
-                // yusP.M36_5(tmp);
-                hera.MC(tmp);
-                hera.MR(tmp);
+                yusP.M36(tmp);
                 for (int j = 0; j < BlockWords; j++)
                 {
                     KeyStream2[i * BlockWords + j] = tmp[j];
@@ -672,10 +1114,10 @@ int main()
             }
             if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
             {
-                std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
+                std::cerr << "Decryption verification failed for KeyStream2 Linear Layer." << std::endl;
                 return 0;
             }
-            std::cout << "Decryption verification succeeded for KeyStream Linear Layer." << std::endl;
+            std::cout << "Decryption verification succeeded for KeyStream2 Linear Layer." << std::endl;
         }
         start_sbox = std::chrono::high_resolution_clock::now();
         // S Layer
@@ -692,13 +1134,13 @@ int main()
         }
         if (deflag)
         {
-            hera.Sbox(KeyStream2);
+            yusP.Sbox(KeyStream2);
             if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
             {
-                std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
+                std::cerr << "Decryption verification failed for KeyStream2 Sbox." << std::endl;
                 return 0;
             }
-            std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
+            std::cout << "Decryption verification succeeded for KeyStream2 Sbox." << std::endl;
         }
         // Round Key Addition
         start_add = std::chrono::high_resolution_clock::now();
@@ -719,16 +1161,16 @@ int main()
         }
         if (deflag)
         {
-            for (long i = 0; i < PlainWords; i++)
+            for (long i = 0; i < KeyStreamWords; i++)
             {
-                KeyStream2[i] = (KeyStream2[i] + RoundKeySet[r * PlainWords + i]) % PlainMod;
+                KeyStream2[i] = (KeyStream2[i] + RoundKeySet[r * KeyStreamWords + i]) % PlainMod;
             }
             if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
             {
-                std::cerr << "Decryption verification failed for KeyStream Round Key Addition." << std::endl;
+                std::cerr << "Decryption verification failed for KeyStream2 Round Key Addition." << std::endl;
                 return 0;
             }
-            std::cout << "Decryption verification succeeded for KeyStream Round Key Addition." << std::endl;
+            std::cout << "Decryption verification succeeded for KeyStream2 Round Key Addition." << std::endl;
         }
     }
 // 最后一轮
@@ -736,9 +1178,7 @@ int main()
     std::cout << "the last Round " << Nr << " start" << std::endl;
     start_linear = std::chrono::high_resolution_clock::now();
     // Linear Layer
-    // HE_M2(encryptedKeyStream);
-    HE_MC(encryptedKeyStream);
-    HE_MR(encryptedKeyStream);
+    HE_M(encryptedKeyStream);
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
     linear_set[Nr - 1] = std::chrono::duration<double>(end_linear - start_linear).count();
@@ -758,9 +1198,7 @@ int main()
             {
                 tmp[j] = KeyStream2[i * BlockWords + j];
             }
-            // yusP.M36_5(tmp);
-            hera.MC(tmp);
-            hera.MR(tmp);
+            yusP.M36(tmp);
             for (int j = 0; j < BlockWords; j++)
             {
                 KeyStream2[i * BlockWords + j] = tmp[j];
@@ -768,10 +1206,10 @@ int main()
         }
         if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
         {
-            std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
+            std::cerr << "Decryption verification failed for KeyStream2 Linear Layer." << std::endl;
             return 0;
         }
-        std::cout << "Decryption verification succeeded for KeyStream Linear Layer." << std::endl;
+        std::cout << "Decryption verification succeeded for KeyStream2 Linear Layer." << std::endl;
     }
     start_sbox = std::chrono::high_resolution_clock::now();
     // S Layer
@@ -789,20 +1227,46 @@ int main()
     }
     if (deflag)
     {
-        // hera.Sbox_last(KeyStream2);
-        hera.Sbox(KeyStream2);
+        // yusP.Sbox_last(KeyStream2);
+        yusP.Sbox(KeyStream2);
         if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
         {
-            std::cerr << "Decryption verification failed for KeyStream Sbox." << std::endl;
+            std::cerr << "Decryption verification failed for KeyStream2 Sbox." << std::endl;
             return 0;
         }
-        std::cout << "Decryption verification succeeded for KeyStream Sbox." << std::endl;
+        std::cout << "Decryption verification succeeded for KeyStream2 Sbox." << std::endl;
+    }
+    // add
+    start_add = std::chrono::high_resolution_clock::now();
+    for (long j = 0; j < BlockWords; j++)
+    {
+        encryptedKeyStream[j] += encryptedRoundKeySet[Nr * BlockWords + j];
+    }
+    end_add = std::chrono::high_resolution_clock::now();
+    Add_time += std::chrono::duration<double>(end_add - start_add).count();
+    noise_budget = min_noise_budget(encryptedKeyStream);
+    std::cout << "noise budget after Add: " << noise_budget << std::endl;
+    if (noise_budget <= 0)
+    {
+        std::cerr << "noise budget is not enough!!!" << std::endl;
+        return 0;
+    }
+    if (deflag)
+    {
+        for (long i = 0; i < KeyStreamWords; i++)
+        {
+            KeyStream2[i] = (KeyStream2[i] + RoundKeySet[Nr * KeyStreamWords + i]) % PlainMod;
+        }
+        if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
+        {
+            std::cerr << "Decryption verification failed for KeyStream2 Round Key Addition." << std::endl;
+            return 0;
+        }
+        std::cout << "Decryption verification succeeded for KeyStream2 Round Key Addition." << std::endl;
     }
     start_linear = std::chrono::high_resolution_clock::now();
     // Linear Layer
-    // HE_M2(encryptedKeyStream);
-    HE_MC(encryptedKeyStream);
-    HE_MR(encryptedKeyStream);
+    HE_M(encryptedKeyStream);
     end_linear = std::chrono::high_resolution_clock::now();
     Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
     linear_set[Nr] = std::chrono::duration<double>(end_linear - start_linear).count();
@@ -822,9 +1286,7 @@ int main()
             {
                 tmp[j] = KeyStream2[i * BlockWords + j];
             }
-            // yusP.M36_5(tmp);
-            hera.MC(tmp);
-            hera.MR(tmp);
+            yusP.M36(tmp);
             for (int j = 0; j < BlockWords; j++)
             {
                 KeyStream2[i * BlockWords + j] = tmp[j];
@@ -832,39 +1294,14 @@ int main()
         }
         if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
         {
-            std::cerr << "Decryption verification failed for KeyStream Linear Layer." << std::endl;
+            std::cerr << "Decryption verification failed for KeyStream2 Linear Layer." << std::endl;
             return 0;
         }
-        std::cout << "Decryption verification succeeded for KeyStream Linear Layer." << std::endl;
+        std::cout << "Decryption verification succeeded for KeyStream2 Linear Layer." << std::endl;
     }
-    // add
-    start_add = std::chrono::high_resolution_clock::now();
-    for (long j = 0; j < BlockWords; j++)
-    {
-        encryptedKeyStream[j] += encryptedRoundKeySet[Nr * BlockWords + j];
-    }
-    end_add = std::chrono::high_resolution_clock::now();
-    Add_time += std::chrono::duration<double>(end_add - start_add).count();
-    noise_budget = min_noise_budget(encryptedKeyStream);
-    std::cout << "noise budget after Add: " << noise_budget << std::endl;
-    if (noise_budget <= 0)
-    {
-        std::cerr << "noise budget is not enough!!!" << std::endl;
-        return 0;
-    }
-    if (deflag)
-    {
-        for (long i = 0; i < PlainWords; i++)
-        {
-            KeyStream2[i] = (KeyStream2[i] + RoundKeySet[Nr * PlainWords + i]) % PlainMod;
-        }
-        if (!verifyDecryption(encryptedKeyStream, KeyStream2, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
-        {
-            std::cerr << "Decryption verification failed for KeyStream Round Key Addition." << std::endl;
-            return 0;
-        }
-        std::cout << "Decryption verification succeeded for KeyStream Round Key Addition." << std::endl;
-    }
+    //截断密钥流
+     encryptedKeyStream.erase(encryptedKeyStream.begin() + BlockPlainWords, encryptedKeyStream.end());
+
 #endif
 
     // 输出 XOF_time,Encode_time,Add_time、Sbox_time、Linear_time
@@ -879,9 +1316,9 @@ int main()
     std::cout << "Server offline total time: " << Server_offtime << "s\n";
     std::cout << "sbox_timeset: " << sbox_set << endl;
     std::cout << "linear_timeset: " << linear_set << endl;
-    if (plainflag)
+    if (KeyStreamflag)
     {
-        if (!verifyDecryption(encryptedKeyStream, KeyStream, secretKey, cmodulus, BlockWords,PlainBlock,nslots,Para_p))
+        if (!verifyDecryption(encryptedKeyStream, KeyStream, secretKey, cmodulus, BlockPlainWords,PlainBlock,nslots,Para_p))
         {
             std::cerr << "Decryption verification failed for KeyStream." << std::endl;
             return 0;
@@ -891,23 +1328,38 @@ int main()
     // 客户端在线
     // 生成随机对称明文流，只用于测试
     random_device rd;
-    vector<long> PlainStream(TruncPlainWords);
-    for (int i = 0; i < TruncPlainWords; i++)
+    vector<long> PlainStream(PlainWords);
+    for (int i = 0; i < PlainWords; i++)
     {
         PlainStream[i] = rd() % PlainMod;
     }
     // 加密
-    vector<vec_long> CipherStream(TruncWords);
-    for (int i = 0; i < TruncWords; i++)
+    vector<vec_long> CipherStream(BlockPlainWords);
+    for (int i = 0; i < BlockPlainWords; i++)
     {
-        CipherStream[i].SetLength(PlainBlock);
+        CipherStream[i].SetLength(nslots);
+                for (int j = 0; j < nslots; j++)
+        {
+            CipherStream[i][j] = 0;
+        }
     }
     auto start_ClientOnline = std::chrono::high_resolution_clock::now();
     for (int j = 0; j < PlainBlock; j++)
     {
-        for (int i = 0; i < TruncWords; i++)
+        for (int i = 0; i < BlockPlainWords; i++)
         {
-            CipherStream[i][j] = ((PlainStream[j * TruncWords + i] + KeyStream[j * BlockWords + i]) % PlainMod + PlainMod) % PlainMod;
+            CipherStream[i][j] = ((PlainStream[j * BlockPlainWords + i] - KeyStream[j * BlockPlainWords + i]) % PlainMod + PlainMod) % PlainMod;
+        }
+    }
+        if (PlainBlock == 1)
+    {
+
+        for (int i = 0; i < BlockPlainWords; i++)
+        {
+            for (int j = 1; j < nslots; j++)
+            {
+                CipherStream[i][j] = CipherStream[i][0];
+            }
         }
     }
     auto end_ClientOnline = std::chrono::high_resolution_clock::now();
@@ -917,19 +1369,17 @@ int main()
     std::cout << "Client total time: " << Client_totaltime << "s\n";
     // 服务端在线
     // 同态加密
-    vector<Ctxt> TruncencryptedKeyStream(encryptedKeyStream.begin(), encryptedKeyStream.begin() + TruncWords);
-    vector<Ctxt> encrypedPlainStream = TruncencryptedKeyStream;
+    vector<Ctxt> encrypedPlainStream = encryptedKeyStream;
     // 对CipherStream进行编码
-    vector<ZZX> encodedCipherStream(TruncWords);
+    vector<ZZX> encodedCipherStream(BlockPlainWords);
     auto start_ServerOnline = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < TruncWords; i++)
+    for (int i = 0; i < BlockPlainWords; i++)
     {
         cmodulus.iFFT(encodedtemp, CipherStream[i]);
         convert(encodedCipherStream[i], encodedtemp);
     }
-    for (int i = 0; i < TruncWords; i++)
+    for (int i = 0; i < BlockPlainWords; i++)
     {
-        encrypedPlainStream[i].negate();
         encrypedPlainStream[i].addConstant(encodedCipherStream[i]);
     }
     auto end_ServerOnline = std::chrono::high_resolution_clock::now();
@@ -947,27 +1397,29 @@ int main()
     // {
     //     encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
     // }
-    if (!verifyDecryption(encrypedPlainStream, PlainStream, secretKey, cmodulus, TruncWords,PlainBlock,nslots,Para_p))
+    if (plainflag)
     {
-        std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
-        return 0;
+        if (!verifyDecryption(encrypedPlainStream, PlainStream, secretKey, cmodulus, BlockPlainWords,PlainBlock,nslots,Para_p))
+        {
+            std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
+            return 0;
+        }
     }
     std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
     // 计算吞吐量,KiB/min
     double Server_totaltime = Server_offtime + server_ontime;
     double throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);
-    throughput = throughput * TruncRate;
     std::cout << "Server total time: " << Server_totaltime << "s\n";
     std::cout << "Throughput: " << throughput << "KiB/min\n";
     std::string dirPath = "../tests";
     std::string filePath;
     if (!fs::exists(dirPath))
     {
-        filePath = "test_HERA.txt";
+        filePath = "test_Yus_5.txt";
     }
     else
     {
-        filePath = "../tests/test_HERA.txt";
+        filePath = "../tests/test_Yus_5.txt";
     }
     std::ofstream outfile(filePath, std::ios::app);
     if (!outfile)
@@ -976,8 +1428,9 @@ int main()
         return 0;
     }
     outfile << std::left << std::setw(3) << Nr
-            << std::left << std::setw(10) << Para_p
+            << std::left << std::setw(12) << Para_p
             << std::left << std::setw(10) << nslots
+            << std::left << std::setw(10) << PlainBlock
             << std::left << std::setw(5) << Para_bits
             << std::left << std::setw(4) << Para_c
             << std::left << std::setw(6) << Qbits
@@ -996,6 +1449,7 @@ int main()
             << std::left << std::setw(10) << noise_budget
             << std::endl;
     outfile.close();
-    std::cout << "test_HERA.txt updated." << std::endl;
+    std::cout << "test_Yus_5.txt updated." << std::endl;
+    }
     return 0;
 }

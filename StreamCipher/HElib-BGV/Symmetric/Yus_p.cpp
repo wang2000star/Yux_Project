@@ -265,7 +265,7 @@ void YusP::MR64(vector<long> &data)
     }
     std::copy(temp.begin(), temp.end(), data.begin());
 }
-void YusP::Sbox(vector<long> &data)
+void YusP::Sbox_feistel(vector<long> &data)
 {
     long temp;
     for (int i = 0; i < data.size(); i += 2)
@@ -1209,5 +1209,58 @@ void YusP::Sbox_8(vector<long> &data)
     {
         data[i + 1] = (temp[i] * temp[i + 2] + temp[i + 1]) % PlainMod;
         data[i + 2] = (((-temp[i] * temp[i + 1] + temp[i] * temp[i + 2] + temp[i + 2]) % PlainMod) + PlainMod) % PlainMod;
+    }
+}
+
+void YusP::M36(vector<long> &data)
+{
+    std::vector<long> temp = data;
+data[0] = (((temp[0] + temp[1] + temp[3] + temp[4] + temp[5] + temp[6] + temp[7] + temp[8] + temp[11] + temp[14] + temp[15] + temp[16] + temp[17] + temp[19] + temp[20] + temp[21] + temp[22] + temp[24] + temp[25] + temp[29] + temp[30] + temp[31] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[1] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[6] + temp[8] + temp[10] + temp[12] + temp[13] + temp[15] + temp[17] + temp[18] + temp[20] + temp[21] + temp[22] + temp[23] + temp[24] + temp[25] + temp[26] + temp[28] + temp[31] + temp[32] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[2] = (((temp[1] + temp[4] + temp[5] + temp[7] + temp[8] + temp[9] + temp[10] + temp[12] + temp[14] + temp[16] + temp[17] + temp[18] + temp[19] + temp[20] + temp[21] + temp[23] + temp[25] + temp[26] + temp[27] + temp[28] + temp[29] + temp[30] + temp[31] + temp[32] + temp[33] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[3] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[6] + temp[7] + temp[8] + temp[9] + temp[10] + temp[11] + temp[14] + temp[17] + temp[18] + temp[19] + temp[20] + temp[22] + temp[23] + temp[24] + temp[25] + temp[27] + temp[28] + temp[32] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[4] = (((temp[0] + temp[1] + temp[3] + temp[4] + temp[5] + temp[6] + temp[7] + temp[9] + temp[11] + temp[13] + temp[15] + temp[16] + temp[18] + temp[20] + temp[21] + temp[23] + temp[24] + temp[25] + temp[26] + temp[27] + temp[28] + temp[29] + temp[31] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[5] = (((temp[0] + temp[2] + temp[4] + temp[7] + temp[8] + temp[10] + temp[11] + temp[12] + temp[13] + temp[15] + temp[17] + temp[19] + temp[20] + temp[21] + temp[22] + temp[23] + temp[24] + temp[26] + temp[28] + temp[29] + temp[30] + temp[31] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[6] = (((temp[0] + temp[1] + temp[3] + temp[4] + temp[5] + temp[6] + temp[7] + temp[9] + temp[10] + temp[11] + temp[12] + temp[13] + temp[14] + temp[17] + temp[20] + temp[21] + temp[22] + temp[23] + temp[25] + temp[26] + temp[27] + temp[28] + temp[30] + temp[31] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[7] = (((temp[1] + temp[2] + temp[3] + temp[4] + temp[6] + temp[7] + temp[8] + temp[9] + temp[10] + temp[12] + temp[14] + temp[16] + temp[18] + temp[19] + temp[21] + temp[23] + temp[24] + temp[26] + temp[27] + temp[28] + temp[29] + temp[30] + temp[31] + temp[32] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[8] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[5] + temp[7] + temp[10] + temp[11] + temp[13] + temp[14] + temp[15] + temp[16] + temp[18] + temp[20] + temp[22] + temp[23] + temp[24] + temp[25] + temp[26] + temp[27] + temp[29] + temp[31] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[9] = (((temp[2] + temp[3] + temp[4] + temp[6] + temp[7] + temp[8] + temp[9] + temp[10] + temp[12] + temp[13] + temp[14] + temp[15] + temp[16] + temp[17] + temp[20] + temp[23] + temp[24] + temp[25] + temp[26] + temp[28] + temp[29] + temp[30] + temp[31] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[10] = (((temp[1] + temp[4] + temp[5] + temp[6] + temp[7] + temp[9] + temp[10] + temp[11] + temp[12] + temp[13] + temp[15] + temp[17] + temp[19] + temp[21] + temp[22] + temp[24] + temp[26] + temp[27] + temp[29] + temp[30] + temp[31] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[11] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + temp[6] + temp[8] + temp[10] + temp[13] + temp[14] + temp[16] + temp[17] + temp[18] + temp[19] + temp[21] + temp[23] + temp[25] + temp[26] + temp[27] + temp[28] + temp[29] + temp[30] + temp[32] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[12] = (((temp[0] + temp[1] + temp[5] + temp[6] + temp[7] + temp[9] + temp[10] + temp[11] + temp[12] + temp[13] + temp[15] + temp[16] + temp[17] + temp[18] + temp[19] + temp[20] + temp[23] + temp[26] + temp[27] + temp[28] + temp[29] + temp[31] + temp[32] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[13] = (((temp[0] + temp[1] + temp[2] + temp[4] + temp[7] + temp[8] + temp[9] + temp[10] + temp[12] + temp[13] + temp[14] + temp[15] + temp[16] + temp[18] + temp[20] + temp[22] + temp[24] + temp[25] + temp[27] + temp[29] + temp[30] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[14] = (((temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + temp[6] + temp[7] + temp[8] + temp[9] + temp[11] + temp[13] + temp[16] + temp[17] + temp[19] + temp[20] + temp[21] + temp[22] + temp[24] + temp[26] + temp[28] + temp[29] + temp[30] + temp[31] + temp[32] + temp[33] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[15] = (((temp[0] + temp[1] + temp[3] + temp[4] + temp[8] + temp[9] + temp[10] + temp[12] + temp[13] + temp[14] + temp[15] + temp[16] + temp[18] + temp[19] + temp[20] + temp[21] + temp[22] + temp[23] + temp[26] + temp[29] + temp[30] + temp[31] + temp[32] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[16] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + temp[7] + temp[10] + temp[11] + temp[12] + temp[13] + temp[15] + temp[16] + temp[17] + temp[18] + temp[19] + temp[21] + temp[23] + temp[25] + temp[27] + temp[28] + temp[30] + temp[32] + temp[33] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[17] = (((temp[0] + temp[2] + temp[4] + temp[5] + temp[6] + temp[7] + temp[8] + temp[9] + temp[10] + temp[11] + temp[12] + temp[14] + temp[16] + temp[19] + temp[20] + temp[22] + temp[23] + temp[24] + temp[25] + temp[27] + temp[29] + temp[31] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[18] = (((temp[1] + temp[2] + temp[3] + temp[4] + temp[6] + temp[7] + temp[11] + temp[12] + temp[13] + temp[15] + temp[16] + temp[17] + temp[18] + temp[19] + temp[21] + temp[22] + temp[23] + temp[24] + temp[25] + temp[26] + temp[29] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[19] = (((temp[0] + temp[2] + temp[3] + temp[4] + temp[5] + temp[6] + temp[7] + temp[8] + temp[10] + temp[13] + temp[14] + temp[15] + temp[16] + temp[18] + temp[19] + temp[20] + temp[21] + temp[22] + temp[24] + temp[26] + temp[28] + temp[30] + temp[31] + temp[33] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[20] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[5] + temp[7] + temp[8] + temp[9] + temp[10] + temp[11] + temp[12] + temp[13] + temp[14] + temp[15] + temp[17] + temp[19] + temp[22] + temp[23] + temp[25] + temp[26] + temp[27] + temp[28] + temp[30] + temp[32] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[21] = (((temp[0] + temp[1] + temp[2] + temp[4] + temp[5] + temp[6] + temp[7] + temp[9] + temp[10] + temp[14] + temp[15] + temp[16] + temp[18] + temp[19] + temp[20] + temp[21] + temp[22] + temp[24] + temp[25] + temp[26] + temp[27] + temp[28] + temp[29] + temp[32] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[22] = (((temp[0] + temp[2] + temp[3] + temp[5] + temp[6] + temp[7] + temp[8] + temp[9] + temp[10] + temp[11] + temp[13] + temp[16] + temp[17] + temp[18] + temp[19] + temp[21] + temp[22] + temp[23] + temp[24] + temp[25] + temp[27] + temp[29] + temp[31] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[23] = (((temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + temp[6] + temp[8] + temp[10] + temp[11] + temp[12] + temp[13] + temp[14] + temp[15] + temp[16] + temp[17] + temp[18] + temp[20] + temp[22] + temp[25] + temp[26] + temp[28] + temp[29] + temp[30] + temp[31] + temp[33] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[24] = (((temp[2] + temp[3] + temp[4] + temp[5] + temp[7] + temp[8] + temp[9] + temp[10] + temp[12] + temp[13] + temp[17] + temp[18] + temp[19] + temp[21] + temp[22] + temp[23] + temp[24] + temp[25] + temp[27] + temp[28] + temp[29] + temp[30] + temp[31] + temp[32] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[25] = (((temp[0] + temp[1] + temp[3] + temp[5] + temp[6] + temp[8] + temp[9] + temp[10] + temp[11] + temp[12] + temp[13] + temp[14] + temp[16] + temp[19] + temp[20] + temp[21] + temp[22] + temp[24] + temp[25] + temp[26] + temp[27] + temp[28] + temp[30] + temp[32] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[26] = (((temp[0] + temp[2] + temp[4] + temp[5] + temp[6] + temp[7] + temp[8] + temp[9] + temp[11] + temp[13] + temp[14] + temp[15] + temp[16] + temp[17] + temp[18] + temp[19] + temp[20] + temp[21] + temp[23] + temp[25] + temp[28] + temp[29] + temp[31] + temp[32] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[27] = (((temp[2] + temp[5] + temp[6] + temp[7] + temp[8] + temp[10] + temp[11] + temp[12] + temp[13] + temp[15] + temp[16] + temp[20] + temp[21] + temp[22] + temp[24] + temp[25] + temp[26] + temp[27] + temp[28] + temp[30] + temp[31] + temp[32] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[28] = (((temp[1] + temp[3] + temp[4] + temp[6] + temp[8] + temp[9] + temp[11] + temp[12] + temp[13] + temp[14] + temp[15] + temp[16] + temp[17] + temp[19] + temp[22] + temp[23] + temp[24] + temp[25] + temp[27] + temp[28] + temp[29] + temp[30] + temp[31] + temp[33] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[29] = (((temp[0] + temp[1] + temp[3] + temp[5] + temp[7] + temp[8] + temp[9] + temp[10] + temp[11] + temp[12] + temp[14] + temp[16] + temp[17] + temp[18] + temp[19] + temp[20] + temp[21] + temp[22] + temp[23] + temp[24] + temp[26] + temp[28] + temp[31] + temp[32] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[30] = (((temp[0] + temp[1] + temp[2] + temp[5] + temp[8] + temp[9] + temp[10] + temp[11] + temp[13] + temp[14] + temp[15] + temp[16] + temp[18] + temp[19] + temp[23] + temp[24] + temp[25] + temp[27] + temp[28] + temp[29] + temp[30] + temp[31] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[31] = (((temp[0] + temp[2] + temp[4] + temp[6] + temp[7] + temp[9] + temp[11] + temp[12] + temp[14] + temp[15] + temp[16] + temp[17] + temp[18] + temp[19] + temp[20] + temp[22] + temp[25] + temp[26] + temp[27] + temp[28] + temp[30] + temp[31] + temp[32] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[32] = (((temp[1] + temp[2] + temp[3] + temp[4] + temp[6] + temp[8] + temp[10] + temp[11] + temp[12] + temp[13] + temp[14] + temp[15] + temp[17] + temp[19] + temp[20] + temp[21] + temp[22] + temp[23] + temp[24] + temp[25] + temp[26] + temp[27] + temp[29] + temp[31] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[33] = (((temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + temp[8] + temp[11] + temp[12] + temp[13] + temp[14] + temp[16] + temp[17] + temp[18] + temp[19] + temp[21] + temp[22] + temp[26] + temp[27] + temp[28] + temp[30] + temp[31] + temp[32] + temp[33] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+data[34] = (((temp[0] + temp[1] + temp[3] + temp[5] + temp[7] + temp[9] + temp[10] + temp[12] + temp[14] + temp[15] + temp[17] + temp[18] + temp[19] + temp[20] + temp[21] + temp[22] + temp[23] + temp[25] + temp[28] + temp[29] + temp[30] + temp[31] + temp[33] + temp[34] + temp[35]) % PlainMod)+PlainMod)%PlainMod;
+data[35] = (((temp[1] + temp[2] + temp[4] + temp[5] + temp[6] + temp[7] + temp[9] + temp[11] + temp[13] + temp[14] + temp[15] + temp[16] + temp[17] + temp[18] + temp[20] + temp[22] + temp[23] + temp[24] + temp[25] + temp[26] + temp[27] + temp[28] + temp[29] + temp[30] + temp[32] + temp[34]) % PlainMod)+PlainMod)%PlainMod;
+}
+void YusP::Sbox(vector<long> &data)
+{
+    vector<long> temp = data;
+    // 一次迭代，(x0,x1,x2)——>(x0,x0*x2+x1,-x0*x1+x0*x2+x2)
+    long t02;
+    for (int i = 0; i < data.size(); i += 3)
+    {
+        t02 = (temp[i] * temp[i + 2]) % PlainMod;
+        data[i + 1] = (t02 + temp[i + 1]) % PlainMod;
+        data[i + 2] = (t02 -temp[i] * temp[i + 1]  + temp[i + 2]) % PlainMod;
     }
 }

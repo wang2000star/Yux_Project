@@ -6,10 +6,17 @@
 #include <random>
 #include <climits>
 #include <helib/helib.h>
-
+extern "C"
+{
+#include "../keccak/KeccakHash.h"
+}
 
 // 函数声明
 long generate_secure_random_int(unsigned m);
+
+void random_init_shake(long nonce, long block_counter, Keccak_HashInstance &shake128_);
+
+long generate_random_field_element(Keccak_HashInstance &shake128, bool allow_zero, long max_prime_size, long PlainMod);
 
 int min_noise_budget(std::vector<helib::Ctxt> &eData);
 
@@ -17,7 +24,7 @@ helib::zzX multiplyAndMod(const helib::zzX &a, long b,long pmod);
 
 bool writeEncryptedSymKey(const std::vector<helib::Ctxt> &encryptedSymKey, const std::string &filename);
 
-void decodeToCtxt(std::vector<long> &data, const std::vector<NTL::vec_long> &encData, const long CtxtWords,const long PlainBlock,const long nslots);
+void decodeToCtxt(std::vector<long> &data, const std::vector<NTL::vec_long> &encData, const long CtxtWords,const long nslots);
 
 bool verifyDecryption(const std::vector<helib::Ctxt> &encryptedVec, const std::vector<long> &originalVec, const helib::SecKey &secretKey,
                       const helib::Cmodulus &cmodulus, const long CtxtWords, const long PlainBlock, const long nslots, const long pmod);

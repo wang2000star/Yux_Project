@@ -12,7 +12,35 @@ long generate_secure_random_int(unsigned m) {
 
     return dis(gen);
 }
+void random_init_shake(long nonce, long block_counter, Keccak_HashInstance &shake128_)
+{
+    uint8_t seed[16];
 
+    *((long *)seed) = htobe64(nonce);
+    *((long *)(seed + 8)) = htobe64(block_counter);
+
+    if (SUCCESS != Keccak_HashInitialize_SHAKE128(&shake128_))
+        throw std::runtime_error("failed to init shake");
+    if (SUCCESS != Keccak_HashUpdate(&shake128_, seed, sizeof(seed) * 8))
+        throw std::runtime_error("SHAKE128 update failed");
+    if (SUCCESS != Keccak_HashFinal(&shake128_, NULL))
+        throw std::runtime_error("SHAKE128 final failed");
+}
+long generate_random_field_element(Keccak_HashInstance &shake128, bool allow_zero, long max_prime_size, long PlainMod)
+{
+    uint8_t random_bytes[sizeof(long)];
+    while (1)
+    {
+        if (SUCCESS !=
+            Keccak_HashSqueeze(&shake128, random_bytes, sizeof(random_bytes) * 8))
+            throw std::runtime_error("SHAKE128 squeeze failed");
+        long ele = be64toh(*((long *)random_bytes)) & max_prime_size;
+        if (!allow_zero && ele == 0)
+            continue;
+        if (ele < PlainMod)
+            return ele;
+    }
+}
 
 int min_noise_budget(std::vector<helib::Ctxt> &eData)
 {
@@ -60,10 +88,10 @@ bool writeEncryptedSymKey(const std::vector<helib::Ctxt> &encryptedSymKey, const
     return true;
 }
 
-void decodeToCtxt(std::vector<long> &data, const std::vector<NTL::vec_long> &encData, const long CtxtWords,const long PlainBlock,const long nslots)
+void decodeToCtxt(std::vector<long> &data, const std::vector<NTL::vec_long> &encData, const long CtxtWords,const long nslots)
 {
     long R = encData.size() / CtxtWords;
-    long AllByte = CtxtWords * PlainBlock;
+    long AllByte = CtxtWords * nslots;
     long data_size = R * AllByte;
     data.resize(data_size);
     long byteIdx;
@@ -99,20 +127,19 @@ bool verifyDecryption(const std::vector<helib::Ctxt> &encryptedVec, const std::v
         tempVec[i] = (tempVec[i] + pmod) % pmod;
     }
     int size = encryptedVec.size();
+    std::cout << "size: " << size << std::endl;
     auto start_decrypt = std::chrono::high_resolution_clock::now();
     std::vector<long> decryptedVec = originalVec;
     std::vector<NTL::vec_long> decryptedPolys(size);
     std::vector<NTL::ZZX> Polys(size);
-    //     omp_set_num_threads(16); // 设置线程数为16
-    // #pragma omp parallel for
     for (std::size_t i = 0; i < size; ++i)
     {
         secretKey.Decrypt(Polys[i], encryptedVec[i]);
         cmodulus.FFT(decryptedPolys[i], Polys[i]);
     }
-    decodeToCtxt(decryptedVec, decryptedPolys, CtxtWords, PlainBlock, nslots);
+    decodeToCtxt(decryptedVec, decryptedPolys, CtxtWords, nslots);
     // 验证解密结果
-    bool isDecryptedVecCorrect = std::equal(decryptedVec.begin(), decryptedVec.end(), tempVec.begin());
+    bool isDecryptedVecCorrect = std::equal(decryptedVec.begin(), decryptedVec.begin()+PlainBlock*CtxtWords, tempVec.begin());
     auto end_decrypt = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_seconds = end_decrypt - start_decrypt;
     std::cout << "Decryption and verification finished! Time: " << elapsed_seconds.count() << "s\n";

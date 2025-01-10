@@ -38,12 +38,12 @@ else()
 endif()
 
 # 添加包含目录
-include_directories(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak)
-include_directories(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak/avx2)
-include_directories(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak/opt64)
+include_directories(${CMAKE_SOURCE_DIR}/keccak)
+include_directories(${CMAKE_SOURCE_DIR}/keccak/avx2)
+include_directories(${CMAKE_SOURCE_DIR}/keccak/opt64)
 
 # 添加 keccak 子目录
-add_subdirectory(${CMAKE_SOURCE_DIR}/hybrid-HE-framework/util/keccak)
+add_subdirectory(${CMAKE_SOURCE_DIR}/keccak)
 
 # add symmetric library
 aux_source_directory("${CMAKE_SOURCE_DIR}/Symmetric" SYMMETRIC_SRC_LIST)
@@ -54,6 +54,8 @@ message(STATUS "SYMMETRIC_SRC_LIST: ${SYMMETRIC_SRC_LIST}")
 # add UTILS library
 aux_source_directory("${CMAKE_SOURCE_DIR}/utils" UTILS_SRC_LIST)
 add_library(Utils ${UTILS_SRC_LIST})
+# Link Keccak library to Utils
+target_link_libraries(Utils PRIVATE keccak)
 # Output UTILS_SRC_LIST for debugging
 message(STATUS "UTILS_SRC_LIST: ${UTILS_SRC_LIST}")
 
