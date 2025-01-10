@@ -83,5 +83,5 @@
         "shared_mutex": "cpp",
         "*.ipp": "cpp"
     },
-    "cmake.sourceDirectory": "/home/wangfangzhen/Yux_Project/StreamCipher/BGV-Symmetric"
+    "cmake.sourceDirectory": "/home/luck/wfz/Yux_Project/StreamCipher/HElib-BGV"
 }
