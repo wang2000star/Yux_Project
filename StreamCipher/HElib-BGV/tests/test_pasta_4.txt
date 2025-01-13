@@ -1,4 +1,4 @@
-Nr p         nslots    block     bits c   Qbits SecurityLevel XOF(s)    Encode(s) white(s)  Sbox(s)   Linear(s) SerOff(s) SerOn(s)  SerAll(s) throughput(KiB/min) noise_budget     
+Nr p           nslots    block     bits c   Qbits SecurityLevel XOF(s) Encode(s) RoundKey(s) Add(s) Sbox(s) Linear(s) SerOff(s) SerOn(s)  SerAll(s) throughput(KiB/min) noise_budget        
          
 4  65537     32768     32768     430  2   623   180.465       7.068     6.270     8.776     40.634    53.493    116.242   0.246     116.488   1120.800            41        
 4  65537     32768     32768     430  2   623   180.465       7.884     5.541     8.388     40.791    54.615    117.220   0.245     117.465   1111.478            41        

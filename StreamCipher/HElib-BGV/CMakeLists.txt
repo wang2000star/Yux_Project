@@ -69,11 +69,11 @@ message(STATUS "UTILS_SRC_LIST: ${UTILS_SRC_LIST}")
 # Output TRANSCIPHER_SRC_LIST for debugging
 # message(STATUS "TRANSCIPHER_SRC_LIST: ${TRANSCIPHER_SRC_LIST}")
 
-# 针对特定文件启用 AVX2 优化选项
-set_source_files_properties(
-    ${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C36_ClientAndServer5_2.cpp
-    PROPERTIES COMPILE_FLAGS "-mavx2"
-)
+# # 针对特定文件启用 AVX2 优化选项
+# set_source_files_properties(
+#     ${CMAKE_SOURCE_DIR}/tests/test_Yus_p_C36_ClientAndServer5_2.cpp
+#     PROPERTIES COMPILE_FLAGS "-mavx2"
+# )
 
 add_subdirectory(tests)
 
