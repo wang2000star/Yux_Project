@@ -1,0 +1,3 @@
+Nr p           nslots    block     Qbits     SecLevel  CliOff(C)      CliOn(C)       CliAll(C)      CliTP(C/B)     SerOff(s)      SerOn(s)       SerAll(s)      SerTP(KiB/min) noise_budget                     
+6  65537       16384     16384     424       128       415815406      2676977        418492383      500.000        8.939          0.012          8.950          5470.288       133       
+6  65537       16384     16384     424       128       414098291      2631794        416730085      498.000        8.900          0.011          8.912          5493.820       133       

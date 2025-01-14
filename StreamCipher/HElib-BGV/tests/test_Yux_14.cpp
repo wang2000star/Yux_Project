@@ -22,7 +22,7 @@
 #include "helib/powerful.h"
 #include <immintrin.h> // 包含 SIMD 指令集支持
 
-#include "../utils/random_bit.hpp"
+
 #include "../Symmetric/Yux_p.hpp"
 #include "../utils/tool.hpp"
 

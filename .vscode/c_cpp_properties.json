@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/local/include/SEAL-4.1"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",

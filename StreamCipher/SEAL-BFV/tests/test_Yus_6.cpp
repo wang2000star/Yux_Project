@@ -49,7 +49,7 @@ constexpr bool symkeyflag = 0; // true/1表示对称密钥同态解密验证加�
 constexpr bool KeyStreamflag = 0;  // true/1表示密钥流同态解密验证，false/0表示不验证
 constexpr bool plainflag = 1;      // true/1表示明文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
-constexpr unsigned Nr = 4; // 轮数
+constexpr unsigned Nr = 6; // 轮数
 constexpr long idx = 0;
 constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
@@ -1124,7 +1124,7 @@ int main()
             }
             std::cout << "Decryption verification succeeded for KeyStream2 Round Key Addition." << std::endl;
         }
-        start_linear = std::chrono::high_resolution_clock::now();
+                start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
         HE_M(encryptedKeyStream, evaluator);
         end_linear = std::chrono::high_resolution_clock::now();
@@ -1159,8 +1159,6 @@ int main()
             }
             std::cout << "Decryption verification succeeded for KeyStream2 Linear Layer." << std::endl;
         }
-        // 截断密钥流
-        encryptedKeyStream.erase(encryptedKeyStream.begin() + BlockPlainWords, encryptedKeyStream.end());
         // 输出 XOF_time,Add_time、Sbox_time、Linear_time
         std::cout << "XOF time: " << XOF_time << "s\n";
         std::cout << "Add time: " << Add_time << "s\n";
@@ -1272,11 +1270,11 @@ int main()
         std::string filePath;
         if (!fs::exists(dirPath))
         {
-            filePath = "test_Yus_4.txt";
+            filePath = "test_Yus_6.txt";
         }
         else
         {
-            filePath = "../tests/test_Yus_4.txt";
+            filePath = "../tests/test_Yus_6.txt";
         }
         std::ofstream outfile(filePath, std::ios::app);
         if (!outfile)
@@ -1302,7 +1300,7 @@ int main()
                 << std::left << std::setw(10) << noise_budget
                 << std::endl;
         outfile.close();
-        std::cout << "test_Yus_4.txt updated." << std::endl;
+        std::cout << "test_Yus_6.txt updated." << std::endl;
     }
     return 0;
 }

@@ -116,7 +116,6 @@ bool verifyDecryption(const std::vector<Ciphertext> &encryptedVec, const std::ve
         tempVec[i] = (tempVec[i] + pmod) % pmod;
     }
     int size = encryptedVec.size();
-    std::cout << "size: " << size << std::endl;
     auto start_decrypt = std::chrono::high_resolution_clock::now();
     std::vector<long> decryptedVec = originalVec;
     Plaintext decrypted_result;
@@ -129,6 +128,10 @@ bool verifyDecryption(const std::vector<Ciphertext> &encryptedVec, const std::ve
         decryptedPolys[i] = pod_result;
     }
     decodeToCtxt(decryptedVec, decryptedPolys, CtxtWords, nslots);
+    for (int i = 0; i < decryptedVec.size(); i++)
+    {
+        decryptedVec[i] = (decryptedVec[i] + pmod) % pmod;
+    }
     // 验证解密结果
     bool isDecryptedVecCorrect = std::equal(decryptedVec.begin(), decryptedVec.begin()+PlainBlock*CtxtWords, tempVec.begin());
     auto end_decrypt = std::chrono::high_resolution_clock::now();
@@ -137,7 +140,7 @@ bool verifyDecryption(const std::vector<Ciphertext> &encryptedVec, const std::ve
     // 如果解密结果不正确，输出错误的位置
     if (!isDecryptedVecCorrect)
     {
-        for (size_t i = 0; i < CtxtWords; i++)
+        for (size_t i = 0; i < CtxtWords*2; i++)
         {
             if (decryptedVec[i] != tempVec[i])
             {
