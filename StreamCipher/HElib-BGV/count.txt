@@ -1,3 +1,4 @@
+    把a+=b换成evaluator.add_inplace(a,b); 把a.multByConstant(b)换成evaluator.multiply_plain_inplace(a,b)
     vector<long> temp = data;
     long temp0_1 = temp[0];
     temp0_1 += temp[1];

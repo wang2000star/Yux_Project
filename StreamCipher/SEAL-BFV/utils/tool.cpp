@@ -155,6 +155,7 @@ bool verifyDecryption(const std::vector<Ciphertext> &encryptedVec, const std::ve
 void encryptSymKey(vector<Ciphertext> &encryptedSymKey, const vector<long> &SymKey, BatchEncoder &batch_encoder, Encryptor &encryptor,const long nslots)
 {
     long BlockWords = SymKey.size();
+    encryptedSymKey.resize(BlockWords);
     // 加密
     for (long i = 0; i < BlockWords; i++)
     { // encrypt the encoded key

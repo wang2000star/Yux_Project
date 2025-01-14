@@ -1260,9 +1260,9 @@ int main()
             {
                 std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
                 return 0;
-            }
+            }std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
         }
-        std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
+        
         // 计算吞吐量,KiB/min
         double Server_totaltime = Server_offtime + server_ontime;
         double Ser_throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);

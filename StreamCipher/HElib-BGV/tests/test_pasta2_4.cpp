@@ -53,6 +53,7 @@ constexpr double TruncRate = BlockPlainWords / (double)BlockWords;
 // ===============模式设置================
 constexpr bool deflag = 0;     // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
 constexpr bool symkeyflag = 0; // true/1表示对称密钥同态解密验证加密，false/0表示不验证
+constexpr bool KeyStreamflag = 0; // true/1表示密钥流同态解密验证，false/0表示不验证
 constexpr bool plainflag = 0;  // true/1表示对称密文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-3][idx]
 constexpr unsigned Nr = 4; // 轮数
@@ -699,7 +700,7 @@ int main()
     std::cout << "Server offline total time: " << Server_offtime << "s\n";
     std::cout << "sbox_timeset: " << sbox_set << endl;
     std::cout << "linear_timeset: " << linear_set << endl;
-    if (plainflag)
+    if (KeyStreamflag)
     {
         if (!verifyDecryption(encryptedKeyStream, KeyStream, secretKey, cmodulus, BlockPlainWords, PlainBlock, nslots, Para_p))
         {
@@ -780,17 +781,14 @@ int main()
         std::cerr << "noise budget is not enough!!!" << std::endl;
         return 0;
     }
-    // 同态解密验证
-    // for (int i = 0; i < encryptedKeyStream.size(); i++)
-    // {
-    //     encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
-    // }
-    // if (!verifyDecryption(encrypedPlainStream, PlainStream, secretKey, cmodulus, BlockPlainWords, PlainBlock, nslots, Para_p))
-    // {
-    //     std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
-    //     return 0;
-    // }
-    // std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
+           if (plainflag)
+        {
+            if (!verifyDecryption(encrypedPlainStream, PlainStream, secretKey, cmodulus, BlockPlainWords, PlainBlock, nslots, Para_p))
+            {
+                std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
+                return 0;
+            }std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
+        }
     // 计算吞吐量,KiB/min
     double Server_totaltime = Server_offtime + server_ontime;
     double Ser_throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);

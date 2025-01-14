@@ -42,8 +42,8 @@ namespace fs = std::filesystem;
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 // 更一般的，应该有d|ord_p(m)，slots=\phi(m)/ord_p(m)
 //!!!!!!!!!!!!!!!!
-constexpr unsigned BlockWords = 64;      // 分组密钥字长度=KeyWords
-constexpr unsigned BlockPlainWords = 32; // 明文分组字长度
+constexpr unsigned BlockWords = 256;      // 分组密钥字长度=KeyWords
+constexpr unsigned BlockPlainWords = 128; // 明文分组字长度
 constexpr double TruncRate = BlockPlainWords / (double)BlockWords;
 // ===============模式设置================
 constexpr bool deflag = 0;        // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
@@ -51,7 +51,7 @@ constexpr bool symkeyflag = 0;    // true/1表示对称密钥同态解密验证�
 constexpr bool KeyStreamflag = 0; // true/1表示密钥流同态解密验证，false/0表示不验证
 constexpr bool plainflag = 0;     // true/1表示对称密文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-3][idx]
-constexpr unsigned Nr = 4; // 轮数
+constexpr unsigned Nr = 3; // 轮数
 constexpr long idx = 0;
 constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
@@ -626,11 +626,11 @@ int main()
         std::string filePath;
         if (!fs::exists(dirPath))
         {
-            filePath = "test_pasta_4.txt";
+            filePath = "test_pasta_3.txt";
         }
         else
         {
-            filePath = "../tests/test_pasta_4.txt";
+            filePath = "../tests/test_pasta_3.txt";
         }
         std::ofstream outfile(filePath, std::ios::app);
         if (!outfile)
@@ -656,7 +656,7 @@ int main()
                 << std::left << std::setw(10) << noise_budget
                 << std::endl;
         outfile.close();
-        std::cout << "test_pasta_4.txt updated." << std::endl;
+        std::cout << "test_pasta_3.txt updated." << std::endl;
     }
     return 0;
 }

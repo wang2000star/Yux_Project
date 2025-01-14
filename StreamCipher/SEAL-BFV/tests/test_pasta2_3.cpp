@@ -42,8 +42,8 @@ namespace fs = std::filesystem;
 // p^d = 1 mod m,d=1,slots=\phi(m)/d=\phi(m);m=65536=2^16,\phi(m)=2^15=32768
 // 更一般的，应该有d|ord_p(m)，slots=\phi(m)/ord_p(m)
 //!!!!!!!!!!!!!!!!
-constexpr unsigned BlockWords = 64;      // 分组密钥字长度=KeyWords
-constexpr unsigned BlockPlainWords = 32; // 明文分组字长度
+constexpr unsigned BlockWords = 256;      // 分组密钥字长度=KeyWords
+constexpr unsigned BlockPlainWords = 128; // 明文分组字长度
 constexpr double TruncRate = BlockPlainWords / (double)BlockWords;
 // ===============模式设置================
 constexpr bool deflag = 0;        // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
@@ -51,7 +51,7 @@ constexpr bool symkeyflag = 0;    // true/1表示对称密钥同态解密验证�
 constexpr bool KeyStreamflag = 0; // true/1表示密钥流同态解密验证，false/0表示不验证
 constexpr bool plainflag = 0;     // true/1表示对称密文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-3][idx]
-constexpr unsigned Nr = 4; // 轮数
+constexpr unsigned Nr = 3; // 轮数
 constexpr long idx = 0;
 constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 // 当c=2时，Qbits=1.5*bits,当c=3时，Qbits=1.5*bits - 100
@@ -105,13 +105,85 @@ constexpr long counter_begin = 0;                            // 计数器起始�
 constexpr long counter_end = PlainBlock + counter_begin - 1; // 计数器结束值
 
 constexpr long max_prime_size = (1ULL << Wordbits) - 1;
-
-constexpr unsigned plain_size_square = BlockPlainWords * BlockPlainWords;
-
+constexpr long R_BITS = 7; // for MDS Matrix
+constexpr long x_mask = (1ULL << (Wordbits - R_BITS - 2)) - 1;
+constexpr long y_mask = max_prime_size >> 2;
 Pasta pasta(PlainMod, BlockPlainWords, max_prime_size);
+
 // Linear transformation
-void HE_M(std::vector<Ciphertext> &encryptedKeyStream, std::vector<Plaintext> &encodedxof_mat1, std::vector<Plaintext> &encodedxof_mat2,
-          std::vector<Plaintext> &encodedxof_rc, Evaluator &evaluator)
+void HE_Fix_M(std::vector<Ciphertext> &encryptedKeyStream, std::vector<std::vector<long>> &fixed_mat, std::vector<std::vector<long>> &fixed_rc1,
+              std::vector<std::vector<long>> &fixed_rc2, long r, Evaluator &evaluator, BatchEncoder &batch_encoder)
+{
+    std::vector<Ciphertext> temp = encryptedKeyStream;
+    Ciphertext temp1;
+    Plaintext temp2;
+    vector<long> temp3(nslots);
+    for (int i = 0; i < BlockPlainWords; i++)
+    {
+        encryptedKeyStream[i] = temp[0];
+        for (int k = 0; k < nslots; k++)
+        {
+            temp3[k] = fixed_mat[i][0];
+        }
+        batch_encoder.encode(temp3, temp2);
+        evaluator.multiply_plain_inplace(encryptedKeyStream[i], temp2);
+        for (int j = 1; j < BlockPlainWords; j++)
+        {
+            temp1 = temp[j];
+            for (int k = 0; k < nslots; k++)
+            {
+                temp3[k] = fixed_mat[i][j];
+            }
+            batch_encoder.encode(temp3, temp2);
+            evaluator.multiply_plain_inplace(temp1, temp2);
+            evaluator.add_inplace(encryptedKeyStream[i], temp1);
+        }
+    }
+    for (int i = 0; i < BlockPlainWords; i++)
+    {
+        encryptedKeyStream[i + BlockPlainWords] = temp[BlockPlainWords];
+        for (int k = 0; k < nslots; k++)
+        {
+            temp3[k] = fixed_mat[i][0];
+        }
+        batch_encoder.encode(temp3, temp2);
+        evaluator.multiply_plain_inplace(encryptedKeyStream[i + BlockPlainWords], temp2);
+        for (int j = 1; j < BlockPlainWords; j++)
+        {
+            temp1 = temp[BlockPlainWords + j];
+            for (int k = 0; k < nslots; k++)
+            {
+                temp3[k] = fixed_mat[i][j];
+            }
+            batch_encoder.encode(temp3, temp2);
+            evaluator.multiply_plain_inplace(temp1, temp2);
+            evaluator.add_inplace(encryptedKeyStream[i + BlockPlainWords], temp1);
+        }
+    }
+    for (int i = 0; i < BlockPlainWords; i++)
+    {
+        for (int k = 0; k < nslots; k++)
+        {
+            temp3[k] = fixed_rc1[r][i];
+        }
+        batch_encoder.encode(temp3, temp2);
+        evaluator.add_plain_inplace(encryptedKeyStream[i], temp2);
+        for (int k = 0; k < nslots; k++)
+        {
+            temp3[k] = fixed_rc2[r][i];
+        }
+        batch_encoder.encode(temp3, temp2);
+        evaluator.add_plain_inplace(encryptedKeyStream[i + BlockPlainWords], temp2);
+    }
+    temp = encryptedKeyStream;
+    for (int i = 0; i < BlockWords; i++)
+    {
+        evaluator.add_inplace(encryptedKeyStream[i], temp[i]);
+        evaluator.add_inplace(encryptedKeyStream[i], temp[(i + BlockPlainWords) % BlockWords]);
+    }
+}
+void HE_Ran_M(std::vector<Ciphertext> &encryptedKeyStream, std::vector<Plaintext> &encodedxof_mat1, std::vector<Plaintext> &encodedxof_mat2,
+              std::vector<Plaintext> &encodedxof_rc, Evaluator &evaluator)
 {
     std::vector<Ciphertext> temp = encryptedKeyStream;
     Ciphertext temp1 = temp[0];
@@ -165,6 +237,100 @@ void HE_Last_Sbox(vector<Ciphertext> &encrypedKeyStream, Evaluator &evaluator, R
     {
         evaluator.exponentiate_inplace(encrypedKeyStream[i], 3, relin_keys);
     }
+}
+//----------------------------------------------------------------
+void fixed_init_shake(Keccak_HashInstance &shake128)
+{
+    uint8_t seed[16] = "PASTA2_";
+    seed[7] = '0' + (uint8_t)Nr;
+    *((long *)(seed + 8)) = htobe64(PlainMod);
+
+    if (SUCCESS != Keccak_HashInitialize_SHAKE128(&shake128))
+        throw std::runtime_error("failed to init shake");
+    if (SUCCESS != Keccak_HashUpdate(&shake128, seed, sizeof(seed) * 8))
+        throw std::runtime_error("SHAKE128 update failed");
+    if (SUCCESS != Keccak_HashFinal(&shake128, NULL))
+        throw std::runtime_error("SHAKE128 final failed");
+}
+std::vector<long> get_random_yi(Keccak_HashInstance &shake128)
+{
+    std::vector<long> out(BlockPlainWords, 0);
+    for (auto i = 0ULL; i < BlockPlainWords; i++)
+    {
+        bool valid = false;
+        // get distinct x_i, which also imply distinct y_i
+        while (!valid)
+        {
+            // random element of size floor(log_2(p))
+            uint8_t random_bytes[sizeof(long)];
+            if (SUCCESS !=
+                Keccak_HashSqueeze(&shake128, random_bytes, sizeof(random_bytes) * 8))
+                throw std::runtime_error("SHAKE128 squeeze failed");
+            long y_i = be64toh(*((long *)random_bytes)) & y_mask;
+            // check distinct x_i
+            long x_i = y_i & x_mask;
+            valid = true;
+            for (auto j = 0ULL; j < i; j++)
+            {
+                if ((out[j] & x_mask) == x_i)
+                {
+                    valid = false;
+                    break;
+                }
+            }
+            if (valid)
+                out[i] = y_i;
+        }
+    }
+    return out;
+}
+long mod_inverse(long val)
+{
+    if (val == 0)
+        throw(std::runtime_error("0 has no inverse!"));
+
+    int64_t prev_a = 1;
+    int64_t a = 0;
+    long mod = PlainMod;
+
+    while (mod != 0)
+    {
+        int64_t q = val / mod;
+        int64_t temp = val % mod;
+        val = mod;
+        mod = temp;
+
+        temp = a;
+        a = prev_a - q * a;
+        prev_a = temp;
+    }
+
+    if (val != 1)
+        throw(std::runtime_error("value has no inverse!"));
+
+    long res = prev_a;
+    if (prev_a < 0)
+        res += PlainMod;
+
+    return res;
+}
+std::vector<std::vector<long>> get_random_mds_matrix(Keccak_HashInstance &shake128)
+{
+    std::vector<std::vector<long>> mat(BlockPlainWords, std::vector<long>(BlockPlainWords, 0));
+    auto y = get_random_yi(shake128);
+    auto x = y;
+    for (auto &x_i : x)
+        x_i &= x_mask;
+
+    for (auto i = 0ULL; i < BlockPlainWords; i++)
+    {
+        for (auto j = 0ULL; j < BlockPlainWords; j++)
+        {
+            // ld(rasta_prime) ~ 60, no uint128_t for addition necessary
+            mat[i][j] = mod_inverse((x[i] + y[j]) % PlainMod);
+        }
+    }
+    return mat;
 }
 
 int main()
@@ -243,7 +409,7 @@ int main()
     }
     std::cout << "SymKey generated." << std::endl;
     auto start_keyEncryption = std::chrono::high_resolution_clock::now();
-        vector<Ciphertext> encryptedSymKey(BlockWords);
+    vector<Ciphertext> encryptedSymKey(BlockWords);
     encryptSymKey(encryptedSymKey, SymKey, batch_encoder, encryptor, nslots);
     auto end_keyEncryption = std::chrono::high_resolution_clock::now();
     double keyEncryption = std::chrono::duration<double>(end_keyEncryption - start_keyEncryption).count();
@@ -257,6 +423,45 @@ int main()
         }
         std::cout << "Symmetric key encryption succeeded!" << std::endl;
     }
+
+    // 生成固定矩阵和轮向量
+    Keccak_HashInstance shake128;
+
+    fixed_init_shake(shake128);
+    vector<vector<long>> fixed_rc1;
+    vector<vector<long>> fixed_rc2;
+    fixed_rc1.reserve(Nr);
+    fixed_rc2.reserve(Nr);
+
+    for (uint16_t i = 0; i < Nr; i++)
+    {
+        std::vector<long> rc1_(BlockPlainWords);
+        std::vector<long> rc2_(BlockPlainWords);
+
+        for (uint16_t j = 0; j < BlockPlainWords; j++)
+        {
+            rc1_[j] = generate_random_field_element(shake128, false, max_prime_size, PlainMod);
+        }
+        for (uint16_t j = 0; j < BlockPlainWords; j++)
+        {
+            rc2_[j] = generate_random_field_element(shake128, false, max_prime_size, PlainMod);
+        }
+        fixed_rc1.push_back(std::move(rc1_));
+        fixed_rc2.push_back(std::move(rc2_));
+    }
+    std::cout << "固定向量生成成功" << std::endl;
+    vector<vector<long>> fixed_mat(BlockPlainWords, vector<long>(BlockPlainWords));
+    fixed_mat = get_random_mds_matrix(shake128);
+    // for (int i = 0; i < BlockPlainWords; i++)
+    // {
+    //     for(int j=0;j<BlockPlainWords;j++)
+    //     {
+    //         std::cout<<fixed_mat[i][j]<<" ";
+    //     }
+    //     std::cout<<std::endl;
+    // }
+    std::cout << "固定矩阵生成成功" << std::endl;
+    // 固定层生成结束
     for (int test = 0; test < 3; test++)
     {
         // Generating key stream
@@ -296,32 +501,25 @@ int main()
             {
                 pasta.sbox_feistel(state_L);
                 pasta.sbox_feistel(state_R);
-                mat_FL = pasta.get_random_matrix_pasta(shake128_2);
-                mat_FR = pasta.get_random_matrix_pasta(shake128_2);
-                for (int i = 0; i < BlockPlainWords; i++)
-                {
-                    rc_L[i] = generate_random_field_element(shake128_2, false, max_prime_size, PlainMod);
-                    rc_R[i] = generate_random_field_element(shake128_2, false, max_prime_size, PlainMod);
-                }
-                pasta.matmul(state_L, mat_FL);
-                pasta.matmul(state_R, mat_FR);
-                pasta.random_add_rc(state_L, state_R, rc_L, rc_R);
+                pasta.matmul(state_L, fixed_mat);
+                pasta.matmul(state_R, fixed_mat);
+                pasta.add_rc(state_L, state_R, r - 1, fixed_rc1, fixed_rc2);
                 pasta.mix(state_L, state_R);
             }
             // 最后一轮
             pasta.sbox_cube(state_L);
             pasta.sbox_cube(state_R);
-            pasta.matmul(state_L, mat_FL);
-            pasta.matmul(state_R, mat_FR);
-            pasta.random_add_rc(state_L, state_R, rc_L, rc_R);
+            pasta.matmul(state_L, fixed_mat);
+            pasta.matmul(state_R, fixed_mat);
+            pasta.add_rc(state_L, state_R, Nr - 1, fixed_rc1, fixed_rc2);
             pasta.mix(state_L, state_R);
             memcpy(&KeyStream[(block_num)*BlockPlainWords], state_L.data(), BlockPlainWords * sizeof(long));
         }
         uint64_t end_cycle1 = rdtsc();
         auto end_keyStream = std::chrono::high_resolution_clock::now();
-        uint64_t cycle_count1 = end_cycle1 - start_cycle1;
         double Client_offtime = std::chrono::duration_cast<std::chrono::duration<double>>(end_keyStream - start_keyStream).count();
         std::cout << "Encryption offline total time: " << Client_offtime << "s\n";
+        uint64_t cycle_count1 = end_cycle1 - start_cycle1;
         std::cout << "Encryption offline total cycles: " << cycle_count1 << std::endl;
         // 将KeyStream同态密文写入文件
         // if (!writeEncryptedSymKey(encryptedSymKey, "Client_encryptedSymKey.bin"))
@@ -331,10 +529,12 @@ int main()
         // std::cout << "Client_encryptedSymKey.bin has been written to file." << std::endl;
 
         //=============服务端offline阶段================
+
         std::cout << "Generating XOF stream..." << std::endl;
-        std::vector<vector<long>> xof_mat1(plain_size_square * (Nr + 1), vector<long>(nslots, 0));
+        unsigned plain_size_square = BlockPlainWords * BlockPlainWords;
+        std::vector<vector<long>> xof_mat1(plain_size_square, vector<long>(nslots, 0));
         std::vector<vector<long>> xof_mat2 = xof_mat1;
-        std::vector<vector<long>> xof_rc(BlockWords * (Nr + 1), vector<long>(nslots, 0));
+        std::vector<vector<long>> xof_rc(BlockWords, vector<long>(nslots, 0));
         Keccak_HashInstance shake128_3;
         auto start_XOF = std::chrono::high_resolution_clock::now();
         for (long counter = counter_begin; counter <= counter_end; counter++)
@@ -342,30 +542,27 @@ int main()
             block_num = counter - counter_begin;
             nonce = NonceSet[block_num];
             random_init_shake(nonce, counter, shake128_3);
-            for (int r = 0; r < Nr + 1; r++)
+            mat_FL = pasta.get_random_matrix_pasta(shake128_3);
+            mat_FR = pasta.get_random_matrix_pasta(shake128_3);
+            for (int i = 0; i < BlockPlainWords; i++)
             {
-                mat_FL = pasta.get_random_matrix_pasta(shake128_3);
-                mat_FR = pasta.get_random_matrix_pasta(shake128_3);
-                for (int i = 0; i < BlockPlainWords; i++)
+                rc_L[i] = generate_random_field_element(shake128_2, false, max_prime_size, PlainMod);
+                rc_R[i] = generate_random_field_element(shake128_2, false, max_prime_size, PlainMod);
+            }
+            for (int i = 0; i < BlockPlainWords; i++)
+            {
+                for (int j = 0; j < BlockPlainWords; j++)
                 {
-                    rc_L[i] = generate_random_field_element(shake128_2, false, max_prime_size, PlainMod);
-                    rc_R[i] = generate_random_field_element(shake128_2, false, max_prime_size, PlainMod);
+                    xof_mat1[i * BlockPlainWords + j][block_num] = mat_FL[i][j];
+                    xof_mat2[i * BlockPlainWords + j][block_num] = mat_FR[i][j];
                 }
-                for (int i = 0; i < BlockPlainWords; i++)
-                {
-                    for (int j = 0; j < BlockPlainWords; j++)
-                    {
-                        xof_mat1[r * plain_size_square + i * BlockPlainWords + j][block_num] = mat_FL[i][j];
-                        xof_mat2[r * plain_size_square + i * BlockPlainWords + j][block_num] = mat_FR[i][j];
-                    }
-                    xof_rc[r * BlockWords + i][block_num] = rc_L[i];
-                    xof_rc[r * BlockWords + i + BlockPlainWords][block_num] = rc_R[i];
-                }
+                xof_rc[i][block_num] = rc_L[i];
+                xof_rc[i + BlockPlainWords][block_num] = rc_R[i];
             }
         }
         if (PlainBlock == 1)
         {
-            for (int i = 0; i < plain_size_square * (Nr + 1); i++)
+            for (int i = 0; i < plain_size_square; i++)
             {
                 for (int j = 1; j < nslots; j++)
                 {
@@ -373,7 +570,7 @@ int main()
                     xof_mat2[i][j] = xof_mat2[i][0];
                 }
             }
-            for (int i = 0; i < BlockWords * (Nr + 1); i++)
+            for (int i = 0; i < BlockWords; i++)
             {
                 for (int j = 1; j < nslots; j++)
                 {
@@ -385,8 +582,6 @@ int main()
         double XOF_time = std::chrono::duration<double>(end_XOF - start_XOF).count();
         std::cout << "XOF stream Generation time: " << XOF_time << "s\n";
 
-        // zz_pX encodedtemp;
-        // Ciphertext tmpCiphertext(*publicKey);
         int noise_budget = min_noise_budget(encryptedSymKey, decryptor);
         std::cout << "noise budget initially: " << noise_budget << std::endl;
         if (noise_budget <= 0)
@@ -408,25 +603,25 @@ int main()
         vector<double> linear_set(Nr + 1);
         vector<Ciphertext> encryptedKeyStream = encryptedSymKey;
 
-        std::cout << "white round start" << std::endl;
-        std::vector<Plaintext> encodedxof_mat1i(plain_size_square);
-        std::vector<Plaintext> encodedxof_mat2i(plain_size_square);
-        std::vector<Plaintext> encodedxof_rci(BlockWords);
+        std::cout << "random round start" << std::endl;
+        std::vector<Plaintext> encodedxof_mat1(plain_size_square);
+        std::vector<Plaintext> encodedxof_mat2(plain_size_square);
+        std::vector<Plaintext> encodedxof_rc(BlockWords);
         start_white = std::chrono::high_resolution_clock::now();
-        for (long i = 0; i < plain_size_square; i++)
+        for (int i = 0; i < plain_size_square; i++)
         {
-            batch_encoder.encode(xof_mat1[i], encodedxof_mat1i[i]);
-            batch_encoder.encode(xof_mat2[i], encodedxof_mat2i[i]);
+            batch_encoder.encode(xof_mat1[i], encodedxof_mat1[i]);
+            batch_encoder.encode(xof_mat2[i], encodedxof_mat2[i]);
         }
-        for (long i = 0; i < BlockWords; i++)
+        for (int i = 0; i < BlockWords; i++)
         {
-            batch_encoder.encode(xof_rc[i], encodedxof_rci[i]);
+            batch_encoder.encode(xof_rc[i], encodedxof_rc[i]);
         }
-        HE_M(encryptedKeyStream, encodedxof_mat1i, encodedxof_mat2i, encodedxof_rci, evaluator);
+        HE_Ran_M(encryptedKeyStream, encodedxof_mat1, encodedxof_mat2, encodedxof_rc, evaluator);
         end_white = std::chrono::high_resolution_clock::now();
         white_time += std::chrono::duration<double>(end_white - start_white).count();
-        // 输出 white round time
-        std::cout << "white round time: " << white_time << "s\n";
+        // 输出 random round time
+        std::cout << "random round time: " << white_time << "s\n";
         noise_budget = min_noise_budget(encryptedKeyStream, decryptor);
         std::cout << "noise budget after Whiteround: " << noise_budget << std::endl;
         if (noise_budget <= 0)
@@ -453,16 +648,7 @@ int main()
             }
             start_linear = std::chrono::high_resolution_clock::now();
             // Linear Layer
-            for (long i = 0; i < plain_size_square; i++)
-            {
-                batch_encoder.encode(xof_mat1[r * plain_size_square + i], encodedxof_mat1i[i]);
-                batch_encoder.encode(xof_mat2[r * plain_size_square + i], encodedxof_mat2i[i]);
-            }
-            for (long i = 0; i < BlockWords; i++)
-            {
-                batch_encoder.encode(xof_rc[r * BlockWords + i], encodedxof_rci[i]);
-            }
-            HE_M(encryptedKeyStream, encodedxof_mat1i, encodedxof_mat2i, encodedxof_rci, evaluator);
+            HE_Fix_M(encryptedKeyStream, fixed_mat, fixed_rc1, fixed_rc2, r - 1, evaluator, batch_encoder);
             end_linear = std::chrono::high_resolution_clock::now();
             Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
             linear_set[r - 1] = std::chrono::duration<double>(end_linear - start_linear).count();
@@ -491,21 +677,13 @@ int main()
         }
         start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
-        for (long i = 0; i < plain_size_square; i++)
-        {
-            batch_encoder.encode(xof_mat1[Nr * plain_size_square + i], encodedxof_mat1i[i]);
-            batch_encoder.encode(xof_mat2[Nr * plain_size_square + i], encodedxof_mat2i[i]);
-        }
-        for (long i = 0; i < BlockWords; i++)
-        {
-            batch_encoder.encode(xof_rc[Nr * BlockWords + i], encodedxof_rci[i]);
-        }
-        HE_M(encryptedKeyStream, encodedxof_mat1i, encodedxof_mat2i, encodedxof_rci, evaluator);
+        HE_Fix_M(encryptedKeyStream, fixed_mat, fixed_rc1, fixed_rc2, Nr - 1, evaluator, batch_encoder);
         end_linear = std::chrono::high_resolution_clock::now();
         Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
         linear_set[Nr] = std::chrono::duration<double>(end_linear - start_linear).count();
         // 截断密钥流
         encryptedKeyStream.erase(encryptedKeyStream.begin() + BlockPlainWords, encryptedKeyStream.end());
+
         noise_budget = min_noise_budget(encryptedKeyStream, decryptor);
         std::cout << "noise budget after linear: " << noise_budget << std::endl;
         if (noise_budget <= 0)
@@ -513,10 +691,9 @@ int main()
             std::cerr << "noise budget is not enough!!!" << std::endl;
             return 0;
         }
-
         // 输出 XOF_time,Add_time、Sbox_time、Linear_time
         std::cout << "XOF time: " << XOF_time << "s\n";
-        std::cout << "White time: " << white_time << "s\n";
+        std::cout << "whiteround time: " << white_time << "s\n";
         std::cout << "Sbox time: " << Sbox_time << "s\n";
         std::cout << "Linear time: " << Linear_time << "s\n";
         // 计算总时间
@@ -552,9 +729,10 @@ int main()
             PlainStream[i] = rd() % PlainMod;
         }
         // 加密
-        vector<vector<long>> CipherStream(BlockPlainWords, vector<long>(nslots));
+        vector<vector<long>> CipherStream(BlockPlainWords, vector<long>(nslots, 0));
         auto start_ClientOnline = std::chrono::high_resolution_clock::now();
         uint64_t start_cycle2 = rdtsc();
+
         for (int j = 0; j < PlainBlock; j++)
         {
             for (int i = 0; i < BlockPlainWords; i++)
@@ -564,7 +742,6 @@ int main()
         }
         if (PlainBlock == 1)
         {
-
             for (int i = 0; i < BlockPlainWords; i++)
             {
                 for (int j = 1; j < nslots; j++)
@@ -584,7 +761,6 @@ int main()
         // 输出吞吐量
         double Cli_throughput = (8 * cycle_count) / Plainbits; // 单位：Cycle/Byte
         std::cout << "Client Throughput: " << Cli_throughput << "Cycle/Byte\n";
-
         // 服务端在线
         // 同态加密
         vector<Ciphertext> encrypedPlainStream = encryptedKeyStream;
@@ -608,15 +784,16 @@ int main()
             return 0;
         }
         // 同态解密验证
-        if (plainflag)
-        {
-            if (!verifyDecryption(encrypedPlainStream, PlainStream, batch_encoder, decryptor, BlockPlainWords, PlainBlock, nslots, PlainMod))
-            {
-                std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
-                return 0;
-            }
-            std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
-        }
+        // for (int i = 0; i < encryptedKeyStream.size(); i++)
+        // {
+        //     encryptedKeyStream[i].bringToSet(encryptedKeyStream[i].naturalPrimeSet());
+        // }
+        // if (!verifyDecryption(encrypedPlainStream, PlainStream, secretKey, cmodulus, BlockPlainWords, PlainBlock, nslots, Para_p))
+        // {
+        //     std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
+        //     return 0;
+        // }
+        // std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
         // 计算吞吐量,KiB/min
         double Server_totaltime = Server_offtime + server_ontime;
         double Ser_throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);
@@ -626,11 +803,11 @@ int main()
         std::string filePath;
         if (!fs::exists(dirPath))
         {
-            filePath = "test_pasta_4.txt";
+            filePath = "test_pasta2_3.txt";
         }
         else
         {
-            filePath = "../tests/test_pasta_4.txt";
+            filePath = "../tests/test_pasta2_3.txt";
         }
         std::ofstream outfile(filePath, std::ios::app);
         if (!outfile)
@@ -656,7 +833,7 @@ int main()
                 << std::left << std::setw(10) << noise_budget
                 << std::endl;
         outfile.close();
-        std::cout << "test_pasta_4.txt updated." << std::endl;
+        std::cout << "test_pasta2_3.txt updated." << std::endl;
     }
     return 0;
 }

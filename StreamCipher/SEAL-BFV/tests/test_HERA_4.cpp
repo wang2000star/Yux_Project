@@ -763,7 +763,7 @@ int main()
             jBP = j * BlockPlainWords;
             for (int i = 0; i < BlockPlainWords; i++)
             {
-                CipherStream[i][j] = (PlainStream[jBP + i] - KeyStream[jBP + i]) % PlainMod;
+                CipherStream[i][j] = (PlainStream[jBP + i] + KeyStream[jBP + i]) % PlainMod;
             }
         }
         if (PlainBlock == 1)
@@ -796,6 +796,7 @@ int main()
         for (int i = 0; i < BlockPlainWords; i++)
         {
             batch_encoder.encode(CipherStream[i], encodedCipherStreami);
+             evaluator.negate_inplace(encrypedPlainStream[i]);
             evaluator.add_plain_inplace(encrypedPlainStream[i], encodedCipherStreami);
         }
         auto end_ServerOnline = std::chrono::high_resolution_clock::now();
@@ -816,8 +817,9 @@ int main()
                 std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
                 return 0;
             }
+            std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
         }
-        std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
+        
         // 计算吞吐量,KiB/min
         double Server_totaltime = Server_offtime + server_ontime;
         double Ser_throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);
