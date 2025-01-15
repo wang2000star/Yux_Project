@@ -110,34 +110,45 @@ constexpr unsigned plain_size_square = BlockPlainWords * BlockPlainWords;
 
 Pasta pasta(PlainMod, BlockPlainWords, max_prime_size);
 // Linear transformation
-void HE_M(std::vector<Ciphertext> &encryptedKeyStream, std::vector<Plaintext> &encodedxof_mat1, std::vector<Plaintext> &encodedxof_mat2,
-          std::vector<Plaintext> &encodedxof_rc, Evaluator &evaluator)
+void HE_M(std::vector<Ciphertext> &encryptedKeyStream, std::vector<vector<long>> &xof_mat1, std::vector<vector<long>> &xof_mat2,
+          std::vector<vector<long>> &xof_rc, Evaluator &evaluator, BatchEncoder &batch_encoder, int r)
 {
     std::vector<Ciphertext> temp = encryptedKeyStream;
     Ciphertext temp1 = temp[0];
+    int s1 = r * plain_size_square;
+    int s2 = r * BlockWords;
+    Plaintext encodedxof_mat1;
+    Plaintext encodedxof_mat2;
+    Plaintext encodedxof_rc;
     for (int i = 0; i < BlockPlainWords; i++)
     {
         encryptedKeyStream[i] = temp[0];
-        evaluator.multiply_plain_inplace(encryptedKeyStream[i], encodedxof_mat1[i * BlockPlainWords + 0]);
+        batch_encoder.encode(xof_mat1[s1 + i * BlockPlainWords + 0], encodedxof_mat1);
+        evaluator.multiply_plain_inplace(encryptedKeyStream[i], encodedxof_mat1);
         for (int j = 1; j < BlockPlainWords; j++)
         {
             temp1 = temp[j];
-            evaluator.multiply_plain_inplace(temp1, encodedxof_mat1[i * BlockPlainWords + j]);
+            batch_encoder.encode(xof_mat1[s1 + i * BlockPlainWords + j], encodedxof_mat1);
+            evaluator.multiply_plain_inplace(temp1, encodedxof_mat1);
             evaluator.add_inplace(encryptedKeyStream[i], temp1);
         }
-        evaluator.add_plain_inplace(encryptedKeyStream[i], encodedxof_rc[i]);
+        batch_encoder.encode(xof_rc[s2 + i], encodedxof_rc);
+        evaluator.add_plain_inplace(encryptedKeyStream[i], encodedxof_rc);
     }
     for (int i = 0; i < BlockPlainWords; i++)
     {
         encryptedKeyStream[i + BlockPlainWords] = temp[BlockPlainWords];
-        evaluator.multiply_plain_inplace(encryptedKeyStream[i + BlockPlainWords], encodedxof_mat2[i * BlockPlainWords + 0]);
+        batch_encoder.encode(xof_mat2[s1 + i * BlockPlainWords + 0], encodedxof_mat2);
+        evaluator.multiply_plain_inplace(encryptedKeyStream[i + BlockPlainWords], encodedxof_mat2);
         for (int j = 1; j < BlockPlainWords; j++)
         {
             temp1 = temp[BlockPlainWords + j];
-            evaluator.multiply_plain_inplace(temp1, encodedxof_mat2[i * BlockPlainWords + j]);
+            batch_encoder.encode(xof_mat2[s1 + i * BlockPlainWords + j], encodedxof_mat2);
+            evaluator.multiply_plain_inplace(temp1, encodedxof_mat2);
             evaluator.add_inplace(encryptedKeyStream[i + BlockPlainWords], temp1);
         }
-        evaluator.add_plain_inplace(encryptedKeyStream[i + BlockPlainWords], encodedxof_rc[i + BlockPlainWords]);
+        batch_encoder.encode(xof_rc[s2 + i + BlockPlainWords], encodedxof_rc);
+        evaluator.add_plain_inplace(encryptedKeyStream[i + BlockPlainWords], encodedxof_rc);
     }
     temp = encryptedKeyStream;
     for (int i = 0; i < BlockWords; i++)
@@ -243,7 +254,7 @@ int main()
     }
     std::cout << "SymKey generated." << std::endl;
     auto start_keyEncryption = std::chrono::high_resolution_clock::now();
-        vector<Ciphertext> encryptedSymKey(BlockWords);
+    vector<Ciphertext> encryptedSymKey(BlockWords);
     encryptSymKey(encryptedSymKey, SymKey, batch_encoder, encryptor, nslots);
     auto end_keyEncryption = std::chrono::high_resolution_clock::now();
     double keyEncryption = std::chrono::duration<double>(end_keyEncryption - start_keyEncryption).count();
@@ -259,6 +270,7 @@ int main()
     }
     for (int test = 0; test < 3; test++)
     {
+        std::cout << "--------------- Test = " << test << "---------------"<< std::endl;
         // Generating key stream
         Keccak_HashInstance shake128_2;
         vector<vector<long>> mat_FL(BlockPlainWords, vector<long>(BlockPlainWords));
@@ -409,20 +421,8 @@ int main()
         vector<Ciphertext> encryptedKeyStream = encryptedSymKey;
 
         std::cout << "white round start" << std::endl;
-        std::vector<Plaintext> encodedxof_mat1i(plain_size_square);
-        std::vector<Plaintext> encodedxof_mat2i(plain_size_square);
-        std::vector<Plaintext> encodedxof_rci(BlockWords);
         start_white = std::chrono::high_resolution_clock::now();
-        for (long i = 0; i < plain_size_square; i++)
-        {
-            batch_encoder.encode(xof_mat1[i], encodedxof_mat1i[i]);
-            batch_encoder.encode(xof_mat2[i], encodedxof_mat2i[i]);
-        }
-        for (long i = 0; i < BlockWords; i++)
-        {
-            batch_encoder.encode(xof_rc[i], encodedxof_rci[i]);
-        }
-        HE_M(encryptedKeyStream, encodedxof_mat1i, encodedxof_mat2i, encodedxof_rci, evaluator);
+        HE_M(encryptedKeyStream, xof_mat1, xof_mat2, xof_rc, evaluator, batch_encoder, 0);
         end_white = std::chrono::high_resolution_clock::now();
         white_time += std::chrono::duration<double>(end_white - start_white).count();
         // 输出 white round time
@@ -453,16 +453,7 @@ int main()
             }
             start_linear = std::chrono::high_resolution_clock::now();
             // Linear Layer
-            for (long i = 0; i < plain_size_square; i++)
-            {
-                batch_encoder.encode(xof_mat1[r * plain_size_square + i], encodedxof_mat1i[i]);
-                batch_encoder.encode(xof_mat2[r * plain_size_square + i], encodedxof_mat2i[i]);
-            }
-            for (long i = 0; i < BlockWords; i++)
-            {
-                batch_encoder.encode(xof_rc[r * BlockWords + i], encodedxof_rci[i]);
-            }
-            HE_M(encryptedKeyStream, encodedxof_mat1i, encodedxof_mat2i, encodedxof_rci, evaluator);
+            HE_M(encryptedKeyStream, xof_mat1, xof_mat2, xof_rc, evaluator, batch_encoder, r);
             end_linear = std::chrono::high_resolution_clock::now();
             Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
             linear_set[r - 1] = std::chrono::duration<double>(end_linear - start_linear).count();
@@ -491,16 +482,7 @@ int main()
         }
         start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
-        for (long i = 0; i < plain_size_square; i++)
-        {
-            batch_encoder.encode(xof_mat1[Nr * plain_size_square + i], encodedxof_mat1i[i]);
-            batch_encoder.encode(xof_mat2[Nr * plain_size_square + i], encodedxof_mat2i[i]);
-        }
-        for (long i = 0; i < BlockWords; i++)
-        {
-            batch_encoder.encode(xof_rc[Nr * BlockWords + i], encodedxof_rci[i]);
-        }
-        HE_M(encryptedKeyStream, encodedxof_mat1i, encodedxof_mat2i, encodedxof_rci, evaluator);
+        HE_M(encryptedKeyStream, xof_mat1, xof_mat2, xof_rc, evaluator, batch_encoder, Nr);
         end_linear = std::chrono::high_resolution_clock::now();
         Linear_time += std::chrono::duration<double>(end_linear - start_linear).count();
         linear_set[Nr] = std::chrono::duration<double>(end_linear - start_linear).count();

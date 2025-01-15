@@ -22,7 +22,6 @@
 #include "helib/powerful.h"
 #include <immintrin.h> // 包含 SIMD 指令集支持
 
-
 #include "../Symmetric/Yus_p.hpp"
 #include "../utils/tool.hpp"
 
@@ -53,7 +52,7 @@ constexpr bool deflag = 0;        // true/1表示进行每一步解密验证，f
 constexpr bool ompflag = 0;       // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
 constexpr bool symkeyflag = 0;    // true/1表示对称密钥同态解密验证加密，false/0表示不验证
 constexpr bool KeyStreamflag = 0; // true/1表示密钥流同态解密验证，false/0表示不验证
-constexpr bool plainflag = 1;     // true/1表示明文同态解密验证，false/0表示不验证
+constexpr bool plainflag = 0;     // true/1表示明文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
 constexpr unsigned Nr = 5; // 轮数
 constexpr long idx = 0;
@@ -63,14 +62,14 @@ constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 constexpr tuple<long, long, long, long> paramMap[1][8] = {
     {// Nr = 4
      // {p, log2(m), bits, c}
-     {4298506241, 15, 360, 4},  // 0 *
-     {163841, 15, 240, 2}, // 1
-     {65537, 14, 220, 2},  // 2 *
-     {163841, 14, 230, 2}, // 3
-     {65537, 15, 350, 2},  // 4
-     {163841, 15, 350, 2}, // 5
-     {65537, 15, 400, 2},  // 6
-     {163841, 15, 400, 2}} // 7
+     {4298506241, 15, 360, 4}, // 0 *
+     {163841, 15, 240, 2},     // 1
+     {65537, 14, 220, 2},      // 2 *
+     {163841, 14, 230, 2},     // 3
+     {65537, 15, 350, 2},      // 4
+     {163841, 15, 350, 2},     // 5
+     {65537, 15, 400, 2},      // 6
+     {163841, 15, 400, 2}}     // 7
 };
 // p=k*m+1
 //  2^10=1024,2^11=2048,2^12=4096,2^13=8192,2^14=16384,2^15=32768,2^16=65536,
@@ -795,84 +794,85 @@ int main()
         }
         std::cout << "Symmetric key encryption succeeded!" << std::endl;
     }
-        for (int test = 0; test < 10; test++)
+    for (int test = 0; test < 10; test++)
     {
-    // Generating key stream
-    std::vector<long> NonceSet(PlainBlock);
-    vector<std::vector<long>> RoundKeySet(Nr + 1, std::vector<long>(KeyStreamWords, 0));
-    std::vector<long> KeyStream(PlainWords);
-    std::vector<long> RoundKey(BlockWords);
-    long nonce;
-    long block_num;
-    std::vector<long> state(BlockWords); // 初始化 state
-    Keccak_HashInstance shake128_2;
-    std::cout << "Generating KeyStream..." << std::endl;
-    auto start_keyStream = std::chrono::high_resolution_clock::now();
-    uint64_t start_cycle1 = rdtsc();
-    for (long counter = counter_begin; counter <= counter_end; counter++)
-    {
-        nonce = generate_secure_random_int(NonceSize);
-        random_init_shake(nonce, counter, shake128_2);
-        block_num = counter - counter_begin;
-        NonceSet[block_num] = nonce;
-        // 逐轮进行加密
-        for (unsigned r = 0; r <= Nr; r++)
+        std::cout << "--------------- Test = " << test << "---------------"<< std::endl;
+        // Generating key stream
+        std::vector<long> NonceSet(PlainBlock);
+        vector<std::vector<long>> RoundKeySet(Nr + 1, std::vector<long>(KeyStreamWords, 0));
+        std::vector<long> KeyStream(PlainWords);
+        std::vector<long> RoundKey(BlockWords);
+        long nonce;
+        long block_num;
+        std::vector<long> state(BlockWords); // 初始化 state
+        Keccak_HashInstance shake128_2;
+        std::cout << "Generating KeyStream..." << std::endl;
+        auto start_keyStream = std::chrono::high_resolution_clock::now();
+        uint64_t start_cycle1 = rdtsc();
+        for (long counter = counter_begin; counter <= counter_end; counter++)
         {
-            // 计算RoundKey
-            for (unsigned i = 0; i < BlockWords; ++i)
+            nonce = generate_secure_random_int(NonceSize);
+            random_init_shake(nonce, counter, shake128_2);
+            block_num = counter - counter_begin;
+            NonceSet[block_num] = nonce;
+            // 逐轮进行加密
+            for (unsigned r = 0; r <= Nr; r++)
             {
-                RoundKey[i] = (SymKey[i] * generate_random_field_element(shake128_2, false, max_prime_size, PlainMod)) % PlainMod;
-            }
-            // 将RoundKey 复制到RoundKeySet
-            // 测试使用
-            if (deflag)
-            {
-                memcpy(&RoundKeySet[r][BlockWords * (block_num)], RoundKey.data(), BlockWords * sizeof(long));
-            }
-            if (r == 0)
-            { // 初始轮
-                for (unsigned i = 0; i < BlockWords; i++)
+                // 计算RoundKey
+                for (unsigned i = 0; i < BlockWords; ++i)
                 {
-                    state[i] = (RoundKey[i] + IV[i]) % PlainMod;
+                    RoundKey[i] = (SymKey[i] * generate_random_field_element(shake128_2, false, max_prime_size, PlainMod)) % PlainMod;
                 }
-            }
-            else if (r < Nr)
-            { // 常规轮
+                // 将RoundKey 复制到RoundKeySet
+                // 测试使用
+                if (deflag)
+                {
+                    memcpy(&RoundKeySet[r][BlockWords * (block_num)], RoundKey.data(), BlockWords * sizeof(long));
+                }
+                if (r == 0)
+                { // 初始轮
+                    for (unsigned i = 0; i < BlockWords; i++)
+                    {
+                        state[i] = (RoundKey[i] + IV[i]) % PlainMod;
+                    }
+                }
+                else if (r < Nr)
+                { // 常规轮
 
-                yusP.M36(state); // MixColumns
-                yusP.Sbox(state); // S盒
-                for (unsigned i = 0; i < BlockWords; i++)
-                {
-                    state[i] = (state[i] + RoundKey[i]) % PlainMod;
+                    yusP.M36(state);  // MixColumns
+                    yusP.Sbox(state); // S盒
+                    for (unsigned i = 0; i < BlockWords; i++)
+                    {
+                        state[i] = (state[i] + RoundKey[i]) % PlainMod;
+                    }
                 }
-            }
-            else
-            {                     // 最后一轮
-                yusP.M36(state); // Liner
-                yusP.Sbox(state); // S盒
-                for (unsigned i = 0; i < BlockWords; i++)
-                {
-                    state[i] = (state[i] + RoundKey[i]) % PlainMod;
+                else
+                {                     // 最后一轮
+                    yusP.M36(state);  // Liner
+                    yusP.Sbox(state); // S盒
+                    for (unsigned i = 0; i < BlockWords; i++)
+                    {
+                        state[i] = (state[i] + RoundKey[i]) % PlainMod;
+                    }
+                    yusP.M36(state); // Liner
+                    memcpy(&KeyStream[(block_num)*BlockPlainWords], state.data(), BlockPlainWords * sizeof(long));
                 }
-                yusP.M36(state); // Liner
-                memcpy(&KeyStream[(block_num)*BlockPlainWords], state.data(), BlockPlainWords * sizeof(long));
             }
         }
-    }
-    uint64_t end_cycle1 = rdtsc();
-    auto end_keyStream = std::chrono::high_resolution_clock::now();
-    double Client_offtime = std::chrono::duration_cast<std::chrono::duration<double>>(end_keyStream - start_keyStream).count();
-    std::cout << "Encryption offline total time: " << Client_offtime << "s\n";
-    uint64_t cycle_count1 = end_cycle1 - start_cycle1;
-    std::cout << "Encryption offline total cycles: " << cycle_count1 << std::endl;
-    // 将KeyStream同态密文写入文件
-    // if (!writeEncryptedSymKey(encryptedSymKey, "Client_encryptedSymKey.bin"))
-    // {
-    //     return false;
-    // }
-    // std::cout << "Client_encryptedSymKey.bin has been written to file." << std::endl;
+        uint64_t end_cycle1 = rdtsc();
+        auto end_keyStream = std::chrono::high_resolution_clock::now();
+        double Client_offtime = std::chrono::duration_cast<std::chrono::duration<double>>(end_keyStream - start_keyStream).count();
+        std::cout << "Encryption offline total time: " << Client_offtime << "s\n";
+        uint64_t cycle_count1 = end_cycle1 - start_cycle1;
+        std::cout << "Encryption offline total cycles: " << cycle_count1 << std::endl;
+        // 将KeyStream同态密文写入文件
+        // if (!writeEncryptedSymKey(encryptedSymKey, "Client_encryptedSymKey.bin"))
+        // {
+        //     return false;
+        // }
+        // std::cout << "Client_encryptedSymKey.bin has been written to file." << std::endl;
 
-    //=============服务端offline阶段================
+        //=============服务端offline阶段================
         std::cout << "Generating XOF stream..." << std::endl;
         std::vector<vec_long> Xset(NrBlockWords);
         for (int i = 0; i < NrBlockWords; i++)
@@ -1042,10 +1042,10 @@ int main()
             // #pragma omp parallel for
             for (long j = 0; j < BlockWords; j++)
             {
-            cmodulus.iFFT(encodedtemp, Xset[r * BlockWords + j]);
-            convert(encodedXseti, encodedtemp);
-            tmpCtxt = encryptedSymKey[j];
-            tmpCtxt.multByConstant(encodedXseti);
+                cmodulus.iFFT(encodedtemp, Xset[r * BlockWords + j]);
+                convert(encodedXseti, encodedtemp);
+                tmpCtxt = encryptedSymKey[j];
+                tmpCtxt.multByConstant(encodedXseti);
                 encryptedKeyStream[j] += tmpCtxt;
             }
             end_add = std::chrono::high_resolution_clock::now();
@@ -1071,7 +1071,7 @@ int main()
                 std::cout << "Decryption verification succeeded for KeyStream2 Round Key Addition." << std::endl;
             }
         }
-// 最后一轮
+        // 最后一轮
         std::cout << "the last Round " << Nr << " start" << std::endl;
         start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
@@ -1136,11 +1136,11 @@ int main()
         start_add = std::chrono::high_resolution_clock::now();
         for (long j = 0; j < BlockWords; j++)
         {
-                        cmodulus.iFFT(encodedtemp, Xset[Nr * BlockWords + j]);
+            cmodulus.iFFT(encodedtemp, Xset[Nr * BlockWords + j]);
             convert(encodedXseti, encodedtemp);
             tmpCtxt = encryptedSymKey[j];
             tmpCtxt.multByConstant(encodedXseti);
-                encryptedKeyStream[j] += tmpCtxt;
+            encryptedKeyStream[j] += tmpCtxt;
         }
         end_add = std::chrono::high_resolution_clock::now();
         Add_time += std::chrono::duration<double>(end_add - start_add).count();
@@ -1199,7 +1199,7 @@ int main()
             }
             std::cout << "Decryption verification succeeded for KeyStream2 Linear Layer." << std::endl;
         }
-       // 截断密钥流
+        // 截断密钥流
         encryptedKeyStream.erase(encryptedKeyStream.begin() + BlockPlainWords, encryptedKeyStream.end());
         // 输出 XOF_time,Add_time、Sbox_time、Linear_time
         std::cout << "XOF time: " << XOF_time << "s\n";
@@ -1238,13 +1238,15 @@ int main()
                 CipherStream[i][j] = 0;
             }
         }
+        long jBP;
         auto start_ClientOnline = std::chrono::high_resolution_clock::now();
         uint64_t start_cycle2 = rdtsc();
         for (int j = 0; j < PlainBlock; j++)
         {
+            jBP = j * BlockPlainWords;
             for (int i = 0; i < BlockPlainWords; i++)
             {
-                CipherStream[i][j] = ((PlainStream[j * BlockPlainWords + i] + KeyStream[j * BlockPlainWords + i]) % PlainMod + PlainMod) % PlainMod;
+                CipherStream[i][j] = (PlainStream[jBP + i] - KeyStream[jBP + i]) % PlainMod;
             }
         }
         if (PlainBlock == 1)
@@ -1279,7 +1281,6 @@ int main()
         {
             cmodulus.iFFT(encodedtemp, CipherStream[i]);
             convert(encodedCipherStreami, encodedtemp);
-            encrypedPlainStream[i].negate();
             encrypedPlainStream[i].addConstant(encodedCipherStreami);
         }
         auto end_ServerOnline = std::chrono::high_resolution_clock::now();
@@ -1303,8 +1304,8 @@ int main()
             {
                 std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
                 return 0;
-            }        std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
-
+            }
+            std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
         }
         // 计算吞吐量,KiB/min
         double Server_totaltime = Server_offtime + server_ontime;

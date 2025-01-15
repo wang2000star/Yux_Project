@@ -3,6 +3,70 @@ include_directories(${CMAKE_SOURCE_DIR})
 include_directories("${CMAKE_SOURCE_DIR}/Symmetric")
 include_directories("${CMAKE_SOURCE_DIR}/utils")
 include_directories("${CMAKE_SOURCE_DIR}/keccak")
+
+
+# add_executable(test_context test_context.cpp)
+# target_link_libraries(test_context PUBLIC  helib)
+
+add_executable(test_HERA_4 test_HERA_4.cpp)
+target_link_libraries(test_HERA_4 PUBLIC Symmetric Utils helib)
+
+add_executable(test_HERA_5 test_HERA_5.cpp)
+target_link_libraries(test_HERA_5 PUBLIC Symmetric Utils helib)
+
+add_executable(test_pasta2_3 test_pasta2_3.cpp)
+target_link_libraries(test_pasta2_3 PUBLIC Symmetric Utils keccak helib)
+
+add_executable(test_pasta2_4 test_pasta2_4.cpp)
+target_link_libraries(test_pasta2_4 PUBLIC Symmetric Utils keccak helib)
+
+add_executable(test_pasta_3 test_pasta_3.cpp)
+target_link_libraries(test_pasta_3 PUBLIC Symmetric Utils keccak helib)
+
+add_executable(test_pasta_4 test_pasta_4.cpp)
+target_link_libraries(test_pasta_4 PUBLIC Symmetric Utils keccak helib)
+
+add_executable(test_Yus_4 test_Yus_4.cpp)
+target_link_libraries(test_Yus_4 PUBLIC Symmetric Utils keccak helib)
+
+add_executable(test_Yus_5 test_Yus_5.cpp)
+target_link_libraries(test_Yus_5 PUBLIC Symmetric Utils keccak helib)
+
+add_executable(test_Yus_6 test_Yus_6.cpp)
+target_link_libraries(test_Yus_6 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_HERA_4_33 test_HERA_4_33.cpp)
+# target_link_libraries(test_HERA_4_33 PUBLIC Symmetric Utils helib)
+
+# add_executable(test_HERA_5_33 test_HERA_5_33.cpp)
+# target_link_libraries(test_HERA_5_33 PUBLIC Symmetric Utils helib)
+
+# add_executable(test_pasta2_3_33 test_pasta2_3_33.cpp)
+# target_link_libraries(test_pasta2_3_33 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_pasta2_4_33 test_pasta2_4_33.cpp)
+# target_link_libraries(test_pasta2_4_33 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_pasta_3_33 test_pasta_3_33.cpp)
+# target_link_libraries(test_pasta_3_33 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_pasta_4_33 test_pasta_4_33.cpp)
+# target_link_libraries(test_pasta_4_33 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_Yus_4_33 test_Yus_4_33.cpp)
+# target_link_libraries(test_Yus_4_33 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_Yus_5_33 test_Yus_5_33.cpp)
+# target_link_libraries(test_Yus_5_33 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_Yus_6_33 test_Yus_6_33.cpp)
+# target_link_libraries(test_Yus_6_33 PUBLIC Symmetric Utils keccak helib)
+
+# add_executable(test_Yux_14 test_Yux_14.cpp)
+# target_link_libraries(test_Yux_14 PUBLIC Symmetric Utils helib)
+
+
+
 # include_directories("${CMAKE_SOURCE_DIR}/transciphering")
 
 #add_executable(test_Yux2_8_C1 test_Yux2_8_C1.cpp)
@@ -76,68 +140,6 @@ include_directories("${CMAKE_SOURCE_DIR}/keccak")
 # target_link_libraries(test_Yus_p_C36_ClientAndServer5_2 PUBLIC Symmetric Utils helib ${OpenMP_CXX_LIBRARIES})
 # add_executable(test_Yus_p_C36_ClientAndServer7 test_Yus_p_C36_ClientAndServer7.cpp)
 # target_link_libraries(test_Yus_p_C36_ClientAndServer7 PUBLIC Symmetric Utils helib)
-
-# add_executable(test_context test_context.cpp)
-# target_link_libraries(test_context PUBLIC  helib)
-
-add_executable(test_HERA_4 test_HERA_4.cpp)
-target_link_libraries(test_HERA_4 PUBLIC Symmetric Utils helib)
-
-add_executable(test_HERA_4_33 test_HERA_4_33.cpp)
-target_link_libraries(test_HERA_4_33 PUBLIC Symmetric Utils helib)
-
-add_executable(test_HERA_5 test_HERA_5.cpp)
-target_link_libraries(test_HERA_5 PUBLIC Symmetric Utils helib)
-
-add_executable(test_HERA_5_33 test_HERA_5_33.cpp)
-target_link_libraries(test_HERA_5_33 PUBLIC Symmetric Utils helib)
-
-add_executable(test_pasta2_3 test_pasta2_3.cpp)
-target_link_libraries(test_pasta2_3 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_pasta2_3_33 test_pasta2_3_33.cpp)
-target_link_libraries(test_pasta2_3_33 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_pasta2_4 test_pasta2_4.cpp)
-target_link_libraries(test_pasta2_4 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_pasta2_4_33 test_pasta2_4_33.cpp)
-target_link_libraries(test_pasta2_4_33 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_pasta_3 test_pasta_3.cpp)
-target_link_libraries(test_pasta_3 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_pasta_3_33 test_pasta_3_33.cpp)
-target_link_libraries(test_pasta_3_33 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_pasta_4 test_pasta_4.cpp)
-target_link_libraries(test_pasta_4 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_pasta_4_33 test_pasta_4_33.cpp)
-target_link_libraries(test_pasta_4_33 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_Yus_4 test_Yus_4.cpp)
-target_link_libraries(test_Yus_4 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_Yus_4_33 test_Yus_4_33.cpp)
-target_link_libraries(test_Yus_4_33 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_Yus_6 test_Yus_6.cpp)
-target_link_libraries(test_Yus_6 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_Yus_6_33 test_Yus_6_33.cpp)
-target_link_libraries(test_Yus_6_33 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_Yus_5 test_Yus_5.cpp)
-target_link_libraries(test_Yus_5 PUBLIC Symmetric Utils keccak helib)
-
-add_executable(test_Yus_5_33 test_Yus_5_33.cpp)
-target_link_libraries(test_Yus_5_33 PUBLIC Symmetric Utils keccak helib)
-
-# add_executable(test_Yux_14 test_Yux_14.cpp)
-# target_link_libraries(test_Yux_14 PUBLIC Symmetric Utils helib)
-
-
 
 
 # add_executable(test_Yus_p_C18_ClientAndServer8 test_Yus_p_C18_ClientAndServer8.cpp)

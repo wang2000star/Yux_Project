@@ -12,7 +12,6 @@
 #include <omp.h>
 #include <cassert>
 
-
 #include <immintrin.h> // 包含 SIMD 指令集支持
 
 #include <SEAL-4.1/seal/seal.h>
@@ -42,12 +41,12 @@ constexpr unsigned BlockWords = 36;      // 分组密钥字长度=KeyWords
 constexpr unsigned BlockPlainWords = 24; // 明文分组字长度
 constexpr double TruncRate = BlockPlainWords / (double)BlockWords;
 // ===============模式设置================
-constexpr bool Rkflag = 1;     // true/1表示乘法，false/0表示加法，指的是随机向量和密钥间的操作
-constexpr bool deflag = 0;     // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
-constexpr bool ompflag = 0;    // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
-constexpr bool symkeyflag = 0; // true/1表示对称密钥同态解密验证加密，false/0表示不验证
-constexpr bool KeyStreamflag = 0;  // true/1表示密钥流同态解密验证，false/0表示不验证
-constexpr bool plainflag = 1;      // true/1表示明文同态解密验证，false/0表示不验证
+constexpr bool Rkflag = 1;        // true/1表示乘法，false/0表示加法，指的是随机向量和密钥间的操作
+constexpr bool deflag = 0;        // true/1表示进行每一步解密验证，false/0表示不进行每一步解密验证
+constexpr bool ompflag = 0;       // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
+constexpr bool symkeyflag = 0;    // true/1表示对称密钥同态解密验证加密，false/0表示不验证
+constexpr bool KeyStreamflag = 0; // true/1表示密钥流同态解密验证，false/0表示不验证
+constexpr bool plainflag = 0;     // true/1表示明文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
 constexpr unsigned Nr = 6; // 轮数
 constexpr long idx = 0;
@@ -57,28 +56,27 @@ constexpr unsigned Sbox_depth = 1 * Nr; // S盒深度
 constexpr tuple<long, long> paramMap[1][8] = {
     {// Nr = 4
      // {p, log2(m)}
-     {65537, 15},   // 0 *
-     {163841, 15},  // 1
-     {65537, 14},   // 2 *
-     {163841, 14},  // 3
-     {65537, 15},   // 4
-     {163841, 15},  // 5
-     {65537, 15},   // 6
-     {163841, 15}
-    } // 7
-    };
+     {65537, 15},  // 0 *
+     {163841, 15}, // 1
+     {65537, 14},  // 2 *
+     {163841, 14}, // 3
+     {65537, 15},  // 4
+     {163841, 15}, // 5
+     {65537, 15},  // 6
+     {163841, 15}} // 7
+};
 // p=k*m+1
 //  2^10=1024,2^11=2048,2^12=4096,2^13=8192,2^14=16384,2^15=32768,2^16=65536,
 // 当电脑内存有限时，log2Para_m太大，会导致内存不足，出现terminate called recursively错误，从而终止程序.
 // 此外，即使正常运行，由于内存一直临界，会导致程序运行速度变慢，时间测量不准确。
 
 constexpr long log2Para_m = get<1>(paramMap[0][idx]) - 0;
-constexpr long Para_p = get<0>(paramMap[0][idx]);    // plaintext prime
-constexpr long Para_m = 1 << log2Para_m;                  // cyclotomic polynomial
-constexpr long phi_m = Para_m >> 1;                       // phi(m)
-constexpr long Para_r = 1;                                // Lifting [defualt = 1]
+constexpr long Para_p = get<0>(paramMap[0][idx]); // plaintext prime
+constexpr long Para_m = 1 << log2Para_m;          // cyclotomic polynomial
+constexpr long phi_m = Para_m >> 1;               // phi(m)
+constexpr long Para_r = 1;                        // Lifting [defualt = 1]
 //!!!!!!!!!!!!!!!
-constexpr long nslots = phi_m;             // 槽数
+constexpr long nslots = phi_m;              // 槽数
 constexpr unsigned PlainBlock = nslots - 0; // 明文分组数,应该PlainBlock<=nslots
 constexpr unsigned len3 = BlockWords / 3;
 // 计算 log2 的 constexpr 函数
@@ -90,14 +88,14 @@ constexpr long PlainMod = Para_p;                               // 明文模数
 constexpr unsigned Wordbits = log2_constexpr(PlainMod - 1) + 1; // 字节比特长度=ceil(log2(PlainMod-1))
 constexpr unsigned randbits = Wordbits - 1;
 constexpr unsigned BlockSize = Wordbits * BlockWords;    // 分组比特长度=BlockWords*Wordbits
-constexpr unsigned NrBlockWords = BlockWords * (Nr + 1);  // Nr轮分组密钥字节长度
+constexpr unsigned NrBlockWords = BlockWords * (Nr + 1); // Nr轮分组密钥字节长度
 
-constexpr long KeyStreamWords = BlockWords * PlainBlock; // 密钥流字节长度
-constexpr long PlainWords = BlockPlainWords * PlainBlock;      // 明文字节长度
+constexpr long KeyStreamWords = BlockWords * PlainBlock;  // 密钥流字节长度
+constexpr long PlainWords = BlockPlainWords * PlainBlock; // 明文字节长度
 
-constexpr long Plainbits = Wordbits * PlainWords;        // 明文比特长度
+constexpr long Plainbits = Wordbits * PlainWords; // 明文比特长度
 
-constexpr long max_prime_size = (1ULL << (Wordbits-1)) - 1;
+constexpr long max_prime_size = (1ULL << (Wordbits - 1)) - 1;
 
 constexpr unsigned NonceSize = 32;                           // Nonce比特长度
 constexpr long counter_begin = 0;                            // 计数器起始值
@@ -106,7 +104,7 @@ constexpr long counter_end = PlainBlock + counter_begin - 1; // 计数器结束�
 YusP yusP(PlainMod); // 构建明文对称加密实例
 
 // Linear transformation
-void HE_M(vector<Ciphertext> &eData,Evaluator &evaluator)
+void HE_M(vector<Ciphertext> &eData, Evaluator &evaluator)
 {
     vector<Ciphertext> temp = eData;
     Ciphertext temp0_1 = temp[0];
@@ -634,7 +632,7 @@ void HE_M(vector<Ciphertext> &eData,Evaluator &evaluator)
     evaluator.add_inplace(eData[35], temp32_34);
 }
 // Compute the constants for Sbox,(x0,x1,x2)——>(x0,x0*x2+x1,-x0*x1+x0*x2+x2)
-void HE_Sbox(vector<Ciphertext> &eData, Evaluator &evaluator,RelinKeys &relin_keys)
+void HE_Sbox(vector<Ciphertext> &eData, Evaluator &evaluator, RelinKeys &relin_keys)
 {
     // (x0,x1,x2)——> (x0,x0*x2+x1,-x0*x1+x0*x2+x2)
     Ciphertext c01 = eData[1];
@@ -763,6 +761,7 @@ int main()
     }
     for (int test = 0; test < 10; test++)
     {
+        std::cout << "--------------- Test = " << test << "---------------"<< std::endl;
         // Generating key stream
         std::vector<long> NonceSet(PlainBlock);
         vector<std::vector<long>> RoundKeySet(Nr + 1, vector<long>(KeyStreamWords, 0));
@@ -804,7 +803,7 @@ int main()
                 }
                 else if (r < Nr)
                 {                     // 常规轮
-                    yusP.M36(state);   // Linear
+                    yusP.M36(state);  // Linear
                     yusP.Sbox(state); // S盒
                     for (unsigned i = 0; i < BlockWords; i++)
                     {
@@ -813,7 +812,7 @@ int main()
                 }
                 else
                 {                     // 最后一轮
-                    yusP.M36(state);   // Linear
+                    yusP.M36(state);  // Linear
                     yusP.Sbox(state); // S盒
                     for (unsigned i = 0; i < BlockWords; i++)
                     {
@@ -1124,7 +1123,7 @@ int main()
             }
             std::cout << "Decryption verification succeeded for KeyStream2 Round Key Addition." << std::endl;
         }
-                start_linear = std::chrono::high_resolution_clock::now();
+        start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
         HE_M(encryptedKeyStream, evaluator);
         end_linear = std::chrono::high_resolution_clock::now();
@@ -1258,9 +1257,10 @@ int main()
             {
                 std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
                 return 0;
-            }std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
+            }
+            std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
         }
-        
+
         // 计算吞吐量,KiB/min
         double Server_totaltime = Server_offtime + server_ontime;
         double Ser_throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);

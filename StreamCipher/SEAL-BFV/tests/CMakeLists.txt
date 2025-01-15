@@ -19,7 +19,16 @@ target_link_libraries(test_HERA_4 PUBLIC Symmetric Utils SEAL::seal)
 add_executable(test_HERA_5 test_HERA_5.cpp)
 target_link_libraries(test_HERA_5 PUBLIC Symmetric Utils SEAL::seal)
 
+add_executable(test_pasta_4 test_pasta_4.cpp)
+target_link_libraries(test_pasta_4 PUBLIC Symmetric Utils SEAL::seal)
+
 add_executable(test_pasta2_4 test_pasta2_4.cpp)
 target_link_libraries(test_pasta2_4 PUBLIC Symmetric Utils SEAL::seal)
+
+add_executable(test_pasta_3 test_pasta_3.cpp)
+target_link_libraries(test_pasta_3 PUBLIC Symmetric Utils SEAL::seal)
+
+add_executable(test_pasta2_3 test_pasta2_3.cpp)
+target_link_libraries(test_pasta2_3 PUBLIC Symmetric Utils SEAL::seal)
 
 

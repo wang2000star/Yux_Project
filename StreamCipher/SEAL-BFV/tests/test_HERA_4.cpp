@@ -46,7 +46,7 @@ constexpr bool deflag = 0;        // true/1表示进行每一步解密验证，f
 constexpr bool ompflag = 0;       // true/1表示使用OpenMP并行编码，false/0表示不使用OpenMP并行编码
 constexpr bool symkeyflag = 0;    // true/1表示对称密钥同态解密验证加密，false/0表示不验证
 constexpr bool KeyStreamflag = 0; // true/1表示密钥流同态解密验证，false/0表示不验证
-constexpr bool plainflag = 1;     // true/1表示明文同态解密验证，false/0表示不验证
+constexpr bool plainflag = 0;     // true/1表示明文同态解密验证，false/0表示不验证
 // 参数设置，paramMap[Nr-4][idx]
 constexpr unsigned Nr = 4; // 轮数
 constexpr long idx = 0;
@@ -245,7 +245,7 @@ int main()
     vector<int> bit_sizes;
     set_params(poly_modulus_degree, SecLevel, bit_sizes);
     parms.set_coeff_modulus(CoeffModulus::Create(poly_modulus_degree, bit_sizes));
-    //parms.set_coeff_modulus(CoeffModulus::BFVDefault(poly_modulus_degree));
+    // parms.set_coeff_modulus(CoeffModulus::BFVDefault(poly_modulus_degree));
     parms.set_plain_modulus(PlainMod);
     SEALContext context(parms, true, sec_level_type::none);
     if (SecLevel == 128)
@@ -313,6 +313,7 @@ int main()
     }
     for (int test = 0; test < 10; test++)
     {
+        std::cout << "--------------- Test = " << test << "---------------"<< std::endl;
         // Generating key stream
         std::vector<long> NonceSet(PlainBlock);
         vector<std::vector<long>> RoundKeySet(Nr + 1, vector<long>(KeyStreamWords, 0));
@@ -796,7 +797,7 @@ int main()
         for (int i = 0; i < BlockPlainWords; i++)
         {
             batch_encoder.encode(CipherStream[i], encodedCipherStreami);
-             evaluator.negate_inplace(encrypedPlainStream[i]);
+            evaluator.negate_inplace(encrypedPlainStream[i]);
             evaluator.add_plain_inplace(encrypedPlainStream[i], encodedCipherStreami);
         }
         auto end_ServerOnline = std::chrono::high_resolution_clock::now();
@@ -819,7 +820,7 @@ int main()
             }
             std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
         }
-        
+
         // 计算吞吐量,KiB/min
         double Server_totaltime = Server_offtime + server_ontime;
         double Ser_throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);

@@ -6,33 +6,49 @@ SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 # 切换到脚本所在的目录
 cd $SCRIPT_DIR
 
-# echo "test_Yus_4开始!"
-# ./../build/tests/test_Yus_4
+echo "--------------- HElib-BGV测试开始!!! ---------------"
+echo "--------------- test_Yus_4开始! ---------------"
+./../build/tests/test_Yus_4
+echo "--------------- test_Yus_4完成! ---------------"
+sleep 10
+echo "--------------- test_Yus_5开始! ---------------"
+./../build/tests/test_Yus_5
+echo "--------------- test_Yus_5完成! ---------------"
+sleep 10
+echo "--------------- test_Yus_6开始! ---------------"
+./../build/tests/test_Yus_6
+echo "--------------- test_Yus_6完成! ---------------"
+sleep 10
+echo "--------------- test_HERA_4开始! ---------------"
+./../build/tests/test_HERA_4
+echo "--------------- test_HERA_4完成! ---------------"
+sleep 10
+echo "--------------- test_HERA_5开始! ---------------"
+./../build/tests/test_HERA_5
+echo "--------------- test_HERA_5完成! ---------------"
+sleep 10
+echo "--------------- test_pasta_4开始! ---------------"
+./../build/tests/test_pasta_4
+echo "--------------- test_pasta_4完成! ---------------"
+sleep 10
+echo "--------------- test_pasta2_4开始! ---------------"
+./../build/tests/test_pasta2_4
+echo "--------------- test_pasta2_4完成! ---------------"
 # sleep 10
-# echo "test_Yus_6开始!"
-# ./../build/tests/test_Yus_6
-# sleep 10
-# echo "test_HERA_4开始!"
-# ./../build/tests/test_HERA_4
-# sleep 10
-# echo "test_HERA_5开始!"
-# ./../build/tests/test_HERA_5
-# sleep 10
-# echo "test_pasta_4开始!"
-# ./../build/tests/test_pasta_4
-# sleep 10
-# echo "test_pasta2_4开始!"
-# ./../build/tests/test_pasta2_4
-# sleep 10
-# echo "test_pasta_3开始!"
+# echo "--------------- test_pasta_3开始! ---------------"
 # ./../build/tests/test_pasta_3
+# echo "--------------- test_pasta_3完成! ---------------"
 # sleep 10
-# echo "test_pasta2_3开始!"
+# echo "--------------- test_pasta2_3开始! ---------------"
 # ./../build/tests/test_pasta2_3
-# sleep 10
+# echo "--------------- test_pasta2_3完成! ---------------"
 
+# sleep 10
 # echo "test_Yus_4_33开始!"
 # ./../build/tests/test_Yus_4_33
+# sleep 10
+# echo "test_Yus_5_33开始!"
+# ./../build/tests/test_Yus_5_33
 # sleep 10
 # echo "test_Yus_6_33开始!"
 # ./../build/tests/test_Yus_6_33
@@ -54,21 +70,10 @@ cd $SCRIPT_DIR
 # sleep 10
 # echo "test_pasta2_3_33开始!"
 # ./../build/tests/test_pasta2_3_33
-echo "test_Yus_5开始!"
-./../build/tests/test_Yus_5
-sleep 10
-echo "test_Yus_4_33开始!"
-./../build/tests/test_Yus_4_33
-sleep 10
-echo "test_Yus_5_33开始!"
-./../build/tests/test_Yus_5_33
-sleep 10
-echo "test_Yus_6_33开始!"
-./../build/tests/test_Yus_6_33
 
 # echo "test_Yux_14开始!"
 # ./../build/tests/test_Yux_14
-echo "测试完成!"
+echo "--------------- HElib-BGV测试完成!!! ---------------"
 
 # # 定义参数数对
 # param_pairs=(
@@ -103,5 +108,5 @@ echo "测试完成!"
 
 # python3 calculate.py
 
-## chmod +x run_test_Yus_p_C64_ClientAndServer4.sh
-## ./run_test_Yus_p_C64_ClientAndServer4.sh
+## chmod +x run.sh
+## ./run.sh
