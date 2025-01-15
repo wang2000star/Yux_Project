@@ -90,6 +90,10 @@ void encryptSymKey(vector<Ciphertext> &encryptedSymKey, const vector<long> &SymK
 
 bool verify_encryptSymKey(vector<Ciphertext> &encryptedSymKey, const vector<long> &SymKey,BatchEncoder &batch_encoder, Decryptor &decryptor);
 
+std::string get_cpu_model();
+std::string get_memory_info();
+std::string get_os_version();
+std::string get_environment_info();
 // 声明并定义 rdtsc 函数
 inline uint64_t rdtsc() {
     uint32_t lo, hi;
@@ -100,24 +104,24 @@ inline uint64_t rdtsc() {
     return (static_cast<uint64_t>(hi) << 32) | lo;
 }
 
-template <typename T>
-void HexToBinStr(T hex, bool *bin_str, unsigned n)
-{
-    for (unsigned i = 0; i < n; ++i)
-    {
-        bin_str[i] = (hex >> i) & 1; // 位移操作替代 % 2
-    }
-}
+// template <typename T>
+// void HexToBinStr(T hex, bool *bin_str, unsigned n)
+// {
+//     for (unsigned i = 0; i < n; ++i)
+//     {
+//         bin_str[i] = (hex >> i) & 1; // 位移操作替代 % 2
+//     }
+// }
 
-// 比特串转整数
-template <typename T>
-void BinStrToHex(const bool *bin_str, T &dec_hex, unsigned n)
-{
-    dec_hex = 0; // 确保 dec_hex 从零开始
-    for (unsigned i = 0; i < n; ++i)
-    {
-        dec_hex |= (static_cast<T>(bin_str[i]) << i); // 左移一位并添加当前比特
-    }
-}
+// // 比特串转整数
+// template <typename T>
+// void BinStrToHex(const bool *bin_str, T &dec_hex, unsigned n)
+// {
+//     dec_hex = 0; // 确保 dec_hex 从零开始
+//     for (unsigned i = 0; i < n; ++i)
+//     {
+//         dec_hex |= (static_cast<T>(bin_str[i]) << i); // 左移一位并添加当前比特
+//     }
+// }
 
 #endif // TOOL_HPP

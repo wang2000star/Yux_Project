@@ -263,10 +263,50 @@ int main()
     {
         if (!verify_encryptSymKey(encryptedSymKey, SymKey, batch_encoder, decryptor))
         {
+            std::cerr << "Symmetric key encryption failed!" << std::endl;
             return 0;
         }
         std::cout << "Symmetric key encryption succeeded!" << std::endl;
     }
+            // 获取当前源文件名
+    std::string cppFileName = __FILE__;
+    std::string baseFileName = cppFileName.substr(cppFileName.find_last_of("/\\") + 1);
+    std::string outputFileName = baseFileName + ".txt";
+    // 设置输出文件路径
+    std::string dirPath = "../tests";
+    std::string filePath;
+    if (!fs::exists(dirPath))
+    {
+        filePath = outputFileName;
+    }
+    else
+    {
+        filePath = dirPath + "/" + outputFileName;
+    }
+    std::ofstream outfile(filePath, std::ios::app);
+    if (!outfile)
+    {
+        std::cerr << "Error opening file: " << filePath << std::endl;
+        return 0;
+    }
+    // 获取当前时间
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    // 格式化时间并写入文件
+    outfile << "Current time: " << std::put_time(std::localtime(&now_time), "%Y-%m-%d %H:%M:%S") << std::endl;
+    // 获取当前 CPU 型号并写入文件
+    std::string cpu_model = get_cpu_model();
+    outfile << "CPU model: " << cpu_model << std::endl;
+    // 获取内存信息并写入文件
+    std::string memory_info = get_memory_info();
+    outfile << "Memory info: " << std::endl
+            << memory_info;
+    // 获取系统版本信息并写入文件
+    std::string os_version = get_os_version();
+    outfile << "OS version: " << os_version;
+    // 获取环境信息
+    std::string environment_info = get_environment_info();
+    outfile << "Environment info: " << environment_info << std::endl; 
     for (int test = 0; test < 3; test++)
     {
         std::cout << "--------------- Test = " << test << "---------------"<< std::endl;
@@ -403,7 +443,7 @@ int main()
         if (noise_budget <= 0)
         {
             std::cerr << "noise budget is not enough!!!" << std::endl;
-            return 0;
+            continue;
         }
 
         // 生成 encryptedKeyStream
@@ -431,7 +471,7 @@ int main()
         if (noise_budget <= 0)
         {
             std::cerr << "noise budget is not enough!!!" << std::endl;
-            return 0;
+            continue;
         }
 
         for (long r = 1; r < Nr; r++)
@@ -448,7 +488,7 @@ int main()
             if (noise_budget <= 0)
             {
                 std::cerr << "noise budget is not enough!!!" << std::endl;
-                return 0;
+                continue;
             }
             start_linear = std::chrono::high_resolution_clock::now();
             // Linear Layer
@@ -461,7 +501,7 @@ int main()
             if (noise_budget <= 0)
             {
                 std::cerr << "noise budget is not enough!!!" << std::endl;
-                return 0;
+                continue;
             }
         }
         // 最后一轮
@@ -477,7 +517,7 @@ int main()
         if (noise_budget <= 0)
         {
             std::cerr << "noise budget is not enough!!!" << std::endl;
-            return 0;
+            continue;
         }
         start_linear = std::chrono::high_resolution_clock::now();
         // Linear Layer
@@ -492,7 +532,7 @@ int main()
         if (noise_budget <= 0)
         {
             std::cerr << "noise budget is not enough!!!" << std::endl;
-            return 0;
+            continue;
         }
 
         // 输出 XOF_time,Add_time、Sbox_time、Linear_time
@@ -520,7 +560,7 @@ int main()
             if (!verifyDecryption(encryptedKeyStream, KeyStream, batch_encoder, decryptor, BlockPlainWords, PlainBlock, nslots, PlainMod))
             {
                 std::cerr << "Decryption verification failed for KeyStream." << std::endl;
-                return 0;
+                continue;
             }
             std::cout << "Decryption verification succeeded for KeyStream." << std::endl;
         }
@@ -586,7 +626,7 @@ int main()
         if (noise_budget <= 0)
         {
             std::cerr << "noise budget is not enough!!!" << std::endl;
-            return 0;
+            continue;
         }
         // 同态解密验证
         if (plainflag)
@@ -594,7 +634,7 @@ int main()
             if (!verifyDecryption(encrypedPlainStream, PlainStream, batch_encoder, decryptor, BlockPlainWords, PlainBlock, nslots, PlainMod))
             {
                 std::cerr << "Decryption verification failed for encrypedPlainStream." << std::endl;
-                return 0;
+                continue;
             }
             std::cout << "Decryption verification succeeded for encrypedPlainStream." << std::endl;
         }
@@ -603,22 +643,7 @@ int main()
         double Ser_throughput = (Plainbits * 60) / (pow(2, 13) * Server_totaltime);
         std::cout << "Server total time: " << Server_totaltime << "s\n";
         std::cout << "Server Throughput: " << Ser_throughput << "KiB/min\n";
-        std::string dirPath = "../tests";
-        std::string filePath;
-        if (!fs::exists(dirPath))
-        {
-            filePath = "test_pasta_3.txt";
-        }
-        else
-        {
-            filePath = "../tests/test_pasta_3.txt";
-        }
-        std::ofstream outfile(filePath, std::ios::app);
-        if (!outfile)
-        {
-            std::cerr << "Error opening file: " << filePath << std::endl;
-            return 0;
-        }
+
         outfile << std::left << std::setw(3) << Nr
                 << std::left << std::setw(12) << Para_p
                 << std::left << std::setw(10) << nslots
@@ -636,8 +661,8 @@ int main()
                 << std::left << std::setw(15) << Ser_throughput
                 << std::left << std::setw(10) << noise_budget
                 << std::endl;
-        outfile.close();
-        std::cout << "test_pasta_3.txt updated." << std::endl;
-    }
+        
+        std::cout << "Test " << test << " finished." << std::endl;
+    }outfile.close();
     return 0;
 }

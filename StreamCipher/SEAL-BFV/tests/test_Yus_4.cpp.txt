@@ -1,0 +1,167 @@
+Current time: 2025-01-15 10:36:57
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+4  65537       16384     16384     424       128       364443267      3842160        368285427      440.000        6.280          0.011          6.291          7782.400       196       
+4  65537       16384     16384     424       128       344679042      4310006        348989048      417.000        6.140          0.011          6.151          7960.159       196       
+4  65537       16384     16384     424       128       341186512      3217613        344404125      412.000        6.188          0.012          6.199          7897.750       196       
+4  65537       16384     16384     424       128       346321421      3190778        349512199      418.000        6.369          0.012          6.381          7672.857       196       
+4  65537       16384     16384     424       128       347530418      2800836        350331254      419.000        6.146          0.011          6.157          7952.209       197       
+4  65537       16384     16384     424       128       350918909      2650586        353569495      423.000        6.224          0.011          6.235          7852.735       196       
+4  65537       16384     16384     424       128       355546204      2702909        358249113      428.000        6.265          0.011          6.276          7800.873       196       
+4  65537       16384     16384     424       128       349231888      2755920        351987808      421.000        6.293          0.012          6.305          7765.739       197       
+4  65537       16384     16384     424       128       354155652      3155827        357311479      427.000        6.349          0.011          6.360          7697.964       196       
+4  65537       16384     16384     424       128       351327737      3032419        354360156      424.000        6.394          0.012          6.406          7643.340       196       
+Current time: 2025-01-15 10:41:24
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal:       12251472 kB
+MemFree:         4034404 kB
+OS version: "Ubuntu 22.04.5 LTS"
+
+4  65537       16384     16384     424       128       357237691      3887980        361125671      432.000        6.430          0.011          6.440          7601.909       196       
+4  65537       16384     16384     424       128       356021896      2872821        358894717      429.000        6.238          0.011          6.250          7833.787       197       
+Current time: 2025-01-15 10:45:21
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+OS version: "Ubuntu 22.04.5 LTS"
+
+4  65537       16384     16384     424       128       350583806      3326165        353909971      423.000        6.319          0.012          6.331          7733.577       196       
+4  65537       16384     16384     424       128       370146867      2927553        373074420      446.000        6.235          0.011          6.246          7838.414       196       
+4  65537       16384     16384     424       128       348204826      3205983        351410809      420.000        6.210          0.011          6.221          7869.905       197       
+Current time: 2025-01-15 10:47:22
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12251472 kB
+SwapTotal: 16777216 kB
+OS version: "Ubuntu 22.04.5 LTS"
+
+4  65537       16384     16384     424       128       352919256      2847079        355766335      425.000        6.248          0.012          6.260          7821.594       196       
+4  65537       16384     16384     424       128       356248399      2990348        359238747      429.000        6.249          0.012          6.261          7819.807       196       
+Current time: 2025-01-15 10:49:35
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 11.6839 GiB
+SwapTotal: 16 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Current time: 2025-01-15 11:00:53
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+4  65537       16384     16384     424       128       346799402      3274611        350074013      418.000        6.447          0.011          6.458          7581.030       196       
+Current time: 2025-01-15 11:01:57
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+4  65537       16384     16384     424       128       353563121      2740447        356303568      426.000        6.349          0.012          6.361          7697.449       197       
+4  65537       16384     16384     424       128       364907177      2854703        367761880      440.000        6.272          0.012          6.284          7790.838       196       
+4  65537       16384     16384     424       128       347421876      2870864        350292740      419.000        6.290          0.012          6.302          7769.188       197       
+Current time: 2025-01-15 11:05:03
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+4  65537       16384     16384     424       128       355366805      3576085        358942890      429.000        6.192          0.011          6.203          7893.145       196       
+Current time: 2025-01-15 11:06:36
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: 
+Current time: 2025-01-15 11:09:58
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: Linux
+Current time: 2025-01-15 11:11:34
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: Linux
+Current time: 2025-01-15 11:12:44
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: Linux
+Current time: 2025-01-15 11:13:43
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: Linux
+Current time: 2025-01-15 11:15:26
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: Linux
+Current time: 2025-01-15 11:17:00
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: Linux
+Current time: 2025-01-15 11:19:01
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: Linux
+Current time: 2025-01-15 11:22:07
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: WSL2
+4  65537       16384     16384     424       128       352557352      2652787        355210139      425.000        6.366          0.013          6.379          7674.966       196       
+Current time: 2025-01-15 11:23:24
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: WSL2
+Current time: 2025-01-15 11:24:57
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+
+Environment info: WSL2
+Current time: 2025-01-15 11:25:28
+CPU model: 12th Gen Intel(R) Core(TM) i5-12500H
+Memory info: 
+MemTotal: 12.6683 GiB
+SwapTotal: 18 GiB
+OS version: "Ubuntu 22.04.5 LTS"
+Environment info: WSL2

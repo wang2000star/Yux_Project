@@ -34,6 +34,10 @@ void encryptSymKey(std::vector<helib::Ctxt> &encryptedSymKey, const std::vector<
 
 bool verify_encryptSymKey(std::vector<helib::Ctxt> &encryptedSymKey, const std::vector<long> &SymKey, const helib::SecKey &secretKey,
                           const helib::Cmodulus &cmodulus);
+std::string get_cpu_model();
+std::string get_memory_info();
+std::string get_os_version();
+std::string get_environment_info();
 // 声明并定义 rdtsc 函数
 inline uint64_t rdtsc() {
     uint32_t lo, hi;

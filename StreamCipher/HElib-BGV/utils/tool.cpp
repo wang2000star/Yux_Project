@@ -200,3 +200,134 @@ bool verify_encryptSymKey(std::vector<helib::Ctxt> &encryptedSymKey, const std::
     std::cout << "Decryption and verification finished! Time: " << elapsed_seconds.count() << "s\n";
     return isDecryptedSymKeyCorrect;
 }
+std::string get_cpu_model()
+{
+    std::ifstream cpuinfo("/proc/cpuinfo");
+    std::string line;
+    while (std::getline(cpuinfo, line))
+    {
+        if (line.find("model name") != std::string::npos)
+        {
+            return line.substr(line.find(":") + 2);
+        }
+    }
+    return "Unknown CPU model";
+}
+// std::string get_memory_info() {
+//     std::ifstream meminfo("/proc/meminfo");
+//     std::string line;
+//     std::ostringstream meminfo_stream;
+//     while (std::getline(meminfo, line)) {
+//         if (line.find("MemTotal") != std::string::npos || line.find("MemFree") != std::string::npos) {
+//             meminfo_stream << line << std::endl;
+//         }
+//     }
+//     return meminfo_stream.str();
+// }
+
+// std::string get_memory_info() {
+//     std::ifstream meminfo("/proc/meminfo");
+//     std::string line;
+//     std::ostringstream meminfo_stream;
+//     long mem_total = 0;
+//     long swap_total = 0;
+
+//     while (std::getline(meminfo, line)) {
+//         if (line.find("MemTotal") != std::string::npos) {
+//             mem_total = std::stol(line.substr(line.find(":") + 1));
+//         }
+//         if (line.find("SwapTotal") != std::string::npos) {
+//             swap_total = std::stol(line.substr(line.find(":") + 1));
+//         }
+//     }
+
+//     meminfo_stream << "MemTotal: " << mem_total << " kB" << std::endl;
+//     meminfo_stream << "SwapTotal: " << swap_total << " kB" << std::endl;
+
+//     return meminfo_stream.str();
+// }
+std::string get_memory_info()
+{
+    std::ifstream meminfo("/proc/meminfo");
+    std::string line;
+    std::ostringstream meminfo_stream;
+    long mem_total_kb = 0;
+    long swap_total_kb = 0;
+
+    while (std::getline(meminfo, line))
+    {
+        if (line.find("MemTotal") != std::string::npos)
+        {
+            mem_total_kb = std::stol(line.substr(line.find(":") + 1));
+        }
+        if (line.find("SwapTotal") != std::string::npos)
+        {
+            swap_total_kb = std::stol(line.substr(line.find(":") + 1));
+        }
+    }
+
+    double mem_total_gib = mem_total_kb / 1024.0 / 1024.0;
+    double swap_total_gib = swap_total_kb / 1024.0 / 1024.0;
+
+    meminfo_stream << "MemTotal: " << mem_total_gib << " GiB" << std::endl;
+    meminfo_stream << "SwapTotal: " << swap_total_gib << " GiB" << std::endl;
+
+    return meminfo_stream.str();
+}
+
+std::string get_os_version()
+{
+    std::ifstream osrelease("/etc/os-release");
+    std::string line;
+    std::ostringstream osrelease_stream;
+    while (std::getline(osrelease, line))
+    {
+        if (line.find("PRETTY_NAME") != std::string::npos)
+        {
+            osrelease_stream << line.substr(line.find("=") + 1) << std::endl;
+        }
+    }
+    return osrelease_stream.str();
+}
+
+std::string to_lower(const std::string &str) {
+    std::string lower_str = str;
+    std::transform(lower_str.begin(), lower_str.end(), lower_str.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+    return lower_str;
+}
+
+std::string get_environment_info() {
+    std::string environment = "Unknown";
+
+    // Check for WSL
+    std::ifstream version("/proc/version");
+    std::string version_line;
+    if (std::getline(version, version_line)) {
+        std::cout << "Version line: " << version_line << std::endl; // 调试信息
+        std::string lower_version_line = to_lower(version_line);
+        if (lower_version_line.find("microsoft") != std::string::npos) {
+            //std::cout << "Detected Microsoft in version line" << std::endl; // 调试信息
+            if (lower_version_line.find("wsl2") != std::string::npos) {
+                //std::cout << "Detected WSL2 in version line" << std::endl; // 调试信息
+                return "WSL2";
+            } else {
+                return "WSL";
+            }
+        }
+    }
+
+    // Check for virtual machine
+    std::ifstream dmi("/sys/class/dmi/id/product_name");
+    std::string dmi_line;
+    if (std::getline(dmi, dmi_line)) {
+        //std::cout << "DMI line: " << dmi_line << std::endl; // 调试信息
+        std::string lower_dmi_line = to_lower(dmi_line);
+        if (lower_dmi_line.find("virtualbox") != std::string::npos || lower_dmi_line.find("vmware") != std::string::npos) {
+            return "Virtual Machine";
+        }
+    }
+
+    // If not WSL or VM, assume it's a regular Linux system
+    return "Linux";
+}
